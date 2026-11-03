@@ -2,7 +2,8 @@
 
 ## 2.1.0 — workspace e exploração contextual
 
-- Faixa horizontal de ferramentas com ícones ativos e grupos de ações.
+- Faixa horizontal de ferramentas com ícones ativos, grupos de ações e rótulos
+  que se compactam conforme o espaço disponível.
 - Slider de zoom sincronizado com roda, fit, atalhos e botões, junto a grade/snap.
 - Gerador, matriz e layouts integrados ao workspace; edição pendente e undo preservados.
 - Rotas selecionáveis com custo e sequência; tabela lazy e slider de etapas ligados ao canvas.

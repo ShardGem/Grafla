@@ -21,6 +21,24 @@ from grafla.panels import AnalysisPanel, Inspector
 from grafla.workspace import BuildPanel, ZoomBar
 
 
+class ToolStrip(QToolBar):
+    """Keep commands accessible when font metrics leave less horizontal space."""
+
+    def __init__(self):
+        super().__init__("Ferramentas")
+        self.mode_actions = []
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        buttons = [self.widgetForAction(action) for action in self.mode_actions]
+        for button in buttons:
+            button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
+        compact = self.layout().sizeHint().width() > self.width()
+        if compact:
+            for button in buttons:
+                button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonIconOnly)
+
+
 def build_shell(window):
     commands = window.commands
     for title, keys in (
@@ -94,13 +112,15 @@ def build_shell(window):
     row.addWidget(window.panel_button)
     layout.addWidget(header)
 
-    window.tools = QToolBar("Ferramentas")
+    window.tools = ToolStrip()
     window.tools.setObjectName("ToolStrip")
     window.tools.setMovable(False)
     window.tools.setIconSize(QSize(21, 21))
     window.tools.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
     for key in ("select", "hand", "vertex", "edge", "delete"):
-        window.tools.addAction(commands[f"tool_{key}"])
+        action = commands[f"tool_{key}"]
+        window.tools.addAction(action)
+        window.tools.mode_actions.append(action)
         if key == "hand":
             window.tools.addSeparator()
     window.tools.addSeparator()

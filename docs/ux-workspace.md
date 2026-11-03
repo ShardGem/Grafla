@@ -15,7 +15,8 @@ serialização, algoritmos e física serão preservados. A janela continua nativ
 ## Decisões
 
 - Faixa horizontal de ferramentas com agrupamentos, ícone ativo distinto, cor e
-  estado checked; as letras de atalho continuam restritas ao canvas.
+  estado checked; os modos usam apenas ícones quando as fontes ou a largura
+  deixam menos espaço. As letras de atalho continuam restritas ao canvas.
 - Header de documento com ações globais compactas; mais largura e altura para o
   grafo, sem abrir o relatório textual automaticamente.
 - Controle de zoom contínuo/logarítmico, botões ±, 100% e ajustar, com sincronização

@@ -43,6 +43,10 @@ class Splash(QWidget):
             self.release()
 
     def release(self):
+        remaining = max(0, self.minimum_ms - self.elapsed.elapsed())
+        if self.callback is not None and remaining:
+            self.hold.start(remaining)
+            return
         callback, self.callback = self.callback, None
         if callback is not None:
             callback()

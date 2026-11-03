@@ -1,5 +1,5 @@
 import pytest
-from PyQt6.QtCore import QElapsedTimer, Qt, QTimer
+from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtTest import QSignalSpy
 
 from grafla.splash import Splash
@@ -23,9 +23,14 @@ def test_horizontal_tool_modes_change_icons_and_remain_keyboard_accessible(windo
 
 
 def test_physics_control_fits_in_horizontal_strip_on_laptop_width(window, qtbot):
+    font = window.font()
+    font.setPointSize(12)
+    window.setFont(font)
     window.resize(1280, 768)
     qtbot.wait(20)
     assert window.tools.widgetForAction(window.commands["physics"]).isVisible()
+    for action in window.tools.mode_actions:
+        assert window.tools.widgetForAction(action).isVisible()
 
 
 def test_zoom_slider_tracks_wheel_fit_and_buttons_without_feedback_loop(window, graph):
@@ -153,11 +158,9 @@ def test_splash_minimum_is_nonblocking_and_not_added_to_work_duration(qapp, qtbo
     splash = Splash(animate=False, minimum_ms=100)
     qtbot.addWidget(splash)
     splash.show()
-    elapsed = QElapsedTimer()
-    elapsed.start()
     events = []
-    QTimer.singleShot(10, lambda: events.append(("event", elapsed.elapsed())))
-    splash.finish_when_ready(lambda: events.append(("ready", elapsed.elapsed())))
+    QTimer.singleShot(10, lambda: events.append(("event", splash.elapsed.elapsed())))
+    splash.finish_when_ready(lambda: events.append(("ready", splash.elapsed.elapsed())))
     assert events == []
     qtbot.waitUntil(lambda: any(name == "ready" for name, _ in events), timeout=1000)
     assert [name for name, _ in events] == ["event", "ready"]
