@@ -1,13 +1,6 @@
-import sys, os
-from PyQt6.QtWidgets import QApplication
-from view import MainWindow
+"""Compatibility launcher. Install the project first: uv sync."""
 
-root = os.path.abspath(os.path.dirname(__file__))
-if root not in sys.path:
-    sys.path.insert(0, root)
+from grafla.app import main
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    window = MainWindow()
-    window.show()
-    sys.exit(app.exec())
+    raise SystemExit(main())

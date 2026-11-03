@@ -1,0 +1,56 @@
+name: Grafla checks and desktop build
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ['3.12', '3.14']
+    runs-on: ${{ matrix.os }}
+    env:
+      QT_QPA_PLATFORM: offscreen
+      UV_PYTHON: ${{ matrix.python }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python }}
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --frozen --extra dev --extra build --python ${{ matrix.python }}
+      - run: uv run ruff check src tests tools main.py
+      - run: uv run ruff format --check src tests tools main.py
+      - run: uv run mypy
+      - run: uv run pytest --cov=grafla.domain --cov=grafla.persistence --cov=grafla.algorithms --cov=grafla.physics --cov-branch --cov-fail-under=80
+
+  desktop:
+    needs: checks
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --frozen --extra build
+      - run: uv run pyinstaller --noconfirm packaging/grafla.spec
+      - name: Smoke test packaged application with native Windows backend
+        shell: pwsh
+        run: |
+          $process = Start-Process -FilePath "dist/Grafla/Grafla.exe" -ArgumentList "--smoke-test", "--data-dir", "$env:RUNNER_TEMP/grafla-smoke" -PassThru
+          if (-not $process.WaitForExit(30000)) { $process.Kill(); throw "Grafla startup timed out" }
+          if ($process.ExitCode -ne 0) { throw "Grafla exited with $($process.ExitCode)" }
+          if (-not (Test-Path "$env:RUNNER_TEMP/grafla-smoke/smoke-window.png")) { throw "Missing startup evidence" }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Grafla-Windows
+          path: dist/Grafla/

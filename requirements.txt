@@ -1,10 +1,2 @@
-altgraph==0.17.5
-packaging==26.2
-pefile==2024.8.26
-pyinstaller==6.22.3
-pyinstaller-hooks-contrib==2026.9
-PyQt6==6.12.0
-PyQt6-Qt6==6.12.0
-PyQt6_sip==13.13.0
-pywin32-ctypes==0.2.3
-setuptools==80.9.0
+# Compatibility entrypoint. Direct dependencies live in pyproject.toml.
+-e .

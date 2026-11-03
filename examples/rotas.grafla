@@ -1,0 +1,175 @@
+{
+  "format": "grafla",
+  "schema_version": 1,
+  "graph": {
+    "vertices": [
+      {
+        "id": 1,
+        "x": -260,
+        "y": 0,
+        "label": "A",
+        "color": "#899bb2",
+        "radius": 27,
+        "pinned": false
+      },
+      {
+        "id": 2,
+        "x": -80,
+        "y": -150,
+        "label": "B",
+        "color": "#899bb2",
+        "radius": 27,
+        "pinned": false
+      },
+      {
+        "id": 3,
+        "x": -80,
+        "y": 150,
+        "label": "C",
+        "color": "#899bb2",
+        "radius": 27,
+        "pinned": false
+      },
+      {
+        "id": 4,
+        "x": 100,
+        "y": -150,
+        "label": "D",
+        "color": "#899bb2",
+        "radius": 27,
+        "pinned": false
+      },
+      {
+        "id": 5,
+        "x": 100,
+        "y": 150,
+        "label": "E",
+        "color": "#899bb2",
+        "radius": 27,
+        "pinned": false
+      },
+      {
+        "id": 6,
+        "x": 280,
+        "y": 0,
+        "label": "F",
+        "color": "#899bb2",
+        "radius": 27,
+        "pinned": false
+      },
+      {
+        "id": 7,
+        "x": 0,
+        "y": 0,
+        "label": "G",
+        "color": "#899bb2",
+        "radius": 27,
+        "pinned": false
+      }
+    ],
+    "edges": [
+      {
+        "id": 1,
+        "source": 1,
+        "target": 2,
+        "directed": true,
+        "weighted": true,
+        "weight": 2,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 2,
+        "source": 1,
+        "target": 3,
+        "directed": true,
+        "weighted": true,
+        "weight": 4,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 3,
+        "source": 2,
+        "target": 4,
+        "directed": true,
+        "weighted": true,
+        "weight": 3,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 4,
+        "source": 4,
+        "target": 6,
+        "directed": true,
+        "weighted": true,
+        "weight": 1,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 5,
+        "source": 3,
+        "target": 5,
+        "directed": true,
+        "weighted": true,
+        "weight": 2,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 6,
+        "source": 5,
+        "target": 6,
+        "directed": true,
+        "weighted": true,
+        "weight": 3,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 7,
+        "source": 2,
+        "target": 7,
+        "directed": true,
+        "weighted": true,
+        "weight": 1,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 8,
+        "source": 7,
+        "target": 5,
+        "directed": true,
+        "weighted": true,
+        "weight": 1,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 9,
+        "source": 3,
+        "target": 7,
+        "directed": true,
+        "weighted": true,
+        "weight": 2,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 10,
+        "source": 7,
+        "target": 4,
+        "directed": true,
+        "weighted": true,
+        "weight": 5,
+        "label": "",
+        "color": "#899bb2"
+      }
+    ],
+    "next_vertex": 8,
+    "next_edge": 11
+  }
+}
