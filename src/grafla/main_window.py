@@ -3,41 +3,29 @@ from __future__ import annotations
 import logging
 from pathlib import Path
 
-from PyQt6.QtCore import QByteArray, QMimeData, QSettings, QSize, Qt, QTimer
+from PyQt6.QtCore import QByteArray, QMimeData, QSettings, Qt, QTimer
 from PyQt6.QtGui import QAction, QActionGroup, QKeySequence
 from PyQt6.QtWidgets import (
     QApplication,
     QCheckBox,
     QDialog,
-    QDockWidget,
     QFileDialog,
-    QFrame,
-    QHBoxLayout,
     QLabel,
     QMainWindow,
     QMessageBox,
-    QPlainTextEdit,
-    QPushButton,
-    QScrollArea,
-    QSizePolicy,
     QSpinBox,
-    QTabWidget,
-    QToolBar,
-    QToolButton,
     QVBoxLayout,
-    QWidget,
 )
 
 from grafla import __version__
 from grafla.analysis_controller import AnalysisController
 from grafla.canvas import Canvas
-from grafla.dialogs import GenerateDialog, MatrixDialog, PreferencesDialog, SearchDialog, buttons
+from grafla.dialogs import PreferencesDialog, SearchDialog, buttons
 from grafla.document import Change, Document
 from grafla.domain import GraphError, layout_positions
 from grafla.exporting import export_graph
 from grafla.file_actions import FileActions
 from grafla.icons import icon
-from grafla.panels import AnalysisPanel, Inspector
 from grafla.persistence import DocumentError, decode, encode
 from grafla.physics_controller import PhysicsController
 from grafla.theme import apply, resolve
@@ -88,6 +76,10 @@ class MainWindow(QMainWindow):
         self.analysis.play_requested.connect(self.runner.toggle_playback)
         self.analysis.restart_requested.connect(self.runner.restart)
         self.analysis.speed.valueChanged.connect(self.runner.update_speed)
+        self.analysis.browser.index_selected.connect(self.runner.select_result)
+        self.analysis.algorithm.currentIndexChanged.connect(self.runner.parameters_changed)
+        self.analysis.origin.currentIndexChanged.connect(self.runner.parameters_changed)
+        self.analysis.destination.currentIndexChanged.connect(self.runner.parameters_changed)
         self.autosave_timer = QTimer(self)
         self.autosave_timer.setInterval(60_000)
         self.autosave_timer.timeout.connect(self.files.autosave)
@@ -100,7 +92,7 @@ class MainWindow(QMainWindow):
             self.restoreGeometry(geometry)
         state = self.settings.value("window_state")
         if isinstance(state, QByteArray):
-            self.restoreState(state)
+            self.restoreState(state, 1)
         self.physics_state()
         self.update_title()
         self.physics.set_enabled(self.settings.value("physics", False, type=bool))
@@ -202,138 +194,9 @@ class MainWindow(QMainWindow):
         self.commands["tool_select"].setChecked(True)
 
     def _build_shell(self):
-        for title, keys in (
-            ("Arquivo", ["new", "open", "save", "save_as", "export", "quit"]),
-            (
-                "Editar",
-                [
-                    "undo",
-                    "redo",
-                    "copy",
-                    "paste",
-                    "select_all",
-                    "delete_selection",
-                    "clear",
-                    "preferences",
-                ],
-            ),
-            ("Exibir", ["fit", "fit_selection", "reset_view", "zoom_in", "zoom_out", "search"]),
-            (
-                "Grafo",
-                [
-                    "generate",
-                    "to_matrix",
-                    "from_matrix",
-                    "physics",
-                    "layout_circular",
-                    "layout_grid",
-                    "layout_random",
-                ],
-            ),
-            ("Ajuda", ["about"]),
-        ):
-            menu = self.menuBar().addMenu(title)
-            for key in keys:
-                menu.addAction(self.commands[key])
-            if title == "Arquivo":
-                self.recent_menu = menu.addMenu("Arquivos recentes")
-                self.recent_menu.aboutToShow.connect(self.populate_recent)
-        tools = QToolBar("Ferramentas", self)
-        tools.setObjectName("tools")
-        tools.setMovable(False)
-        tools.setIconSize(QSize(24, 24))
-        tools.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextUnderIcon)
-        self.addToolBar(Qt.ToolBarArea.LeftToolBarArea, tools)
-        for key in TOOL_NAMES:
-            tools.addAction(self.commands[f"tool_{key}"])
-        tools.addSeparator()
-        tools.addAction(self.commands["fit"])
-        top = QToolBar("Documento", self)
-        top.setObjectName("document_actions")
-        top.setMovable(False)
-        top.setIconSize(QSize(20, 20))
-        for key in ("new", "open", "save", "undo", "redo"):
-            top.addAction(self.commands[key])
-        top.addSeparator()
-        top.addAction(self.commands["generate"])
-        top.addAction(self.commands["to_matrix"])
-        top.addSeparator()
-        top.addAction(self.commands["physics"])
-        top.widgetForAction(self.commands["physics"]).setToolButtonStyle(
-            Qt.ToolButtonStyle.ToolButtonTextBesideIcon
-        )
-        self.physics_label = QLabel()
-        self.physics_label.setProperty("muted", True)
-        top.addWidget(self.physics_label)
-        self.addToolBar(top)
-        central = QWidget()
-        layout = QVBoxLayout(central)
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(0)
-        header = QFrame()
-        header.setObjectName("Header")
-        row = QHBoxLayout(header)
-        row.setContentsMargins(16, 12, 16, 12)
-        brand = QLabel("GRAFLA")
-        brand.setObjectName("Brand")
-        row.addWidget(brand)
-        row.addSpacing(12)
-        self.document_name = QLabel()
-        self.document_name.setTextFormat(Qt.TextFormat.PlainText)
-        self.document_name.setObjectName("DocumentName")
-        self.document_name.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Preferred)
-        row.addWidget(self.document_name, 1)
-        search = QPushButton("Buscar  Ctrl+K")
-        search.clicked.connect(self.search)
-        row.addWidget(search)
-        layout.addWidget(header)
-        layout.addWidget(self.canvas, 1)
-        self.setCentralWidget(central)
-        self.inspector = Inspector()
-        self.analysis = AnalysisPanel()
-        self.tabs = QTabWidget()
-        self.tabs.addTab(self.inspector, "Propriedades")
-        analysis_scroll = QScrollArea()
-        analysis_scroll.setWidgetResizable(True)
-        analysis_scroll.setWidget(self.analysis)
-        self.tabs.addTab(analysis_scroll, "Análise")
-        self.workspace = QDockWidget("Workspace", self)
-        self.workspace.setObjectName("workspace")
-        self.workspace.setWidget(self.tabs)
-        self.workspace.setMinimumWidth(300)
-        self.workspace.setAllowedAreas(
-            Qt.DockWidgetArea.LeftDockWidgetArea | Qt.DockWidgetArea.RightDockWidgetArea
-        )
-        self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.workspace)
-        self.resizeDocks([self.workspace], [330], Qt.Orientation.Horizontal)
-        self.results = QPlainTextEdit()
-        self.results.setReadOnly(True)
-        self.results.setAccessibleName("Resultados da análise")
-        self.results.setPlaceholderText(
-            "Resultados, caminhos, custos e estruturas auxiliares aparecerão aqui."
-        )
-        self.results_dock = QDockWidget("Resultados", self)
-        self.results_dock.setObjectName("results")
-        self.results_dock.setWidget(self.results)
-        self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.results_dock)
-        self.results_dock.hide()
-        view_menu = self.menuBar().actions()[2].menu()
-        view_menu.addAction(self.workspace.toggleViewAction())
-        view_menu.addAction(self.results_dock.toggleViewAction())
-        self.graph_status = QLabel()
-        self.statusBar().addPermanentWidget(self.graph_status, 1)
-        for text, callback in (
-            ("−", lambda: self.canvas.zoom(1 / 1.2)),
-            ("100%", self.canvas.reset_view),
-            ("+", lambda: self.canvas.zoom(1.2)),
-        ):
-            button = QToolButton()
-            button.setText(text)
-            button.setToolTip("Redefinir zoom" if text == "100%" else "Alterar zoom")
-            button.clicked.connect(callback)
-            self.statusBar().addPermanentWidget(button)
-            if text == "100%":
-                self.zoom_button = button
+        from grafla.shell import build_shell
+
+        build_shell(self)
 
     def notify(self, message: str, error=False):
         self.statusBar().showMessage(message, 10_000 if error else 5000)
@@ -347,6 +210,9 @@ class MainWindow(QMainWindow):
         self.setWindowModified(self.document.dirty)
         self.document_name.setText(name + ("  ·  Modificado" if self.document.dirty else ""))
         self.document_name.setToolTip(name)
+        self.saved_state.setText(
+            "● Modificado" if self.document.dirty else ("Salvo" if self.document.path else "Local")
+        )
 
     def update_status(self, *args):
         graph = self.document.graph
@@ -354,10 +220,19 @@ class MainWindow(QMainWindow):
             f"  {len(graph.vertices)} vértices  ·  {len(graph.edges)} arestas  ·  {graph.kind}  ·  {TOOL_NAMES[self.canvas.mode]}"
         )
         for key in TOOL_NAMES:
-            self.commands[f"tool_{key}"].setChecked(key == self.canvas.mode)
+            action = self.commands[f"tool_{key}"]
+            action.setChecked(key == self.canvas.mode)
+            if hasattr(self, "theme"):
+                action.setIcon(
+                    icon(
+                        key,
+                        self.theme.accent if action.isChecked() else self.theme.text,
+                        action.isChecked(),
+                    )
+                )
 
     def update_zoom(self, scale):
-        self.zoom_button.setText(f"{scale * 100:.0f}%")
+        self.zoom_controls.set_scale(scale)
 
     def on_document_change(self, change):
         if not change.preview:
@@ -365,6 +240,7 @@ class MainWindow(QMainWindow):
             if change.vertex_labels:
                 self.analysis.refresh_vertices(self.document.graph)
             self.on_selection(self.canvas.selection())
+            self.building.matrix.set_graph(self.document.graph)
             self.update_title()
         self.update_status()
 
@@ -422,21 +298,32 @@ class MainWindow(QMainWindow):
 
     def generate(self):
         self.physics.pause()
-        dialog = GenerateDialog(self)
-        if dialog.exec() == QDialog.DialogCode.Accepted:
-            self.document.replace("Gerar grafo", dialog.graph)
-            self.canvas.fit_graph()
+        self.workspace.show()
+        self.tabs.setCurrentIndex(2)
+        self.building.setCurrentIndex(0)
 
     def matrix(self, importing):
         self.physics.pause()
-        try:
-            dialog = MatrixDialog(self.document.graph, importing, self)
-        except GraphError as error:
-            self.notify(str(error), error=True)
-            return
-        if dialog.exec() == QDialog.DialogCode.Accepted and importing:
-            self.document.replace("Criar grafo da matriz", dialog.result_graph)
-            self.canvas.fit_graph()
+        self.workspace.show()
+        self.tabs.setCurrentIndex(2)
+        self.building.setCurrentIndex(1)
+        self.building.matrix.set_graph(self.document.graph)
+        self.building.matrix.mode.setCurrentIndex(1 if importing else 0)
+        self.building.matrix.rebuild()
+
+    def replace_graph(self, label, graph):
+        self.document.replace(label, graph)
+        self.canvas.fit_graph()
+        self.notify("Grafo atualizado. Ctrl+Z desfaz a operação.")
+
+    def set_grid(self, enabled):
+        self.canvas.show_grid = enabled
+        self.settings.setValue("grid", enabled)
+        self.canvas.viewport().update()
+
+    def set_snap(self, enabled):
+        self.canvas.snap = enabled
+        self.settings.setValue("snap", enabled)
 
     def apply_layout(self, kind):
         self.physics.pause()
@@ -466,8 +353,16 @@ class MainWindow(QMainWindow):
         self.canvas.set_theme(self.theme)
         self.canvas.show_grid = self.settings.value("grid", True, type=bool)
         self.canvas.snap = self.settings.value("snap", False, type=bool)
+        for control, checked in (
+            (self.zoom_controls.grid, self.canvas.show_grid),
+            (self.zoom_controls.snap, self.canvas.snap),
+        ):
+            control.blockSignals(True)
+            control.setChecked(checked)
+            control.blockSignals(False)
         for key, name in self.command_icons.items():
             self.commands[key].setIcon(icon(name, self.theme.text))
+        self.update_status()
 
     def preferences(self):
         dialog = PreferencesDialog(self.settings, self)
@@ -597,7 +492,7 @@ class MainWindow(QMainWindow):
         self.autosave_timer.stop()
         self.files.clear_recovery()
         self.settings.setValue("geometry", self.saveGeometry())
-        self.settings.setValue("window_state", self.saveState())
+        self.settings.setValue("window_state", self.saveState(1))
         self.settings.sync()
         self.runner.pool.waitForDone(2500)
         event.accept()

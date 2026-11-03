@@ -2,7 +2,7 @@
 
 **Construir. Explorar. Compreender.**
 
-Grafla 2.0 é um editor desktop de grafos em Python e Qt: edição direta, documentos
+Grafla 2.1 é um editor desktop de grafos em Python e Qt: edição direta, documentos
 versionados, histórico de alterações, física opcional e análises com visualização.
 O alvo principal é Windows; a base também pode ser executada em Linux e macOS.
 
@@ -12,6 +12,8 @@ O alvo principal é Windows; a base também pode ser executada em Linux e macOS.
 
 - Canvas com seleção individual/múltipla e por retângulo, movimento em grupo,
   conexões por dois cliques, laços, arestas opostas, exclusão e menus contextuais.
+- Ferramentas horizontais com ícones ativos distintos, slider de zoom sincronizado
+  com roda/atalhos e controles de construção dentro do workspace.
 - Inspector de rótulo, posição, raio, cor, fixação, direção e peso. Arestas podem
   ser direcionadas ou não; pesos não negativos incluem zero.
 - Desfazer/refazer de edição, exclusão com incidentes, geração, layouts, colagem,
@@ -27,13 +29,16 @@ O alvo principal é Windows; a base também pode ser executada em Linux e macOS.
   fila/pilha e arestas percorridas, componentes, floresta geradora mínima e topológica.
 - Reprodução, pausa, passo anterior/seguinte, reinício e parada da visualização.
   Edições invalidam resultados antigos; tarefas usam um snapshot independente da UI.
+- Rotas clicáveis com custo e sequência; tabela de visitas/fila/pilha e slider de
+  etapas ligados ao grafo. O relatório textual é secundário e abre sob demanda.
 - Matrizes binárias e de pesos, copiar CSV e construir grafo a partir de matriz.
   Layouts circular, grade e aleatório com operação desfazível.
 - Exportação PNG/JPEG/SVG/PDF, região inteira ou seleção, largura configurável e
   transparência em PNG/SVG. A exportação exclui controles e handles do editor.
 - Copiar/colar subgrafo, busca de comandos/vértices, zoom no cursor, navegação com
   Espaço/botão do meio, snap e temas Dark/Light/System.
-- Splash ligada às etapas reais do bootstrap, sem pausa artificial, e controles
+- Splash ligada às etapas reais do bootstrap, com mínimo de **1,8 s** ajustável
+  nas preferências (0,5–5 s), usando timer sem bloquear a interface, e controles
   **nativos de janela** para minimizar, maximizar/restaurar, arrastar e fechar.
 
 ## Executar
@@ -123,7 +128,11 @@ inspector. Os comandos também estão nos menus e na busca.
 - Matriz de pesos: `·`/`.` é ausência; `0` é aresta de custo zero. A matriz não
   preserva posições, rótulos, estilos nem a direção individual de um grafo misto;
   use `.grafla` para roundtrip completo. Editor matricial: até 100 vértices;
-  visualização: até 500. Trocar tipo/tamanho no diálogo reinicia a matriz pendente.
+  visualização: até 500. O painel preserva células ao mudar o tamanho ou tipo;
+  remover direção com pesos conflitantes é recusado sem apagar a edição.
+- Gerar e converter matriz são painéis integrados: parâmetros pendentes só afetam
+  o documento ao aplicar. O mínimo da splash é contado desde sua exibição e não
+  se soma ao trabalho de inicialização; `--no-splash` continua disponível.
 - Autosave é cópia de recuperação, **não** substitui Salvar nem marca o documento
   como salvo. Pode haver até um minuto de edição ainda não recuperável.
 - Exportação: largura 128–4.096 e altura até 8.192; margem de 24 unidades da cena.
@@ -168,7 +177,9 @@ servidor gráfico compatíveis com Qt. O smoke offscreen não valida o composito
 ## Arquitetura e evolução
 
 Veja [arquitetura](docs/arquitetura.md), [auditoria e decisões](docs/auditoria.md),
-[design system](docs/design-system.md) e [changelog](CHANGELOG.md).
+[design system](docs/design-system.md), [revisão do workspace](docs/ux-workspace.md)
+e [changelog](CHANGELOG.md). A [captura de execução BFS](docs/screenshots/steps.png)
+mostra a tabela de visitas e o slider de etapas ligados ao canvas.
 
 A modernização conserva o legado no commit `a9c310d`; módulos e assets obsoletos
 foram retirados do caminho ativo após a substituição por componentes testados.

@@ -56,7 +56,21 @@ class VertexItem(QGraphicsEllipseItem):
             or key in self.canvas.neighbor_vertices
         )
         hovered = self.isUnderMouse()
-        color = QColor(theme.accent if active else self.vertex.color)
+        dimmed = (
+            (self.canvas.highlight_vertices or self.canvas.highlight_edges)
+            and not active
+            and not hovered
+        )
+        if dimmed:
+            painter.setOpacity(0.45)
+        highlight_color = (
+            theme.visited
+            if self.canvas.current_vertex is not None
+            and key != self.canvas.current_vertex
+            and not self.isSelected()
+            else theme.accent
+        )
+        color = QColor(highlight_color if active else self.vertex.color)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         painter.setPen(QPen(color, 2 if active or hovered else 1.4))
         fill = QColor(theme.panel)
@@ -70,7 +84,10 @@ class VertexItem(QGraphicsEllipseItem):
             painter.setPen(QPen(QColor(theme.accent), 1.4, Qt.PenStyle.DashLine))
             painter.setBrush(Qt.BrushStyle.NoBrush)
             painter.drawEllipse(self.rect().adjusted(-4, -4, 4, 4))
-        painter.setPen(QColor(theme.accent if active else theme.text))
+        painter.setOpacity(1)
+        painter.setPen(
+            QColor(highlight_color if active else (theme.muted if dimmed else theme.text))
+        )
         font = QFont()
         font.setPointSizeF(10)
         font.setBold(active)
@@ -197,7 +214,18 @@ class EdgeItem(QGraphicsPathItem):
             or self.edge.id in self.canvas.highlight_edges
             or self.edge.id in self.canvas.neighbor_edges
         )
-        color = QColor(theme.accent if active or self.isUnderMouse() else self.edge.color)
+        if (
+            (self.canvas.highlight_vertices or self.canvas.highlight_edges)
+            and not active
+            and not self.isUnderMouse()
+        ):
+            painter.setOpacity(0.25)
+        highlight_color = (
+            theme.visited
+            if self.canvas.current_vertex is not None and not self.isSelected()
+            else theme.accent
+        )
+        color = QColor(highlight_color if active or self.isUnderMouse() else self.edge.color)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         pen = QPen(color, 3 if active else 1.8)
         pen.setCapStyle(Qt.PenCapStyle.RoundCap)
@@ -208,6 +236,7 @@ class EdgeItem(QGraphicsPathItem):
         painter.setBrush(color)
         painter.drawPath(self.arrow_path)
         if self.label:
+            painter.setOpacity(1)
             painter.setBrush(QColor(theme.canvas))
             painter.drawRoundedRect(self.label_rect, 4, 4)
             painter.setPen(QColor(theme.text))

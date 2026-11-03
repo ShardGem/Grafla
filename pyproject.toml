@@ -26,6 +26,9 @@ grafla = ["resources/*"]
 [tool.setuptools.dynamic]
 version = {attr = "grafla.__version__"}
 
+[tool.uv]
+cache-keys = [{file = "pyproject.toml"}, {file = "src/grafla/__init__.py"}, {file = "README.md"}]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 qt_api = "pyqt6"

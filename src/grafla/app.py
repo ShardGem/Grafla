@@ -60,7 +60,14 @@ def main() -> int:
         )
         return 1
     settings = QSettings(str(data_dir / "preferences.ini"), QSettings.Format.IniFormat)
-    splash = None if args.no_splash else Splash(settings.value("animations", True, type=bool))
+    splash = (
+        None
+        if args.no_splash
+        else Splash(
+            settings.value("animations", True, type=bool),
+            settings.value("splash_duration_ms", 1800, type=int),
+        )
+    )
     if splash:
         splash.show()
     state = {}
@@ -101,7 +108,10 @@ def main() -> int:
                 min(1366, int(available.width() * 0.94)), min(820, int(available.height() * 0.9))
             )
         state["window"] = window
-        QTimer.singleShot(0, present)
+        if splash:
+            splash.finish_when_ready(present)
+        else:
+            QTimer.singleShot(0, present)
 
     def present():
         window = state["window"]

@@ -15,6 +15,7 @@ class AnalysisController(QObject):
         self.task_token = 0
         self.result = None
         self.result_index = 0
+        self.tree_focus = False
         self.pool = QThreadPool(self)
         self.pool.setMaxThreadCount(2)
         self.playback = QTimer(self)
@@ -34,9 +35,10 @@ class AnalysisController(QObject):
         )
         self.task.signals.finished.connect(self.analysis_finished)
         self.task.signals.failed.connect(self.analysis_failed)
-        self.analysis.status.setText("Analisando snapshot do grafo…")
+        self.analysis.status.setText("Executando análise…")
         self.analysis.cancel.setEnabled(True)
         self.analysis.run.setEnabled(False)
+        self.analysis.run.setText("Analisando…")
         self.pool.start(self.task)
 
     def cancel_analysis(self):
@@ -59,6 +61,7 @@ class AnalysisController(QObject):
         self.playback.stop()
         self.analysis.play.setText("Reproduzir")
         self.result_index = 0
+        self.tree_focus = False
         self.render_result()
 
     def clear_analysis(self, stale=False):
@@ -68,11 +71,14 @@ class AnalysisController(QObject):
         self.task = None
         self.result = None
         self.result_index = 0
+        self.tree_focus = False
         self.canvas.highlight(set(), set())
         self.analysis.set_playback(False)
         self.analysis.position.setText("Sem execução")
         self.analysis.cancel.setEnabled(False)
         self.analysis.run.setEnabled(bool(self.document.graph.vertices))
+        self.analysis.run.setText("Executar análise")
+        self.analysis.browser.clear()
         self.results.clear()
         self.analysis.status.setText(
             "O grafo mudou. Execute novamente."
@@ -87,9 +93,10 @@ class AnalysisController(QObject):
         self.result = result
         self.analysis.cancel.setEnabled(False)
         self.analysis.run.setEnabled(True)
+        self.analysis.run.setText("Executar análise")
         self.analysis.status.setText(("Cancelado. " if result.cancelled else "") + result.message)
         self.results.setPlainText(format_result(self.document.graph, result))
-        self.results_dock.show()
+        self.analysis.browser.set_result(self.document.graph, result)
         playback = bool(result.paths or result.steps) and result.algorithm != "mst"
         self.analysis.set_playback(playback)
         self.analysis.cancel.setEnabled(playback)
@@ -100,6 +107,7 @@ class AnalysisController(QObject):
             self.task = None
             self.analysis.cancel.setEnabled(False)
             self.analysis.run.setEnabled(True)
+            self.analysis.run.setText("Executar análise")
             self.notify(message, error=True)
 
     def render_result(self):
@@ -107,6 +115,13 @@ class AnalysisController(QObject):
             return
         result = self.result
         if result.algorithm == "mst":
+            if self.tree_focus and result.paths:
+                self.canvas.highlight_path(result.paths[self.result_index])
+                self.analysis.browser.set_index(self.result_index)
+                self.analysis.position.setText(
+                    f"Aresta {self.result_index + 1} da floresta · custo {result.costs[self.result_index]:g}"
+                )
+                return
             edges = set()
             for a, b in result.paths:
                 key = self.canvas.pairs.get((a, b), self.canvas.pairs.get((b, a)))
@@ -116,6 +131,9 @@ class AnalysisController(QObject):
             self.analysis.position.setText(
                 f"Floresta · {len(edges)} arestas · custo {sum(result.costs):g}"
             )
+            self.analysis.browser.metric.setText(
+                f"Custo {sum(result.costs):g} · {len(edges)} arestas"
+            )
             return
         count = len(result.paths or result.steps)
         if not count:
@@ -123,6 +141,7 @@ class AnalysisController(QObject):
             return
         self.result_index = max(0, min(count - 1, self.result_index))
         index = self.result_index
+        self.analysis.browser.set_index(index)
         if result.paths:
             self.canvas.highlight_path(result.paths[index])
             self.analysis.position.setText(
@@ -152,6 +171,26 @@ class AnalysisController(QObject):
         self.result_index += delta
         self.render_result()
 
+    def select_result(self, index):
+        if self.result is None:
+            return
+        count = len(self.result.paths or self.result.steps)
+        if not count:
+            return
+        self.playback.stop()
+        self.analysis.play.setText("Reproduzir")
+        self.result_index = max(0, min(count - 1, index))
+        self.tree_focus = self.result.algorithm == "mst"
+        self.render_result()
+
+    def parameters_changed(self, *args):
+        had_result = self.result is not None or self.task is not None
+        self.clear_analysis()
+        if had_result:
+            self.analysis.status.setText(
+                "Parâmetros alterados. Execute novamente para atualizar o resultado."
+            )
+
     def update_speed(self, *args):
         self.playback.setInterval(1100 - self.analysis.speed.value() * 100)
 
@@ -162,7 +201,7 @@ class AnalysisController(QObject):
         elif self.result:
             if self.result_index >= len(self.result.paths or self.result.steps) - 1:
                 self.result_index = 0
-                self.render_result()
+            self.render_result()
             self.update_speed()
             self.playback.start()
             self.analysis.play.setText("Pausar")

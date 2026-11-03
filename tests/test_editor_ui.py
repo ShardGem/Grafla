@@ -4,7 +4,7 @@ from PyQt6.QtGui import QImage, QWheelEvent
 from PyQt6.QtTest import QSignalSpy
 from PyQt6.QtWidgets import QFileDialog, QMessageBox
 
-from grafla.dialogs import GenerateDialog, MatrixDialog, PreferencesDialog, SearchDialog
+from grafla.dialogs import PreferencesDialog, SearchDialog
 from grafla.domain import Graph
 from grafla.exporting import export_graph
 from grafla.items import EdgeItem
@@ -261,20 +261,17 @@ def test_native_window_states_and_close_cancel(window, graph, qtbot, monkeypatch
     assert window.isVisible()
 
 
-def test_generate_cancel_and_matrix_import_undo(window, graph, monkeypatch):
+def test_construction_panels_are_pending_until_applied_and_import_undo(window, graph, qtbot):
     populate(window, graph)
-    monkeypatch.setattr(GenerateDialog, "exec", lambda dialog: 0)
     window.generate()
+    window.building.generator.vertices.setValue(8)
     assert window.document.graph == graph
-
-    def accept_matrix(dialog):
-        dialog.count.setValue(2)
-        dialog.model.setData(dialog.model.index(0, 1), "1")
-        dialog.accept()
-        return 1
-
-    monkeypatch.setattr(MatrixDialog, "exec", accept_matrix)
     window.matrix(True)
+    panel = window.building.matrix
+    panel.count.setValue(2)
+    panel.model.setData(panel.model.index(0, 1), "1")
+    assert window.document.graph == graph
+    qtbot.mouseClick(panel.apply, Qt.MouseButton.LeftButton)
     assert len(window.document.graph.vertices) == 2
     assert len(window.document.graph.edges) == 1
     window.document.undo()
@@ -379,9 +376,11 @@ def test_preferences_search_clipboard_and_recovery_are_integrated(
     dialog = PreferencesDialog(window.settings, window)
     dialog.theme.setCurrentIndex(dialog.theme.findData("light"))
     dialog.snap.setChecked(True)
+    dialog.splash_duration.setValue(2.4)
     dialog.accept()
     window.apply_preferences()
     assert window.theme.canvas == "#fafbfd" and window.canvas.snap
+    assert window.settings.value("splash_duration_ms", type=int) == 2400
     palette = SearchDialog(list(window.commands.values()), graph.vertices.values(), window)
     palette.search.setText("vértice #2")
     assert palette.list.count() == 1

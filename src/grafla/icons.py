@@ -26,8 +26,17 @@ PATHS = {
 
 
 @lru_cache(maxsize=128)
-def icon(name: str, color: str) -> QIcon:
+def icon(name: str, color: str, active: bool = False) -> QIcon:
     body = PATHS.get(name, PATHS["vertex"])
+    if active:
+        marks = {
+            "select": f'<path d="M5 3l14 10-7 1-3 7z" fill="{color}" fill-opacity=".3"/>',
+            "hand": f'<circle cx="13" cy="16" r="3" fill="{color}" stroke="none"/>',
+            "vertex": f'<circle cx="10" cy="12" r="3" fill="{color}" stroke="none"/>',
+            "edge": f'<circle cx="4" cy="18" r="2" fill="{color}"/><circle cx="20" cy="5" r="2" fill="{color}"/>',
+            "delete": '<path d="M3 3l17 3"/>',
+        }
+        body += marks.get(name, "")
     svg = f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g fill="none" stroke="{color}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">{body}</g></svg>'
     renderer = QSvgRenderer(QByteArray(svg.encode()))
     result = QIcon()

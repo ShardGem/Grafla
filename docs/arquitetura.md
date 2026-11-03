@@ -23,6 +23,11 @@ combos. Toda mudança relevante invalida resultados associados à revisão anter
 SO permanece nativa. `file_actions.py` cuida do ciclo do documento, recentes e
 recuperação; `analysis_controller.py` cuida de jobs, resultados e playback.
 
+`shell.py` compõe a arquitetura visual: header, faixa horizontal de modos, canvas,
+zoom e painel contextual. `workspace.py` contém gerador/matriz/layouts integrados;
+`result_browser.py` apresenta rotas e um modelo lazy das etapas. Listas, tabelas e
+sliders emitem apenas a escolha de índice; não executam lógica matemática.
+
 `Canvas` mantém mapas por ID, incidentes e pares de extremos. `items.py` desenha
 vértices e arestas. Deslocar um item atualiza somente as arestas incidentes;
 mudanças estruturais reconciliam os mapas. Setas, labels e áreas de hit pertencem
@@ -82,8 +87,9 @@ QPdfWriter; ocultam temporariamente decoração e itens fora da seleção e rest
 o editor também quando ocorre falha.
 
 `app.py` cria QApplication e logging, apresenta splash, agenda etapas reais de tema
-e editor pelo event loop e mostra a janela pronta. Não existe sleep ou duração
-mínima de splash. Apenas sua entrada pode animar, sem segurar o bootstrap.
+e editor pelo event loop e mostra a janela pronta. A preferência de duração mínima
+(1,8 s por padrão) é atendida por um timer preciso, contado desde o showEvent.
+Se o carregamento já consumiu esse tempo, a janela abre imediatamente. Não há sleep.
 
 ## Testes e distribuição
 

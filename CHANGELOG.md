@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.1.0 — workspace e exploração contextual
+
+- Faixa horizontal de ferramentas com ícones ativos e grupos de ações.
+- Slider de zoom sincronizado com roda, fit, atalhos e botões, junto a grade/snap.
+- Gerador, matriz e layouts integrados ao workspace; edição pendente e undo preservados.
+- Rotas selecionáveis com custo e sequência; tabela lazy e slider de etapas ligados ao canvas.
+- Relatório textual sob demanda; mais área de canvas durante a exploração.
+- Visitas, vértice atual e caminho com estados distintos e contexto legível.
+- Mudanças de algoritmo/origem/destino cancelam resultados que não correspondem à nova consulta.
+- Splash com mínimo de 1,8 s, ajustável de 0,5 a 5 s, sem bloquear o event loop.
+- CI instala o runtime gráfico do Qt no Linux e usa setup-uv com Node 24.
+
 ## 2.0.0 — primeira versão renovada
 
 - Domínio sem Qt, documento único, patches reversíveis e histórico de 60 operações.

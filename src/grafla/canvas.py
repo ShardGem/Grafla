@@ -432,12 +432,15 @@ class Canvas(QGraphicsView):
                 self.edges[edge_id].update()
 
     def highlight(self, nodes: set[int], edges: set[int], current: int | None = None):
+        old_mask = bool(self.highlight_vertices or self.highlight_edges)
         changed_nodes = self.highlight_vertices | nodes
         changed_edges = self.highlight_edges | edges
         self.highlight_vertices, self.highlight_edges = nodes, edges
         self.current_vertex = current
         if nodes or edges:
             self.hover_vertex(None)
+        if old_mask != bool(nodes or edges):
+            self.graph_scene.update()
         for key in changed_nodes:
             if key in self.vertices:
                 self.vertices[key].update()

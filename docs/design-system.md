@@ -35,9 +35,16 @@ Salvar fictício. Cores são editadas como #RRGGBB, validadas na transação. In
 checkboxes e combos recebem o estilo do tema e labels de formulário.
 
 Os painéis laterais são recolhíveis e a análise tem scroll para telas menores.
-O dock de resultados abre quando necessário. Zoom fica na status bar, com layout
-Qt, sem posicionamento absoluto sobre o canvas. A janela usa drag/resize e
-controles nativos do SO.
+O relatório é um dock secundário que o usuário abre quando precisa copiar detalhes.
+O zoom usa layout Qt, sem posicionamento absoluto sobre o canvas. A janela usa
+drag/resize e controles nativos do SO.
+
+Na revisão 2.1, ferramentas e ações contextuais ficam numa faixa horizontal.
+O zoom tem sua própria faixa abaixo do canvas, com slider logarítmico, ±, 100%,
+ajuste, grade e snap. Rotas são escolhas diretas, com destaque no canvas; passos
+têm uma tabela de visitas e slider temporal. O relatório não abre automaticamente.
+O contexto sem destaque mantém rótulos legíveis; visitas são verde-azuladas,
+o vértice atual tem ring laranja e a seleção continua com contorno explícito.
 
 O estado vazio apresenta criação e atalhos discretos. Mensagens normais usam a
 status bar; validação também aparece no painel de status, e logs guardam detalhes.

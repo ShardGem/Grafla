@@ -17,6 +17,7 @@ class Theme:
     hover: str
     grid: str
     danger: str
+    visited: str = "#7ed8c5"
 
 
 DARK = Theme(
@@ -44,6 +45,7 @@ LIGHT = Theme(
     "#e0e7f1",
     "#d6dfe9",
     "#b52842",
+    "#17766d",
 )
 
 
@@ -92,6 +94,17 @@ def apply(app: QApplication, theme: Theme) -> None:
         QToolButton {{ border: 1px solid transparent; border-radius: 5px; padding: 6px; }}
         QToolButton:hover, QPushButton:hover {{ background: {theme.hover}; }}
         QToolButton:checked {{ border: 1px solid {theme.accent}; background: {theme.hover}; }}
+        QToolBar#ToolStrip {{ background: {theme.background}; padding: 6px 12px; border-bottom: 1px solid {theme.border}; }}
+        QToolBar#ToolStrip QToolButton {{ padding: 7px 10px; }}
+        QFrame#CanvasControls {{ background: {theme.surface}; border-top: 1px solid {theme.border}; }}
+        QSlider::groove:horizontal {{ height: 3px; background: {theme.border}; border-radius: 1px; }}
+        QSlider::sub-page:horizontal {{ background: {theme.accent}; }}
+        QSlider::handle:horizontal {{ background: {theme.accent}; width: 12px; margin: -5px 0; border-radius: 6px; }}
+        QListWidget#RouteList {{ background: {theme.canvas}; border: 1px solid {theme.border}; border-radius: 5px; }}
+        QListWidget#RouteList::item {{ padding: 9px 8px; border-bottom: 1px solid {theme.border}; }}
+        QListWidget#RouteList::item:selected {{ background: {theme.hover}; color: {theme.accent}; border-left: 3px solid {theme.accent}; }}
+        QListWidget#RouteList::item:hover {{ background: {theme.panel}; }}
+        QLabel#ResultMetric {{ font-size: 15px; font-weight: 600; }}
         QPushButton {{ background: {theme.panel}; border: 1px solid {theme.border};
                        border-radius: 5px; padding: 7px 12px; }}
         QPushButton[primary="true"] {{ color: {theme.canvas}; background: {theme.accent};

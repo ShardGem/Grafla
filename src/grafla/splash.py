@@ -1,4 +1,4 @@
-from PyQt6.QtCore import QPropertyAnimation, QRectF, Qt
+from PyQt6.QtCore import QElapsedTimer, QPropertyAnimation, QRectF, Qt, QTimer
 from PyQt6.QtGui import QColor, QFont, QPainter, QPen
 from PyQt6.QtWidgets import QApplication, QWidget
 
@@ -6,21 +6,51 @@ from grafla import __version__
 
 
 class Splash(QWidget):
-    """A lightweight painted bootstrap surface; it never enforces a minimum duration."""
+    """A nonblocking bootstrap surface with a user-configurable minimum duration."""
 
-    def __init__(self, animate=True):
+    def __init__(self, animate=True, minimum_ms=1800):
         super().__init__(None, Qt.WindowType.SplashScreen | Qt.WindowType.FramelessWindowHint)
         self.setFixedSize(620, 340)
         self.setAccessibleName("Inicialização do Grafla")
         self.status = "Inicializando…"
         self.progress = 0
         self.animation = None
+        self.minimum_ms = max(0, min(5000, minimum_ms))
+        self.elapsed = QElapsedTimer()
+        self.hold = QTimer(self)
+        self.hold.setSingleShot(True)
+        self.hold.setTimerType(Qt.TimerType.PreciseTimer)
+        self.callback = None
+        self.hold.timeout.connect(self.release)
         if animate and QApplication.platformName() not in {"offscreen", "minimal"}:
             self.animation = QPropertyAnimation(self, b"windowOpacity", self)
             self.animation.setDuration(140)
             self.animation.setStartValue(0.0)
             self.animation.setEndValue(1.0)
             self.animation.start()
+
+    def showEvent(self, event):
+        self.elapsed.start()
+        super().showEvent(event)
+
+    def finish_when_ready(self, callback):
+        self.callback = callback
+        self.report("Pronto para explorar.", 1.0)
+        remaining = max(0, self.minimum_ms - self.elapsed.elapsed())
+        if remaining:
+            self.hold.start(remaining)
+        else:
+            self.release()
+
+    def release(self):
+        callback, self.callback = self.callback, None
+        if callback is not None:
+            callback()
+
+    def closeEvent(self, event):
+        self.hold.stop()
+        self.callback = None
+        super().closeEvent(event)
 
     def report(self, status, progress):
         self.status, self.progress = status, progress

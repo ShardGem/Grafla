@@ -31,6 +31,14 @@ def test_actual_entrypoint_starts_and_exits_cleanly(tmp_path):
     assert "Traceback" not in result.stderr
 
 
+def test_installed_version_matches_the_bootstrap_metadata():
+    from importlib.metadata import version
+
+    from grafla import __version__
+
+    assert version("grafla") == __version__
+
+
 def test_smoke_mode_never_erases_an_existing_recovery(tmp_path):
     recovery = tmp_path / "recovery.grafla"
     recovery.write_bytes(b"existing recovery")

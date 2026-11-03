@@ -210,68 +210,81 @@ class AnalysisPanel(QWidget):
 
     def __init__(self, parent=None):
         super().__init__(parent)
+        from grafla.result_browser import ResultBrowser
+
         layout = QVBoxLayout(self)
-        layout.setContentsMargins(16, 16, 16, 16)
-        layout.setSpacing(12)
-        title = QLabel("EXPLORAR O GRAFO")
-        title.setProperty("muted", True)
-        layout.addWidget(title)
-        form = QFormLayout()
+        layout.setContentsMargins(14, 14, 14, 14)
+        layout.setSpacing(9)
         self.algorithm = QComboBox()
+        self.algorithm.setSizeAdjustPolicy(
+            QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon
+        )
+        self.algorithm.setMinimumContentsLength(14)
         for key, label in ALGORITHMS.items():
             self.algorithm.addItem(label, key)
+        layout.addWidget(QLabel("Algoritmo"))
+        layout.addWidget(self.algorithm)
+        endpoints = QHBoxLayout()
         self.origin, self.destination = QComboBox(), QComboBox()
-        form.addRow("Algoritmo", self.algorithm)
-        form.addRow("Origem", self.origin)
-        form.addRow("Destino", self.destination)
-        layout.addLayout(form)
-        note = QLabel(
-            "Maior caminho e enumeração: até 300 caminhos / 1,5 s.\n"
-            "BFS/DFS permitem acompanhar visita e fila/pilha passo a passo."
-        )
-        note.setProperty("muted", True)
-        note.setWordWrap(True)
-        layout.addWidget(note)
+        for combo in (self.origin, self.destination):
+            combo.setMinimumContentsLength(4)
+            combo.setSizeAdjustPolicy(
+                QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon
+            )
+        endpoints.addWidget(QLabel("De"))
+        endpoints.addWidget(self.origin, 1)
+        endpoints.addWidget(QLabel("Para"))
+        endpoints.addWidget(self.destination, 1)
+        layout.addLayout(endpoints)
+        self.note = QLabel()
+        self.note.setWordWrap(True)
+        self.note.setProperty("muted", True)
+        layout.addWidget(self.note)
         row = QHBoxLayout()
-        self.run = QPushButton("Executar")
+        self.run = QPushButton("Executar análise")
         self.run.setProperty("primary", True)
         self.cancel = QPushButton("Parar")
         self.cancel.setEnabled(False)
-        row.addWidget(self.run)
+        row.addWidget(self.run, 1)
         row.addWidget(self.cancel)
         layout.addLayout(row)
         self.status = QLabel("Escolha um algoritmo e os vértices de referência.")
         self.status.setWordWrap(True)
         layout.addWidget(self.status)
-        playback = QGroupBox("Navegação e execução")
-        controls = QVBoxLayout(playback)
+        self.browser = ResultBrowser()
+        layout.addWidget(self.browser, 1)
         row = QHBoxLayout()
-        self.previous = QPushButton("←")
-        self.previous.setToolTip("Passo ou caminho anterior")
-        self.play = QPushButton("Reproduzir")
-        self.next = QPushButton("→")
-        self.next.setToolTip("Próximo passo ou caminho")
+        self.previous, self.play, self.next = (
+            QPushButton("←"),
+            QPushButton("Reproduzir"),
+            QPushButton("→"),
+        )
+        self.previous.setToolTip("Passo ou rota anterior")
+        self.next.setToolTip("Próximo passo ou rota")
         row.addWidget(self.previous)
-        row.addWidget(self.play)
+        row.addWidget(self.play, 1)
         row.addWidget(self.next)
-        controls.addLayout(row)
-        self.restart = QPushButton("Reiniciar visualização")
-        self.restart.clicked.connect(self.restart_requested.emit)
-        controls.addWidget(self.restart)
+        layout.addLayout(row)
         self.position = QLabel("Sem execução")
         self.position.setWordWrap(True)
-        controls.addWidget(self.position)
+        self.position.setProperty("muted", True)
+        layout.addWidget(self.position)
+        row = QHBoxLayout()
+        row.addWidget(QLabel("Velocidade"))
         self.speed = QSlider(Qt.Orientation.Horizontal)
         self.speed.setRange(1, 10)
         self.speed.setValue(4)
         self.speed.setAccessibleName("Velocidade da visualização")
-        controls.addWidget(QLabel("Velocidade"))
-        controls.addWidget(self.speed)
-        layout.addWidget(playback)
-        clear = QPushButton("Limpar resultado e destaque")
+        row.addWidget(self.speed, 1)
+        layout.addLayout(row)
+        row = QHBoxLayout()
+        self.restart = QPushButton("↺ Reiniciar")
+        self.restart.clicked.connect(self.restart_requested.emit)
+        clear = QPushButton("Limpar")
         clear.clicked.connect(self.clear_requested.emit)
-        layout.addWidget(clear)
-        layout.addStretch()
+        row.addWidget(self.restart)
+        row.addWidget(clear)
+        layout.addLayout(row)
         self.run.clicked.connect(self.run_requested.emit)
         self.cancel.clicked.connect(self.cancel_requested.emit)
         self.previous.clicked.connect(lambda: self.next_requested.emit(-1))
@@ -285,20 +298,38 @@ class AnalysisPanel(QWidget):
         name = self.algorithm.currentData()
         self.origin.setEnabled(name in {"shortest", "longest", "all", "bfs", "dfs"})
         self.destination.setEnabled(name in {"shortest", "longest", "all"})
+        notes = {
+            "shortest": "Menor custo total. Arestas sem peso custam 1.",
+            "longest": "Busca parcial: até 300 caminhos / 1,5 s. Não garante o ótimo se interrompida.",
+            "all": "Até 300 caminhos / 1,5 s. Clique numa rota para destacá-la.",
+            "bfs": "Explore por níveis. A tabela mostra visitas, arestas e fila.",
+            "dfs": "Explore em profundidade. A pilha mostra o caminho da busca.",
+            "mst": "Grafo não direcionado. O resultado destaca a floresta inteira.",
+            "components": "Conectividade fraca. Selecione um grupo para isolá-lo visualmente.",
+            "topological": "Exige grafo dirigido sem ciclos.",
+        }
+        self.note.setText(notes[name])
 
     def refresh_vertices(self, graph):
         origin, destination = self.origin.currentData(), self.destination.currentData()
-        self.origin.clear()
-        self.destination.clear()
-        for key in sorted(graph.vertices):
-            vertex = graph.vertices[key]
-            label = f"{key} · {vertex.label}" if vertex.label else str(key)
-            self.origin.addItem(label, key)
-            self.destination.addItem(label, key)
-        for combo, previous in ((self.origin, origin), (self.destination, destination)):
-            index = combo.findData(previous)
-            if index >= 0:
-                combo.setCurrentIndex(index)
+        for combo in (self.origin, self.destination):
+            combo.blockSignals(True)
+            combo.clear()
+        try:
+            for key in sorted(graph.vertices):
+                vertex = graph.vertices[key]
+                label = f"{key} · {vertex.label}" if vertex.label else str(key)
+                self.origin.addItem(label, key)
+                self.destination.addItem(label, key)
+            for combo, previous in ((self.origin, origin), (self.destination, destination)):
+                index = combo.findData(previous)
+                if index >= 0:
+                    combo.setCurrentIndex(index)
+                elif combo is self.destination and combo.count() > 1:
+                    combo.setCurrentIndex(combo.count() - 1)
+        finally:
+            for combo in (self.origin, self.destination):
+                combo.blockSignals(False)
         self.run.setEnabled(bool(graph.vertices))
 
     def set_playback(self, enabled):
