@@ -6,7 +6,10 @@ Grafla 2.1 é um editor desktop de grafos em Python e Qt: edição direta, docum
 versionados, histórico de alterações, física opcional e análises com visualização.
 O alvo principal é Windows; a base também pode ser executada em Linux e macOS.
 
-![Grafla: conexões com origem explícita e ferramentas expressivas](docs/screenshots/editor.png)
+![Grafla: planejamento de rotas com Dijkstra](docs/screenshots/galeria/01-rotas-de-entrega.png)
+
+[Veja a galeria com 18 casos de uso](docs/galeria.md), com capturas em alta resolução
+e os grafos de exemplo para abrir no editor.
 
 ## O que funciona
 
@@ -52,6 +55,18 @@ O alvo principal é Windows; a base também pode ser executada em Linux e macOS.
 - Splash ligada às etapas reais do bootstrap, com mínimo de **1,8 s** ajustável
   nas preferências (0,5–5 s), usando timer sem bloquear a interface, e controles
   **nativos de janela** para minimizar, maximizar/restaurar, arrastar e fechar.
+
+## Um passeio pelo editor
+
+| Buscas passo a passo | Física com vértices fixados |
+| --- | --- |
+| [![Busca em largura com a fila de visitas](docs/screenshots/galeria/03-busca-em-largura.png)](docs/galeria.md#caso-03) | [![Organização de uma rede com três centros fixados](docs/screenshots/galeria/14-fisica.png)](docs/galeria.md#caso-14) |
+| **Matrizes e pesos** | **Tema claro** |
+| [![Grafo e sua matriz de pesos](docs/screenshots/galeria/11-grafo-para-matriz.png)](docs/galeria.md#caso-11) | [![Planejamento de rotas no tema claro](docs/screenshots/galeria/16-tema-claro.png)](docs/galeria.md#caso-16) |
+
+A [galeria completa](docs/galeria.md) também mostra árvore geradora mínima,
+dependências, componentes, laços, conexões opostas, propriedades, geração de grafos,
+seleção em grupo e layouts. Os arquivos estão em [`examples/galeria/`](examples/galeria/).
 
 ## Executar
 

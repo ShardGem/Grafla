@@ -2,6 +2,8 @@
 
 ## Não lançado — precisão de interação e física configurável
 
+- Galeria com 18 capturas de casos de uso, 14 grafos para abrir no editor e um
+  roteiro para reproduzir as imagens. README com novas prévias das ferramentas.
 - Duplo clique respeita o modo ativo; construção não seleciona nem arrasta elementos.
   Origem de aresta distinta da seleção, cancelamento explícito, laços opcionais e
   conexões em sequência. Snap deixa vértices não movidos intactos.

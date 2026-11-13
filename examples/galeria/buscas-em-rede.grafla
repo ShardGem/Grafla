@@ -1,0 +1,250 @@
+{
+  "format": "grafla",
+  "schema_version": 1,
+  "graph": {
+    "vertices": [
+      {
+        "id": 1,
+        "x": -400,
+        "y": 0,
+        "label": "Central",
+        "color": "#ffad78",
+        "radius": 34,
+        "pinned": false
+      },
+      {
+        "id": 2,
+        "x": -150,
+        "y": -230,
+        "label": "A",
+        "color": "#82b6ff",
+        "radius": 34,
+        "pinned": false
+      },
+      {
+        "id": 3,
+        "x": -150,
+        "y": 0,
+        "label": "B",
+        "color": "#7ed8c5",
+        "radius": 34,
+        "pinned": false
+      },
+      {
+        "id": 4,
+        "x": -150,
+        "y": 230,
+        "label": "C",
+        "color": "#b7a4f5",
+        "radius": 34,
+        "pinned": false
+      },
+      {
+        "id": 5,
+        "x": 110,
+        "y": -310,
+        "label": "A1",
+        "color": "#82b6ff",
+        "radius": 34,
+        "pinned": false
+      },
+      {
+        "id": 6,
+        "x": 110,
+        "y": -150,
+        "label": "A2",
+        "color": "#82b6ff",
+        "radius": 34,
+        "pinned": false
+      },
+      {
+        "id": 7,
+        "x": 110,
+        "y": 50,
+        "label": "B1",
+        "color": "#7ed8c5",
+        "radius": 34,
+        "pinned": false
+      },
+      {
+        "id": 8,
+        "x": 110,
+        "y": 220,
+        "label": "C1",
+        "color": "#b7a4f5",
+        "radius": 34,
+        "pinned": false
+      },
+      {
+        "id": 9,
+        "x": 110,
+        "y": 380,
+        "label": "C2",
+        "color": "#b7a4f5",
+        "radius": 34,
+        "pinned": false
+      },
+      {
+        "id": 10,
+        "x": 380,
+        "y": -230,
+        "label": "R1",
+        "color": "#82b6ff",
+        "radius": 34,
+        "pinned": false
+      },
+      {
+        "id": 11,
+        "x": 380,
+        "y": 30,
+        "label": "R2",
+        "color": "#7ed8c5",
+        "radius": 34,
+        "pinned": false
+      },
+      {
+        "id": 12,
+        "x": 380,
+        "y": 300,
+        "label": "R3",
+        "color": "#b7a4f5",
+        "radius": 34,
+        "pinned": false
+      }
+    ],
+    "edges": [
+      {
+        "id": 1,
+        "source": 1,
+        "target": 2,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 2,
+        "source": 1,
+        "target": 3,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 3,
+        "source": 1,
+        "target": 4,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 4,
+        "source": 2,
+        "target": 5,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 5,
+        "source": 2,
+        "target": 6,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 6,
+        "source": 3,
+        "target": 7,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 7,
+        "source": 4,
+        "target": 8,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 8,
+        "source": 4,
+        "target": 9,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 9,
+        "source": 5,
+        "target": 10,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 10,
+        "source": 6,
+        "target": 10,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 11,
+        "source": 7,
+        "target": 11,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 12,
+        "source": 8,
+        "target": 12,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 13,
+        "source": 9,
+        "target": 12,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      }
+    ],
+    "next_vertex": 13,
+    "next_edge": 14
+  }
+}

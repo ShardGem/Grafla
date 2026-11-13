@@ -1,0 +1,137 @@
+{
+  "format": "grafla",
+  "schema_version": 1,
+  "graph": {
+    "vertices": [
+      {
+        "id": 1,
+        "x": -380,
+        "y": 0,
+        "label": "Novo",
+        "color": "#82b6ff",
+        "radius": 38,
+        "pinned": false
+      },
+      {
+        "id": 2,
+        "x": -100,
+        "y": 0,
+        "label": "Fila",
+        "color": "#b7a4f5",
+        "radius": 38,
+        "pinned": false
+      },
+      {
+        "id": 3,
+        "x": 190,
+        "y": 0,
+        "label": "Exec",
+        "color": "#ffad78",
+        "radius": 38,
+        "pinned": false
+      },
+      {
+        "id": 4,
+        "x": 480,
+        "y": 280,
+        "label": "Erro",
+        "color": "#efa4bb",
+        "radius": 38,
+        "pinned": false
+      },
+      {
+        "id": 5,
+        "x": 480,
+        "y": 0,
+        "label": "Fim",
+        "color": "#7ed8c5",
+        "radius": 38,
+        "pinned": false
+      }
+    ],
+    "edges": [
+      {
+        "id": 1,
+        "source": 1,
+        "target": 2,
+        "directed": true,
+        "weighted": false,
+        "weight": 1,
+        "label": "enviar",
+        "color": "#71869d"
+      },
+      {
+        "id": 2,
+        "source": 2,
+        "target": 3,
+        "directed": true,
+        "weighted": false,
+        "weight": 1,
+        "label": "iniciar",
+        "color": "#71869d"
+      },
+      {
+        "id": 3,
+        "source": 3,
+        "target": 2,
+        "directed": true,
+        "weighted": false,
+        "weight": 1,
+        "label": "voltar",
+        "color": "#71869d"
+      },
+      {
+        "id": 4,
+        "source": 3,
+        "target": 3,
+        "directed": true,
+        "weighted": false,
+        "weight": 1,
+        "label": "aguardar",
+        "color": "#71869d"
+      },
+      {
+        "id": 5,
+        "source": 3,
+        "target": 4,
+        "directed": true,
+        "weighted": false,
+        "weight": 1,
+        "label": "falhar",
+        "color": "#71869d"
+      },
+      {
+        "id": 6,
+        "source": 4,
+        "target": 2,
+        "directed": true,
+        "weighted": false,
+        "weight": 1,
+        "label": "tentar",
+        "color": "#71869d"
+      },
+      {
+        "id": 7,
+        "source": 3,
+        "target": 5,
+        "directed": true,
+        "weighted": false,
+        "weight": 1,
+        "label": "concluir",
+        "color": "#71869d"
+      },
+      {
+        "id": 8,
+        "source": 4,
+        "target": 4,
+        "directed": true,
+        "weighted": false,
+        "weight": 1,
+        "label": "revisar",
+        "color": "#71869d"
+      }
+    ],
+    "next_vertex": 6,
+    "next_edge": 9
+  }
+}

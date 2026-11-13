@@ -1,0 +1,250 @@
+{
+  "format": "grafla",
+  "schema_version": 1,
+  "graph": {
+    "vertices": [
+      {
+        "id": 1,
+        "x": -410,
+        "y": -140,
+        "label": "CD",
+        "color": "#82b6ff",
+        "radius": 34,
+        "pinned": false
+      },
+      {
+        "id": 2,
+        "x": -250,
+        "y": -300,
+        "label": "Loja 1",
+        "color": "#82b6ff",
+        "radius": 34,
+        "pinned": false
+      },
+      {
+        "id": 3,
+        "x": -90,
+        "y": -140,
+        "label": "Loja 2",
+        "color": "#82b6ff",
+        "radius": 34,
+        "pinned": false
+      },
+      {
+        "id": 4,
+        "x": -250,
+        "y": 20,
+        "label": "Loja 3",
+        "color": "#82b6ff",
+        "radius": 34,
+        "pinned": false
+      },
+      {
+        "id": 5,
+        "x": 100,
+        "y": -70,
+        "label": "Hub",
+        "color": "#7ed8c5",
+        "radius": 34,
+        "pinned": false
+      },
+      {
+        "id": 6,
+        "x": 280,
+        "y": -240,
+        "label": "Ana",
+        "color": "#7ed8c5",
+        "radius": 34,
+        "pinned": false
+      },
+      {
+        "id": 7,
+        "x": 460,
+        "y": -70,
+        "label": "Bia",
+        "color": "#7ed8c5",
+        "radius": 34,
+        "pinned": false
+      },
+      {
+        "id": 8,
+        "x": 280,
+        "y": 100,
+        "label": "Caio",
+        "color": "#7ed8c5",
+        "radius": 34,
+        "pinned": false
+      },
+      {
+        "id": 9,
+        "x": -260,
+        "y": 260,
+        "label": "Lab",
+        "color": "#b7a4f5",
+        "radius": 34,
+        "pinned": false
+      },
+      {
+        "id": 10,
+        "x": -90,
+        "y": 150,
+        "label": "Ivo",
+        "color": "#b7a4f5",
+        "radius": 34,
+        "pinned": false
+      },
+      {
+        "id": 11,
+        "x": -90,
+        "y": 370,
+        "label": "Lia",
+        "color": "#b7a4f5",
+        "radius": 34,
+        "pinned": false
+      },
+      {
+        "id": 12,
+        "x": 350,
+        "y": 330,
+        "label": "Ilha",
+        "color": "#efa4bb",
+        "radius": 34,
+        "pinned": false
+      }
+    ],
+    "edges": [
+      {
+        "id": 1,
+        "source": 1,
+        "target": 2,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 2,
+        "source": 2,
+        "target": 3,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 3,
+        "source": 3,
+        "target": 4,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 4,
+        "source": 4,
+        "target": 1,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 5,
+        "source": 1,
+        "target": 3,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 6,
+        "source": 5,
+        "target": 6,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 7,
+        "source": 6,
+        "target": 7,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 8,
+        "source": 7,
+        "target": 8,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 9,
+        "source": 8,
+        "target": 5,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 10,
+        "source": 5,
+        "target": 7,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 11,
+        "source": 9,
+        "target": 10,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 12,
+        "source": 10,
+        "target": 11,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 13,
+        "source": 11,
+        "target": 9,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      }
+    ],
+    "next_vertex": 13,
+    "next_edge": 14
+  }
+}

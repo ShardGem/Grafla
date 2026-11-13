@@ -1,0 +1,145 @@
+{
+  "format": "grafla",
+  "schema_version": 1,
+  "graph": {
+    "vertices": [
+      {
+        "id": 1,
+        "x": -320,
+        "y": -270,
+        "label": "Ana",
+        "color": "#82b6ff",
+        "radius": 38,
+        "pinned": false
+      },
+      {
+        "id": 2,
+        "x": -320,
+        "y": -90,
+        "label": "Bia",
+        "color": "#82b6ff",
+        "radius": 38,
+        "pinned": false
+      },
+      {
+        "id": 3,
+        "x": -320,
+        "y": 90,
+        "label": "Caio",
+        "color": "#82b6ff",
+        "radius": 38,
+        "pinned": false
+      },
+      {
+        "id": 4,
+        "x": -320,
+        "y": 270,
+        "label": "Dani",
+        "color": "#82b6ff",
+        "radius": 38,
+        "pinned": false
+      },
+      {
+        "id": 5,
+        "x": 280,
+        "y": -220,
+        "label": "Web",
+        "color": "#7ed8c5",
+        "radius": 38,
+        "pinned": false
+      },
+      {
+        "id": 6,
+        "x": 280,
+        "y": 0,
+        "label": "API",
+        "color": "#b7a4f5",
+        "radius": 38,
+        "pinned": false
+      },
+      {
+        "id": 7,
+        "x": 280,
+        "y": 220,
+        "label": "App",
+        "color": "#efa4bb",
+        "radius": 38,
+        "pinned": false
+      }
+    ],
+    "edges": [
+      {
+        "id": 1,
+        "source": 1,
+        "target": 5,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 2,
+        "source": 1,
+        "target": 6,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 3,
+        "source": 2,
+        "target": 5,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 4,
+        "source": 2,
+        "target": 7,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 5,
+        "source": 3,
+        "target": 6,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 6,
+        "source": 4,
+        "target": 6,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 7,
+        "source": 4,
+        "target": 7,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      }
+    ],
+    "next_vertex": 8,
+    "next_edge": 8
+  }
+}

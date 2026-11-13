@@ -1,0 +1,414 @@
+{
+  "format": "grafla",
+  "schema_version": 1,
+  "graph": {
+    "vertices": [
+      {
+        "id": 1,
+        "x": 1.432836755002403e-14,
+        "y": -234.0,
+        "label": "",
+        "color": "#82b6ff",
+        "radius": 26,
+        "pinned": false
+      },
+      {
+        "id": 2,
+        "x": 80.03271353820651,
+        "y": -219.88807326390256,
+        "label": "",
+        "color": "#7ed8c5",
+        "radius": 26,
+        "pinned": false
+      },
+      {
+        "id": 3,
+        "x": 150.41230066665022,
+        "y": -179.25439968984085,
+        "label": "",
+        "color": "#b7a4f5",
+        "radius": 26,
+        "pinned": false
+      },
+      {
+        "id": 4,
+        "x": 202.64994448555862,
+        "y": -117.0,
+        "label": "",
+        "color": "#82b6ff",
+        "radius": 26,
+        "pinned": false
+      },
+      {
+        "id": 5,
+        "x": 230.44501420485668,
+        "y": -40.6336735740617,
+        "label": "",
+        "color": "#7ed8c5",
+        "radius": 26,
+        "pinned": false
+      },
+      {
+        "id": 6,
+        "x": 230.44501420485668,
+        "y": 40.6336735740617,
+        "label": "",
+        "color": "#b7a4f5",
+        "radius": 26,
+        "pinned": false
+      },
+      {
+        "id": 7,
+        "x": 202.64994448555865,
+        "y": 116.99999999999996,
+        "label": "",
+        "color": "#82b6ff",
+        "radius": 26,
+        "pinned": false
+      },
+      {
+        "id": 8,
+        "x": 150.41230066665022,
+        "y": 179.25439968984082,
+        "label": "",
+        "color": "#7ed8c5",
+        "radius": 26,
+        "pinned": false
+      },
+      {
+        "id": 9,
+        "x": 80.03271353820651,
+        "y": 219.88807326390256,
+        "label": "",
+        "color": "#b7a4f5",
+        "radius": 26,
+        "pinned": false
+      },
+      {
+        "id": 10,
+        "x": 1.432836755002403e-14,
+        "y": 234.0,
+        "label": "",
+        "color": "#82b6ff",
+        "radius": 26,
+        "pinned": false
+      },
+      {
+        "id": 11,
+        "x": -80.03271353820648,
+        "y": 219.88807326390258,
+        "label": "",
+        "color": "#7ed8c5",
+        "radius": 26,
+        "pinned": false
+      },
+      {
+        "id": 12,
+        "x": -150.41230066665014,
+        "y": 179.25439968984094,
+        "label": "",
+        "color": "#b7a4f5",
+        "radius": 26,
+        "pinned": false
+      },
+      {
+        "id": 13,
+        "x": -202.6499444855586,
+        "y": 117.00000000000007,
+        "label": "",
+        "color": "#82b6ff",
+        "radius": 26,
+        "pinned": false
+      },
+      {
+        "id": 14,
+        "x": -230.44501420485668,
+        "y": 40.63367357406168,
+        "label": "",
+        "color": "#7ed8c5",
+        "radius": 26,
+        "pinned": false
+      },
+      {
+        "id": 15,
+        "x": -230.4450142048567,
+        "y": -40.633673574061625,
+        "label": "",
+        "color": "#b7a4f5",
+        "radius": 26,
+        "pinned": false
+      },
+      {
+        "id": 16,
+        "x": -202.64994448555873,
+        "y": -116.99999999999986,
+        "label": "",
+        "color": "#82b6ff",
+        "radius": 26,
+        "pinned": false
+      },
+      {
+        "id": 17,
+        "x": -150.41230066665022,
+        "y": -179.25439968984082,
+        "label": "",
+        "color": "#7ed8c5",
+        "radius": 26,
+        "pinned": false
+      },
+      {
+        "id": 18,
+        "x": -80.03271353820644,
+        "y": -219.88807326390258,
+        "label": "",
+        "color": "#b7a4f5",
+        "radius": 26,
+        "pinned": false
+      }
+    ],
+    "edges": [
+      {
+        "id": 1,
+        "source": 9,
+        "target": 16,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 2,
+        "source": 1,
+        "target": 5,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 3,
+        "source": 10,
+        "target": 11,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 4,
+        "source": 17,
+        "target": 18,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 5,
+        "source": 1,
+        "target": 7,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 6,
+        "source": 8,
+        "target": 10,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 7,
+        "source": 1,
+        "target": 14,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 8,
+        "source": 7,
+        "target": 8,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 9,
+        "source": 9,
+        "target": 14,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 10,
+        "source": 12,
+        "target": 13,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 11,
+        "source": 1,
+        "target": 13,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 12,
+        "source": 10,
+        "target": 13,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 13,
+        "source": 13,
+        "target": 16,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 14,
+        "source": 15,
+        "target": 17,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 15,
+        "source": 6,
+        "target": 9,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 16,
+        "source": 1,
+        "target": 2,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 17,
+        "source": 6,
+        "target": 8,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 18,
+        "source": 7,
+        "target": 10,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 19,
+        "source": 7,
+        "target": 14,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 20,
+        "source": 7,
+        "target": 15,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 21,
+        "source": 5,
+        "target": 11,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 22,
+        "source": 1,
+        "target": 6,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 23,
+        "source": 10,
+        "target": 14,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 24,
+        "source": 3,
+        "target": 11,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#899bb2"
+      }
+    ],
+    "next_vertex": 19,
+    "next_edge": 25
+  }
+}

@@ -1,0 +1,146 @@
+{
+  "format": "grafla",
+  "schema_version": 1,
+  "graph": {
+    "vertices": [
+      {
+        "id": 1,
+        "x": -300,
+        "y": -175.0,
+        "label": "",
+        "color": "#899bb2",
+        "radius": 24,
+        "pinned": false
+      },
+      {
+        "id": 2,
+        "x": 0,
+        "y": -175.0,
+        "label": "",
+        "color": "#899bb2",
+        "radius": 24,
+        "pinned": false
+      },
+      {
+        "id": 3,
+        "x": 300,
+        "y": -175.0,
+        "label": "",
+        "color": "#899bb2",
+        "radius": 24,
+        "pinned": false
+      },
+      {
+        "id": 4,
+        "x": -300,
+        "y": 175.0,
+        "label": "",
+        "color": "#899bb2",
+        "radius": 24,
+        "pinned": false
+      },
+      {
+        "id": 5,
+        "x": 0,
+        "y": 175.0,
+        "label": "",
+        "color": "#899bb2",
+        "radius": 24,
+        "pinned": false
+      },
+      {
+        "id": 6,
+        "x": 300,
+        "y": 175.0,
+        "label": "",
+        "color": "#899bb2",
+        "radius": 24,
+        "pinned": false
+      }
+    ],
+    "edges": [
+      {
+        "id": 1,
+        "source": 1,
+        "target": 2,
+        "directed": false,
+        "weighted": true,
+        "weight": 3.0,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 2,
+        "source": 1,
+        "target": 4,
+        "directed": false,
+        "weighted": true,
+        "weight": 2.0,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 3,
+        "source": 2,
+        "target": 3,
+        "directed": false,
+        "weighted": true,
+        "weight": 4.0,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 4,
+        "source": 2,
+        "target": 4,
+        "directed": false,
+        "weighted": true,
+        "weight": 4.0,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 5,
+        "source": 2,
+        "target": 5,
+        "directed": false,
+        "weighted": true,
+        "weight": 5.0,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 6,
+        "source": 3,
+        "target": 6,
+        "directed": false,
+        "weighted": true,
+        "weight": 2.0,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 7,
+        "source": 4,
+        "target": 5,
+        "directed": false,
+        "weighted": true,
+        "weight": 0.0,
+        "label": "",
+        "color": "#899bb2"
+      },
+      {
+        "id": 8,
+        "source": 5,
+        "target": 6,
+        "directed": false,
+        "weighted": true,
+        "weight": 6.0,
+        "label": "",
+        "color": "#899bb2"
+      }
+    ],
+    "next_vertex": 7,
+    "next_edge": 9
+  }
+}

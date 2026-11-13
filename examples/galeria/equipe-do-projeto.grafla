@@ -1,0 +1,174 @@
+{
+  "format": "grafla",
+  "schema_version": 1,
+  "graph": {
+    "vertices": [
+      {
+        "id": 1,
+        "x": 0,
+        "y": 0,
+        "label": "Oficina",
+        "color": "#ffad78",
+        "radius": 36,
+        "pinned": true
+      },
+      {
+        "id": 2,
+        "x": -300,
+        "y": -200,
+        "label": "Design",
+        "color": "#efa4bb",
+        "radius": 36,
+        "pinned": false
+      },
+      {
+        "id": 3,
+        "x": 0,
+        "y": -310,
+        "label": "Dados",
+        "color": "#82b6ff",
+        "radius": 36,
+        "pinned": false
+      },
+      {
+        "id": 4,
+        "x": 300,
+        "y": -200,
+        "label": "Web",
+        "color": "#7ed8c5",
+        "radius": 36,
+        "pinned": false
+      },
+      {
+        "id": 5,
+        "x": 340,
+        "y": 110,
+        "label": "API",
+        "color": "#82b6ff",
+        "radius": 36,
+        "pinned": false
+      },
+      {
+        "id": 6,
+        "x": 130,
+        "y": 310,
+        "label": "App",
+        "color": "#7ed8c5",
+        "radius": 36,
+        "pinned": false
+      },
+      {
+        "id": 7,
+        "x": -160,
+        "y": 290,
+        "label": "Infra",
+        "color": "#b7a4f5",
+        "radius": 36,
+        "pinned": false
+      },
+      {
+        "id": 8,
+        "x": -340,
+        "y": 70,
+        "label": "Docs",
+        "color": "#e6c47c",
+        "radius": 36,
+        "pinned": false
+      }
+    ],
+    "edges": [
+      {
+        "id": 1,
+        "source": 1,
+        "target": 2,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 2,
+        "source": 1,
+        "target": 3,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 3,
+        "source": 1,
+        "target": 4,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 4,
+        "source": 1,
+        "target": 5,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 5,
+        "source": 1,
+        "target": 6,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 6,
+        "source": 1,
+        "target": 7,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 7,
+        "source": 1,
+        "target": 8,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 8,
+        "source": 2,
+        "target": 8,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 9,
+        "source": 3,
+        "target": 5,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      }
+    ],
+    "next_vertex": 9,
+    "next_edge": 10
+  }
+}

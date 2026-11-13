@@ -1,0 +1,282 @@
+{
+  "format": "grafla",
+  "schema_version": 1,
+  "graph": {
+    "vertices": [
+      {
+        "id": 1,
+        "x": -420,
+        "y": 0,
+        "label": "CD",
+        "color": "#ffad78",
+        "radius": 34,
+        "pinned": false
+      },
+      {
+        "id": 2,
+        "x": -200,
+        "y": -230,
+        "label": "Oeste",
+        "color": "#82b6ff",
+        "radius": 34,
+        "pinned": false
+      },
+      {
+        "id": 3,
+        "x": -200,
+        "y": 230,
+        "label": "Sul",
+        "color": "#7ed8c5",
+        "radius": 34,
+        "pinned": false
+      },
+      {
+        "id": 4,
+        "x": 40,
+        "y": -230,
+        "label": "Norte",
+        "color": "#82b6ff",
+        "radius": 34,
+        "pinned": false
+      },
+      {
+        "id": 5,
+        "x": 40,
+        "y": 0,
+        "label": "Centro",
+        "color": "#b7a4f5",
+        "radius": 34,
+        "pinned": false
+      },
+      {
+        "id": 6,
+        "x": 40,
+        "y": 230,
+        "label": "Bairro",
+        "color": "#7ed8c5",
+        "radius": 34,
+        "pinned": false
+      },
+      {
+        "id": 7,
+        "x": 280,
+        "y": -230,
+        "label": "Aero",
+        "color": "#82b6ff",
+        "radius": 34,
+        "pinned": false
+      },
+      {
+        "id": 8,
+        "x": 280,
+        "y": 230,
+        "label": "Porto",
+        "color": "#7ed8c5",
+        "radius": 34,
+        "pinned": false
+      },
+      {
+        "id": 9,
+        "x": 280,
+        "y": 0,
+        "label": "Leste",
+        "color": "#b7a4f5",
+        "radius": 34,
+        "pinned": false
+      },
+      {
+        "id": 10,
+        "x": 520,
+        "y": 0,
+        "label": "Destino",
+        "color": "#ffad78",
+        "radius": 34,
+        "pinned": false
+      }
+    ],
+    "edges": [
+      {
+        "id": 1,
+        "source": 1,
+        "target": 2,
+        "directed": true,
+        "weighted": true,
+        "weight": 3,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 2,
+        "source": 1,
+        "target": 3,
+        "directed": true,
+        "weighted": true,
+        "weight": 4,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 3,
+        "source": 1,
+        "target": 5,
+        "directed": true,
+        "weighted": true,
+        "weight": 8,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 4,
+        "source": 2,
+        "target": 4,
+        "directed": true,
+        "weighted": true,
+        "weight": 2,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 5,
+        "source": 2,
+        "target": 5,
+        "directed": true,
+        "weighted": true,
+        "weight": 3,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 6,
+        "source": 3,
+        "target": 6,
+        "directed": true,
+        "weighted": true,
+        "weight": 3,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 7,
+        "source": 3,
+        "target": 5,
+        "directed": true,
+        "weighted": true,
+        "weight": 4,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 8,
+        "source": 4,
+        "target": 7,
+        "directed": true,
+        "weighted": true,
+        "weight": 3,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 9,
+        "source": 4,
+        "target": 5,
+        "directed": true,
+        "weighted": true,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 10,
+        "source": 5,
+        "target": 7,
+        "directed": true,
+        "weighted": true,
+        "weight": 4,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 11,
+        "source": 5,
+        "target": 8,
+        "directed": true,
+        "weighted": true,
+        "weight": 5,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 12,
+        "source": 5,
+        "target": 9,
+        "directed": true,
+        "weighted": true,
+        "weight": 3,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 13,
+        "source": 6,
+        "target": 8,
+        "directed": true,
+        "weighted": true,
+        "weight": 2,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 14,
+        "source": 7,
+        "target": 9,
+        "directed": true,
+        "weighted": true,
+        "weight": 2,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 15,
+        "source": 7,
+        "target": 10,
+        "directed": true,
+        "weighted": true,
+        "weight": 7,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 16,
+        "source": 8,
+        "target": 9,
+        "directed": true,
+        "weighted": true,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 17,
+        "source": 8,
+        "target": 10,
+        "directed": true,
+        "weighted": true,
+        "weight": 4,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 18,
+        "source": 9,
+        "target": 10,
+        "directed": true,
+        "weighted": true,
+        "weight": 2,
+        "label": "",
+        "color": "#71869d"
+      }
+    ],
+    "next_vertex": 11,
+    "next_edge": 19
+  }
+}
