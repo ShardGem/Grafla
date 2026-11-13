@@ -64,3 +64,22 @@ construção integrada e mínimo de splash sem bloquear eventos. A cobertura dos
 módulos matemáticos/de persistência permanece em 88,65%; Ruff e mypy aprovados.
 As capturas em `docs/screenshots/` foram produzidas pela aplicação em Linux
 offscreen. A validação visual nativa de Windows/DPI depende do ambiente correspondente.
+
+## Refinamento de interação e simulação
+
+A revisão seguinte trata também do comportamento interno. Seleção e origem de
+aresta têm estados distintos; os quatro eventos do mouse respeitam o modo ativo.
+Laços e conexões em sequência são escolhas persistentes. A faixa de contexto
+explica o próximo gesto e mantém a altura do workspace constante.
+
+O histórico distingue navegação de edição, e comandos físicos guardam apenas
+posições. Undo/Redo permanece pausado até Retomar. Rótulos/estilos e parâmetros ao
+vivo preservam a sessão, com testes de timer, velocidades e ramificação de redo.
+A aba Física agrupa quatro controles principais, três perfis e ajustes avançados
+recolhíveis. Confira o [diagnóstico e as medições](refinamento-editor.md).
+
+As silhuetas preenchidas recuperam a mão, a borracha e as marcas de adição do
+legado. A barra compacta primeiro os menus auxiliares, conservando os rótulos dos
+modos quando há espaço; pausa e ajustes permanecem acessíveis a 1024 px. A suíte
+atual contém 123 casos aprovados, incluindo regressões de estado e visibilidade
+real dos campos numéricos nos dois temas.

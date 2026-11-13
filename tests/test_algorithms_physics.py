@@ -108,3 +108,103 @@ def test_coincident_nodes_separate_even_with_pinned_neighbor(graph):
     moved, _ = step(graph, {})
     assert 1 not in moved
     assert moved[2] != (graph.vertices[2].x, graph.vertices[2].y)
+
+
+def test_physics_force_controls_have_distinct_effects():
+    from dataclasses import replace
+
+    from grafla.domain import Graph
+    from grafla.physics import PhysicsParameters
+
+    graph = Graph()
+    graph.add_vertex(-40, 0)
+    graph.add_vertex(40, 0)
+    graph.add_edge(1, 2)
+    neutral = PhysicsParameters(repulsion=0, attraction=0, centering=0)
+    assert step(graph, {}, neutral)[0] == {}
+    repel, _ = step(graph, {}, replace(neutral, repulsion=4200))
+    assert repel[1][0] < -40 and repel[2][0] > 40
+    outside_range, _ = step(graph, {}, replace(neutral, repulsion=4200, repulsion_distance=40))
+    assert outside_range == {}
+    attract, _ = step(graph, {}, replace(neutral, attraction=1, ideal_distance=40))
+    assert attract[1][0] > -40 and attract[2][0] < 40
+    elastic, _ = step(graph, {}, replace(neutral, attraction=1, ideal_distance=40, stiffness=0.1))
+    assert elastic[1][0] > attract[1][0]
+    equilibrium, _ = step(graph, {}, replace(neutral, attraction=1, ideal_distance=80))
+    assert equilibrium == {}
+    centered, _ = step(graph, {}, replace(neutral, centering=0.01))
+    assert centered[1][0] > -40 and centered[2][0] < 40
+
+
+@pytest.mark.parametrize("angle,axis,sign", [(0, 0, 1), (90, 1, 1), (180, 0, -1), (270, 1, -1)])
+def test_gravity_direction_is_explicit(angle, axis, sign):
+    from grafla.domain import Graph
+    from grafla.physics import PhysicsParameters
+
+    graph = Graph()
+    graph.add_vertex(0, 0)
+    parameters = PhysicsParameters(gravity=1, gravity_angle=angle, centering=0)
+    moved, _ = step(graph, {}, parameters)
+    assert moved[1][axis] * sign > 0.5
+    assert abs(moved[1][1 - axis]) < 1e-10
+
+
+def test_damping_speed_and_velocity_limit_are_effective_without_mutating_graph(graph):
+    from dataclasses import replace
+
+    from grafla.physics import PhysicsParameters
+
+    neutral = PhysicsParameters(repulsion=0, attraction=0, centering=0)
+    original = graph.clone()
+    _, slow = step(graph, {1: (5, 0)}, replace(neutral, damping=0.8))
+    _, fast = step(graph, {1: (5, 0)}, replace(neutral, damping=0.1))
+    assert slow < fast
+    short, _ = step(graph, {}, replace(neutral, gravity=1, speed=0.25))
+    long, _ = step(graph, {}, replace(neutral, gravity=1, speed=2))
+    assert long[1][1] > short[1][1]
+    _, capped = step(graph, {1: (100, 0), 999: (1000, 0)}, replace(neutral, max_speed=2))
+    assert capped <= 2
+    assert graph == original
+
+
+@pytest.mark.parametrize(
+    "values",
+    [{"damping": 0}, {"speed": 20}, {"gravity": float("nan")}, {"ideal_distance": float("inf")}],
+)
+def test_invalid_physics_parameters_are_rejected(values):
+    from grafla.physics import PhysicsParameters
+
+    with pytest.raises(ValueError):
+        PhysicsParameters(**values)
+
+
+def test_aggressive_physics_remains_bounded_with_coincident_and_pinned_nodes():
+    from grafla.domain import Graph
+    from grafla.physics import PhysicsParameters
+
+    graph = Graph()
+    for index in range(40):
+        graph.add_vertex(0 if index < 20 else 1e7, 0)
+    graph.vertices[1].pinned = True
+    for key in range(1, 40):
+        graph.add_edge(key, key + 1)
+    parameters = PhysicsParameters(
+        repulsion=20000,
+        attraction=3,
+        stiffness=0.12,
+        damping=0.05,
+        gravity=2,
+        speed=2,
+        max_speed=14,
+    )
+    velocities = {}
+    for _ in range(50):
+        moved, speed = step(graph, velocities, parameters)
+        assert math.isfinite(speed) and speed <= 14.000001
+        for key, (x, y) in moved.items():
+            assert math.isfinite(x) and math.isfinite(y)
+            assert -1e7 <= x <= 1e7 and -1e7 <= y <= 1e7
+            graph.vertices[key].x, graph.vertices[key].y = x, y
+    assert (graph.vertices[1].x, graph.vertices[1].y) == (0, 0)
+    assert velocities[1] == (0, 0)
+    graph.validate()

@@ -183,3 +183,32 @@ def test_zoom_grid_preferences_are_persisted_in_context(window):
     assert window.canvas.snap
     assert not window.settings.value("grid", type=bool)
     assert window.settings.value("snap", type=bool)
+
+
+@pytest.mark.parametrize("width", [1024, 1280])
+def test_all_physics_commands_and_modes_fit_at_laptop_width(window, graph, qtbot, width):
+    populate(window, graph)
+    font = window.font()
+    font.setPointSize(12)
+    window.setFont(font)
+    window.resize(width, 768)
+    window.physics.set_enabled(True)
+    qtbot.wait(30)
+    for action in window.tools.mode_actions + [
+        window.commands[key] for key in ("physics", "physics_pause", "physics_settings")
+    ]:
+        button = window.tools.widgetForAction(action)
+        assert button.isVisible(), action.text()
+        assert button.geometry().right() < window.tools.width(), action.text()
+
+
+def test_inspector_does_not_reserve_space_for_hidden_property_forms(window, graph, qtbot):
+    populate(window, graph)
+    qtbot.wait(20)
+    stack = window.inspector.stack
+    empty_height = stack.height()
+    assert empty_height <= stack.currentWidget().sizeHint().height() + 2
+    window.canvas.vertices[1].setSelected(True)
+    qtbot.wait(20)
+    assert stack.currentIndex() == 1
+    assert stack.height() > empty_height

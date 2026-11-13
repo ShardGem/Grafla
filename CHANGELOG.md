@@ -1,5 +1,23 @@
 # Changelog
 
+## Não lançado — precisão de interação e física configurável
+
+- Duplo clique respeita o modo ativo; construção não seleciona nem arrasta elementos.
+  Origem de aresta distinta da seleção, cancelamento explícito, laços opcionais e
+  conexões em sequência. Snap deixa vértices não movidos intactos.
+- Ícones com silhuetas preenchidas inspiradas no legado, estados completos e
+  transições opcionais. Barra compacta mantém os controles acessíveis a 1024 px.
+- Undo/Redo consolida o preview uma única vez e pausa a física até Retomar;
+  patches de atributos preservam coordenadas e comandos de física só possuem x/y.
+- Rótulos/estilos e ajustes ao vivo preservam a sessão e o momento da simulação.
+- Aba Física com três perfis, 12 parâmetros persistentes e ajustes avançados
+  recolhíveis; forças simétricas, corte suave e integração em subpassos limitados.
+- Preview de posições reutiliza itens; arestas mantêm caches de rótulo, hit e bounds.
+- Preferências de interação, direção e pesos padrão persistidas; inspector compacto,
+  faixa de contexto e controles numéricos com setas consistentes.
+- Regressões de seleção, duplo clique, Undo/Redo, física e visibilidade dos valores;
+  benchmark reproduzível da simulação via `tools/benchmark.py --physics`.
+
 ## 2.1.0 — workspace e exploração contextual
 
 - Faixa horizontal de ferramentas com ícones ativos, grupos de ações e rótulos

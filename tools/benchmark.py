@@ -1,4 +1,4 @@
-"""Run a reproducible sparse-graph canvas baseline; timings are not FPS."""
+"""Mede o canvas em grafos esparsos; os tempos não representam FPS."""
 
 import argparse
 import json
@@ -14,9 +14,10 @@ from PyQt6.QtWidgets import QApplication
 from grafla.canvas import Canvas
 from grafla.document import Document
 from grafla.domain import Edge, Graph
+from grafla.physics_controller import PhysicsController
 
 
-def measure(n):
+def sparse_graph(n):
     graph = Graph()
     for index in range(n):
         graph.add_vertex(100 + index % 50 * 80, 100 + index // 50 * 80)
@@ -24,6 +25,11 @@ def measure(n):
         graph.edges[key] = Edge(key, key, key + 1, directed=True)
     graph.next_edge = n
     graph.validate()
+    return graph
+
+
+def measure(n):
+    graph = sparse_graph(n)
     doc = Document()
     canvas = Canvas(doc)
     canvas.resize(960, 680)
@@ -64,16 +70,59 @@ def measure(n):
     }
 
 
+def measure_physics(n):
+    """Mede o passo e a atualização do canvas separadamente da renderização."""
+    doc = Document()
+    physics = PhysicsController(doc)
+    canvas = Canvas(doc)
+    canvas.resize(960, 680)
+    doc.reset(sparse_graph(n))
+    canvas.show()
+    canvas.fit_graph()
+    QApplication.processEvents()
+    physics.set_enabled(True)
+    ticks, render = [], []
+    for _ in range(12):
+        start = time.perf_counter()
+        physics.tick()
+        ticks.append((time.perf_counter() - start) * 1000)
+        image = QImage(960, 680, QImage.Format.Format_ARGB32_Premultiplied)
+        painter = QPainter(image)
+        start = time.perf_counter()
+        canvas.render(painter)
+        render.append((time.perf_counter() - start) * 1000)
+        painter.end()
+    start = time.perf_counter()
+    physics.set_enabled(False)
+    flush_ms = (time.perf_counter() - start) * 1000
+    canvas.close()
+    return {
+        "vertices": n,
+        "edges": n - 1,
+        "physics_tick_median_ms": statistics.median(ticks),
+        "viewport_render_median_ms": statistics.median(render),
+        "history_flush_ms": flush_ms,
+    }
+
+
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("sizes", nargs="*", type=int, default=[100, 500, 1000, 5000])
+    parser.add_argument("sizes", nargs="*", type=int)
+    parser.add_argument(
+        "--physics", action="store_true", help="Medir física, canvas e consolidação"
+    )
     args = parser.parse_args()
     app = QApplication([])
     app.setQuitOnLastWindowClosed(False)
-    for size in args.sizes:
+    sizes = args.sizes or ([100, 500, 1000] if args.physics else [100, 500, 1000, 5000])
+    for size in sizes:
         if not 2 <= size <= 10_000:
             parser.error("sizes must be between 2 and 10000")
-        sys.stdout.write(json.dumps(measure(size)) + "\n")
+        if args.physics and size > 1000:
+            parser.error("physics sizes must be between 2 and 1000")
+        sys.stdout.write(
+            json.dumps(measure_physics(size) if args.physics else measure(size)) + "\n"
+        )
         sys.stdout.flush()
 
 

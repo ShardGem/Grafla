@@ -6,13 +6,18 @@ Grafla 2.1 é um editor desktop de grafos em Python e Qt: edição direta, docum
 versionados, histórico de alterações, física opcional e análises com visualização.
 O alvo principal é Windows; a base também pode ser executada em Linux e macOS.
 
-![Grafla: editor, inspector e análise de caminhos](docs/screenshots/editor.png)
+![Grafla: conexões com origem explícita e ferramentas expressivas](docs/screenshots/editor.png)
 
 ## O que funciona
 
 - Canvas com seleção individual/múltipla e por retângulo, movimento em grupo,
   conexões por dois cliques, laços, arestas opostas, exclusão e menus contextuais.
-- Ferramentas horizontais com ícones ativos distintos, slider de zoom sincronizado
+- Ferramentas horizontais com silhuetas preenchidas inspiradas nos ícones originais,
+  estados de hover/desabilitado, transições opcionais e dicas ligadas ao modo ativo.
+- Criação de arestas sem selecionar ou arrastar vértices: origem com ring próprio,
+  laços opcionais, conexão em sequência e cancelamento por fundo/Esc. Preferências
+  de direção, peso e comportamento das novas conexões são persistidas.
+- Slider de zoom sincronizado
   com roda/atalhos e controles de construção dentro do workspace.
 - Inspector de rótulo, posição, raio, cor, fixação, direção e peso. Arestas podem
   ser direcionadas ou não; pesos não negativos incluem zero.
@@ -25,6 +30,13 @@ O alvo principal é Windows; a base também pode ser executada em Linux e macOS.
 - **Física com controle próprio**, indicação de estado e pausa automática ao
   estabilizar ou atingir o orçamento de iterações. Desligar preserva as posições;
   reativar inicia a partir delas. Vértices fixados não são movidos.
+- Aba **Física** com perfis Equilibrada/Suave/Elástica e 12 ajustes persistentes:
+  repulsão e alcance, atração, rigidez, distância ideal, amortecimento, centralização,
+  gravidade/direção, velocidade, limite de movimento e limiar de repouso. Ajustar
+  valores preserva a sessão em andamento; Pausar/Retomar mantém as posições.
+- Undo/Redo pausa o movimento e preserva o histórico restaurado até Retomar.
+  Alterações de rótulo/estilo não interrompem a simulação nem reaplicam posições
+  antigas. O comando de física registra somente coordenadas.
 - Dijkstra, maior caminho simples e enumeração com limites, BFS/DFS com visita,
   fila/pilha e arestas percorridas, componentes, floresta geradora mínima e topológica.
 - Reprodução, pausa, passo anterior/seguinte, reinício e parada da visualização.
@@ -107,6 +119,12 @@ encerra automaticamente, sem pedir confirmação de arquivo.
 Atalhos de ferramentas pertencem ao canvas e não interceptam letras digitadas no
 inspector. Os comandos também estão nos menus e na busca.
 
+O botão de pausa ao lado de Física interrompe/retoma o movimento sem desativar
+a opção. O botão de ajustes abre a aba Física; os parâmetros avançados ficam
+recolhidos inicialmente. As opções de laços e conexões em sequência ficam em
+**Elemento → Novas conexões**. Nas preferências, destaques de vizinhança, criação
+por duplo clique e transições das ferramentas podem ser desativados.
+
 ## Contratos e limites
 
 - O grafo aceita direção por aresta e laços, mas **não arestas paralelas no mesmo
@@ -147,6 +165,7 @@ uv run ruff format --check src tests tools main.py
 uv run mypy
 QT_QPA_PLATFORM=offscreen uv run pytest
 QT_QPA_PLATFORM=offscreen uv run python tools/benchmark.py
+QT_QPA_PLATFORM=offscreen uv run python tools/benchmark.py --physics
 ```
 
 No PowerShell, defina `$env:QT_QPA_PLATFORM = "offscreen"` antes dos testes headless.
@@ -180,6 +199,9 @@ Veja [arquitetura](docs/arquitetura.md), [auditoria e decisões](docs/auditoria.
 [design system](docs/design-system.md), [revisão do workspace](docs/ux-workspace.md)
 e [changelog](CHANGELOG.md). A [captura de execução BFS](docs/screenshots/steps.png)
 mostra a tabela de visitas e o slider de etapas ligados ao canvas.
+O [refinamento de interações e física](docs/refinamento-editor.md) registra o
+diagnóstico, os contratos de estado e o método de medição. Veja também a
+[nova aba Física](docs/screenshots/physics.png).
 
 A modernização conserva o legado no commit `a9c310d`; módulos e assets obsoletos
 foram retirados do caminho ativo após a substituição por componentes testados.

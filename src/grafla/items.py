@@ -52,6 +52,7 @@ class VertexItem(QGraphicsEllipseItem):
         key = self.vertex.id
         active = (
             self.isSelected()
+            or self.canvas.edge_start == key
             or key in self.canvas.highlight_vertices
             or key in self.canvas.neighbor_vertices
         )
@@ -80,9 +81,15 @@ class VertexItem(QGraphicsEllipseItem):
             painter.setPen(QPen(QColor(theme.accent), 2))
             painter.setBrush(Qt.BrushStyle.NoBrush)
             painter.drawEllipse(self.rect().adjusted(-3, -3, 3, 3))
-        if self.isSelected() or self.canvas.edge_start == key:
+        if self.isSelected():
             painter.setPen(QPen(QColor(theme.accent), 1.4, Qt.PenStyle.DashLine))
             painter.setBrush(Qt.BrushStyle.NoBrush)
+            painter.drawEllipse(self.rect().adjusted(-4, -4, 4, 4))
+        elif self.canvas.edge_start == key:
+            painter.setPen(QPen(QColor(theme.accent), 2.2))
+            tint = QColor(theme.accent)
+            tint.setAlpha(28)
+            painter.setBrush(tint)
             painter.drawEllipse(self.rect().adjusted(-4, -4, 4, 4))
         painter.setOpacity(1)
         painter.setPen(
@@ -127,6 +134,10 @@ class EdgeItem(QGraphicsPathItem):
         self.line_path, self.arrow_path = QPainterPath(), QPainterPath()
         self.label_rect = QRectF()
         self.label = ""
+        self._raw_label = None
+        self._label_width = 0.0
+        self._hit_shape = QPainterPath()
+        self._bounds = QRectF()
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable)
         self.setAcceptHoverEvents(True)
         self.setZValue(-1)
@@ -183,29 +194,33 @@ class EdgeItem(QGraphicsPathItem):
         if self.edge.weighted:
             label = f"{label} · {self.edge.weight:g}" if label else f"{self.edge.weight:g}"
         middle = path.pointAtPercent(0.5)
-        font = QFont()
-        font.setPointSizeF(9)
-        label = QFontMetricsF(font).elidedText(label, Qt.TextElideMode.ElideRight, 140)
-        width = QFontMetricsF(font).horizontalAdvance(label) + 14 if label else 0
+        if label != self._raw_label:
+            self._raw_label = label
+            font = QFont()
+            font.setPointSizeF(9)
+            metrics = QFontMetricsF(font)
+            self.label = metrics.elidedText(label, Qt.TextElideMode.ElideRight, 140)
+            self._label_width = metrics.horizontalAdvance(self.label) + 14 if self.label else 0
+        width = self._label_width
         self.prepareGeometryChange()
         self.label_rect = QRectF(middle.x() - width / 2, middle.y() - 12, width, 24)
-        self.label = label
         self.line_path, self.arrow_path = path, arrow
         combined = QPainterPath(path)
         combined.addPath(arrow)
+        stroker = QPainterPathStroker()
+        stroker.setWidth(14)
+        self._hit_shape = stroker.createStroke(combined)
+        if self.label:
+            self._hit_shape.addRect(self.label_rect)
+        self._bounds = self._hit_shape.boundingRect().adjusted(-2, -2, 2, 2)
         self.setPath(combined)
         self.update()
 
     def shape(self):
-        stroker = QPainterPathStroker()
-        stroker.setWidth(14)
-        shape = stroker.createStroke(self.path())
-        if self.label:
-            shape.addRect(self.label_rect)
-        return shape
+        return QPainterPath(self._hit_shape)
 
     def boundingRect(self):
-        return self.shape().boundingRect().adjusted(-2, -2, 2, 2)
+        return QRectF(self._bounds)
 
     def paint(self, painter, option, widget=None):
         theme = self.canvas.theme

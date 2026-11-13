@@ -1,4 +1,4 @@
-# Arquitetura do Grafla 2.0
+# Arquitetura do Grafla
 
 ## Autoridade dos dados
 
@@ -12,6 +12,12 @@ vértices/arestas afetados e sequências de IDs; não retém um grafo inteiro po
 comando. O QUndoStack mantém 60 operações. Edição rejeitada não toca o grafo atual.
 Operações grandes ainda clonam/comparam o modelo durante sua preparação; o custo
 de commit com 5.000 vértices é medido separadamente do movimento visual.
+
+Patches de um elemento existente aplicam somente os campos que a operação mudou.
+Comandos de física possuem apenas x/y, mesmo quando há alterações de atributos
+durante a sessão. `Change.origin` distingue edição, histórico, física e reset;
+`affects_physics` identifica mudanças que alteram posições/fixação/topologia.
+Uma transação inválida é rejeitada antes de interromper a física.
 
 `Change` identifica elementos afetados e distingue preview de física. Alteração
 estrutural/rótulos atualiza os seletores; mover um vértice não repovoa todos os
@@ -36,6 +42,10 @@ aos bounds. Não há timer de repaint nem consulta à cena inteira por aresta.
 Seleção usa o mecanismo Qt. Arrasto mostra preview dos itens e gera um comando
 único no release. Operações em lote evitam uma notificação de seleção por item.
 Modo, preview de conexão, seleção e destaque não alteram a topologia do documento.
+Press/move/release/duplo clique respeitam o mesmo modo: somente Selecionar encaminha
+gestos de seleção/movimento ao Qt. Mão preserva a seleção, e construção limpa-a.
+Origem de aresta é estado transitório independente, cancelado por fundo, Esc,
+mudança de modo, histórico e reset. Laços seguem o mesmo fluxo de dois cliques.
 
 Atalhos/actions ficam centralizados na construção da janela. Letras de ferramentas,
 Delete e operações de subgrafo têm escopo do canvas. Inputs mantêm seu comportamento
@@ -43,8 +53,11 @@ nativo de edição. A busca permite acessar comandos e localizar vértices pelo 
 
 ## Física
 
-`physics.py` é um passo matemático puro: repulsão espacial local com orçamento de
-vizinhos, atração por arestas, amortecimento e limite de velocidade/deslocamento.
+`physics.py` é um passo matemático puro, configurado por `PhysicsParameters`
+imutável e validado: repulsão espacial local com orçamento de pares, atração por
+arestas, gravidade, centralização, amortecimento e limite de velocidade/deslocamento.
+Pares repulsivos são avaliados uma vez e recebem forças opostas; o corte tem
+transição suave. Velocidades de reprodução maiores usam subpassos de até 1.
 Nós fixados participam como obstáculos, mas não são movidos. Nós coincidentes têm
 separação determinística. Coordenadas respeitam os limites do domínio.
 
@@ -54,9 +67,24 @@ posições finais numa operação desfazível. A opção pode continuar habilita
 repouso, sendo reativada por uma edição. Desativar e reativar limpa velocidades,
 sem restaurar posições antigas.
 
-Antes de edição manual, save ou fechamento, a simulação é pausada e seu preview
-é consolidado. Campos de posição ficam desabilitados durante movimento; editar
-um rótulo não reaplica coordenadas antigas do inspector.
+Antes de alterar posições/fixação/topologia, salvar ou fechar, a simulação para e
+o preview é consolidado. Rótulos/estilos não interrompem o timer. Ajustes em tempo
+real preservam velocidades, centro e snapshot da sessão. O centro é o centroide
+no início da sessão, para não puxar um grafo distante de volta à origem da cena.
+
+`before_history` consolida o preview antes da navegação; a notificação histórica
+zera velocidades e deixa a física pausada, sem acordar o timer nem criar novos
+comandos. `Pausar` também mantém pausa persistente; `Retomar` inicia das posições
+atuais. Alterações posteriores e preferências não removem essa pausa.
+
+O caminho de preview do canvas atualiza somente posições e geometrias incidentes;
+rótulos/hit/bounds de arestas são cacheados. A gravação inicial do comando de física
+não reaplica um preview já visível. Campos de posição ficam desabilitados durante
+movimento; editar um rótulo não reaplica coordenadas antigas do inspector.
+
+`physics_panel.py` possui controles e sinais, sem duplicar estado matemático ou de
+execução. O controller é a autoridade da simulação; QSettings guarda os parâmetros
+fora dos documentos. Os valores persistidos são validados individualmente.
 
 ## Algoritmos e concorrência
 

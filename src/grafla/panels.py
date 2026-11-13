@@ -10,6 +10,7 @@ from PyQt6.QtWidgets import (
     QLineEdit,
     QPushButton,
     QScrollArea,
+    QSizePolicy,
     QSlider,
     QStackedWidget,
     QVBoxLayout,
@@ -27,6 +28,38 @@ def number(minimum=-1e7, maximum=1e7, decimals=2):
     return spin
 
 
+class ContextStack(QStackedWidget):
+    """O inspector ocupa o espaço da página aberta, sem reservar altura para as ocultas."""
+
+    def __init__(self):
+        super().__init__()
+        self.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Maximum)
+        self.currentChanged.connect(self.update_page_sizes)
+
+    def addWidget(self, widget):
+        index = super().addWidget(widget)
+        self.update_page_sizes()
+        return index
+
+    def update_page_sizes(self, *_):
+        for index in range(self.count()):
+            self.widget(index).setSizePolicy(
+                QSizePolicy.Policy.Preferred,
+                QSizePolicy.Policy.Preferred
+                if index == self.currentIndex()
+                else QSizePolicy.Policy.Ignored,
+            )
+        self.updateGeometry()
+
+    def sizeHint(self):
+        page = self.currentWidget()
+        return page.sizeHint() if page is not None else super().sizeHint()
+
+    def minimumSizeHint(self):
+        page = self.currentWidget()
+        return page.minimumSizeHint() if page is not None else super().minimumSizeHint()
+
+
 class Inspector(QScrollArea):
     apply_requested = pyqtSignal(object)
 
@@ -41,7 +74,7 @@ class Inspector(QScrollArea):
         self.heading = QLabel("DOCUMENTO")
         self.heading.setProperty("muted", True)
         layout.addWidget(self.heading)
-        self.stack = QStackedWidget()
+        self.stack = ContextStack()
         layout.addWidget(self.stack)
         self.summary = QLabel()
         self.summary.setWordWrap(True)
@@ -112,6 +145,11 @@ class Inspector(QScrollArea):
         form = QFormLayout(defaults)
         self.create_directed = QCheckBox("Direcionadas")
         self.create_weighted = QCheckBox("Ponderadas")
+        self.chain_edges = QCheckBox("Continuar a partir do destino")
+        self.chain_edges.setToolTip(
+            "Crie uma sequência de conexões sem escolher a origem novamente."
+        )
+        self.allow_loops = QCheckBox("Permitir laços no mesmo vértice")
         self.create_weight = number(0, 1e9)
         self.create_weight.setValue(1)
         self.create_weight.setEnabled(False)
@@ -119,6 +157,8 @@ class Inspector(QScrollArea):
         form.addRow(self.create_directed)
         form.addRow(self.create_weighted)
         form.addRow("Peso padrão", self.create_weight)
+        form.addRow(self.chain_edges)
+        form.addRow(self.allow_loops)
         layout.addWidget(defaults)
         tips = QLabel(
             "E · clique na origem e no destino\nEsc · cancelar conexão\nEspaço + arrastar · navegar"
@@ -190,7 +230,7 @@ class Inspector(QScrollArea):
     def submit(self):
         values = self.values()
         if self.stack.currentIndex() in (1, 2):
-            # Don't round untouched persisted coordinates/weights through spinboxes.
+            # Preserva a precisão de coordenadas e pesos que não foram editados.
             values = {
                 key: value
                 for key, value in values.items()

@@ -17,7 +17,9 @@ from PyQt6.QtWidgets import (
     QWidget,
 )
 
+from grafla.icons import ToolFeedback
 from grafla.panels import AnalysisPanel, Inspector
+from grafla.physics_panel import PhysicsPanel
 from grafla.workspace import BuildPanel, ZoomBar
 
 
@@ -27,16 +29,26 @@ class ToolStrip(QToolBar):
     def __init__(self):
         super().__init__("Ferramentas")
         self.mode_actions = []
+        self.menu_buttons = []
+        self.status_action = None
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
         buttons = [self.widgetForAction(action) for action in self.mode_actions]
         for button in buttons:
             button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
-        compact = self.layout().sizeHint().width() > self.width()
-        if compact:
+        for button in self.menu_buttons:
+            button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
+        if self.layout().sizeHint().width() > self.width():
+            for button in self.menu_buttons:
+                button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonIconOnly)
+        if self.layout().sizeHint().width() > self.width():
             for button in buttons:
                 button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonIconOnly)
+        if self.status_action is not None:
+            self.status_action.setVisible(True)
+            if self.layout().sizeHint().width() > self.width():
+                self.status_action.setVisible(False)
 
 
 def build_shell(window):
@@ -56,7 +68,18 @@ def build_shell(window):
                 "preferences",
             ],
         ),
-        ("Exibir", ["fit", "fit_selection", "reset_view", "zoom_in", "zoom_out", "search"]),
+        (
+            "Exibir",
+            [
+                "fit",
+                "fit_selection",
+                "reset_view",
+                "zoom_in",
+                "zoom_out",
+                "search",
+                "physics_settings",
+            ],
+        ),
         (
             "Grafo",
             [
@@ -64,6 +87,7 @@ def build_shell(window):
                 "to_matrix",
                 "from_matrix",
                 "physics",
+                "physics_pause",
                 "layout_circular",
                 "layout_grid",
                 "layout_random",
@@ -121,6 +145,7 @@ def build_shell(window):
         action = commands[f"tool_{key}"]
         window.tools.addAction(action)
         window.tools.mode_actions.append(action)
+        ToolFeedback(window.tools.widgetForAction(action))
         if key == "hand":
             window.tools.addSeparator()
     window.tools.addSeparator()
@@ -128,6 +153,10 @@ def build_shell(window):
 
     build = QToolButton()
     build.setText("Construir")
+    build.setToolTip("Construir · gerar grafo e converter matrizes")
+    build.setProperty("glyph", "physics")
+    build.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
+    window.tools.menu_buttons.append(build)
     build.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
     build_menu = QMenu(build)
     for key in ("generate", "from_matrix", "to_matrix"):
@@ -136,6 +165,10 @@ def build_shell(window):
     window.tools.addWidget(build)
     layouts = QToolButton()
     layouts.setText("Organizar")
+    layouts.setToolTip("Organizar · layouts e ajuste do grafo")
+    layouts.setProperty("glyph", "layout")
+    layouts.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
+    window.tools.menu_buttons.append(layouts)
     layouts.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
     menu = QMenu(layouts)
     for key in ("layout_circular", "layout_grid", "layout_random", "fit"):
@@ -146,8 +179,28 @@ def build_shell(window):
     window.tools.addAction(commands["physics"])
     window.physics_label = QLabel()
     window.physics_label.setProperty("muted", True)
-    window.tools.addWidget(window.physics_label)
+    window.tools.status_action = window.tools.addWidget(window.physics_label)
+    for key in ("physics_pause", "physics_settings"):
+        action = commands[key]
+        window.tools.addAction(action)
+        window.tools.widgetForAction(action).setToolButtonStyle(
+            Qt.ToolButtonStyle.ToolButtonIconOnly
+        )
     layout.addWidget(window.tools)
+    context = QFrame()
+    context.setObjectName("ModeContext")
+    context.setFixedHeight(32)
+    context_row = QHBoxLayout(context)
+    context_row.setContentsMargins(16, 3, 12, 3)
+    window.mode_hint = QLabel()
+    window.mode_hint.setProperty("muted", True)
+    window.mode_hint.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Preferred)
+    context_row.addWidget(window.mode_hint, 1)
+    window.cancel_connection = QPushButton("Cancelar · Esc")
+    window.cancel_connection.clicked.connect(window.canvas.cancel_edge)
+    window.cancel_connection.hide()
+    context_row.addWidget(window.cancel_connection)
+    layout.addWidget(context)
     layout.addWidget(window.canvas, 1)
     window.zoom_controls = ZoomBar()
     window.zoom_controls.zoom_requested.connect(
@@ -166,7 +219,12 @@ def build_shell(window):
     window.tabs = QTabWidget()
     window.tabs.setObjectName("WorkspaceTabs")
     window.tabs.addTab(window.inspector, "Elemento")
-    for widget, title in ((window.analysis, "Análise"), (window.building, "Construir")):
+    window.physics_panel = PhysicsPanel()
+    for widget, title in (
+        (window.analysis, "Análise"),
+        (window.building, "Construir"),
+        (window.physics_panel, "Física"),
+    ):
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
         scroll.setWidget(widget)

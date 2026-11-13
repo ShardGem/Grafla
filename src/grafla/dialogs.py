@@ -41,6 +41,14 @@ class PreferencesDialog(QDialog):
         self.grid.setChecked(settings.value("grid", True, type=bool))
         self.snap = QCheckBox("Alinhar movimento à grade")
         self.snap.setChecked(settings.value("snap", False, type=bool))
+        self.neighbors = QCheckBox("Destacar vizinhos ao passar o ponteiro")
+        self.neighbors.setChecked(settings.value("highlight_neighbors", True, type=bool))
+        self.double_click = QCheckBox("Criar vértice com duplo clique no fundo")
+        self.double_click.setChecked(settings.value("double_click_creates", True, type=bool))
+        self.interface_animations = QCheckBox("Transições suaves nas ferramentas")
+        self.interface_animations.setChecked(
+            settings.value("interface_animations", True, type=bool)
+        )
         self.autosave = QCheckBox("Manter cópia de recuperação a cada minuto")
         self.autosave.setChecked(settings.value("autosave", True, type=bool))
         self.animations = QCheckBox("Animar a abertura")
@@ -55,6 +63,9 @@ class PreferencesDialog(QDialog):
             ("Aparência", self.theme),
             ("Canvas", self.grid),
             ("Snap", self.snap),
+            ("Destaques", self.neighbors),
+            ("Seleção", self.double_click),
+            ("Interface", self.interface_animations),
             ("Recuperação", self.autosave),
             ("Movimento", self.animations),
             ("Tempo mínimo da abertura", self.splash_duration),
@@ -62,7 +73,8 @@ class PreferencesDialog(QDialog):
             form.addRow(label, widget)
         layout.addLayout(form)
         note = QLabel(
-            "A física tem controle próprio na barra superior. Em repouso ela não consome ciclos.\n"
+            "A aba Física reúne os ajustes de movimento. Em repouso ela não consome ciclos.\n"
+            "Laços e conexões em sequência podem ser ajustados em Elemento → Novas conexões.\n"
             "Documentos e recuperação ficam separados das preferências."
         )
         note.setWordWrap(True)
@@ -75,6 +87,9 @@ class PreferencesDialog(QDialog):
             ("theme", self.theme.currentData()),
             ("grid", self.grid.isChecked()),
             ("snap", self.snap.isChecked()),
+            ("highlight_neighbors", self.neighbors.isChecked()),
+            ("double_click_creates", self.double_click.isChecked()),
+            ("interface_animations", self.interface_animations.isChecked()),
             ("autosave", self.autosave.isChecked()),
             ("animations", self.animations.isChecked()),
             ("splash_duration_ms", round(self.splash_duration.value() * 1000)),

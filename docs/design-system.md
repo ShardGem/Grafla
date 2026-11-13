@@ -54,3 +54,26 @@ Qt 6 trata escala DPI. Ícones vetoriais e layouts ajudam, mas não equivalem a
 certificar 125/150/200% em todos os monitores. Acessibilidade do canvas pintado
 também não é automaticamente equivalente à de uma lista nativa de objetos;
 a busca por ID/rótulo fornece navegação adicional por teclado nesta versão.
+
+## Ferramentas e movimento
+
+As novas silhuetas seguem a família original do autor: mão com dedos arredondados,
+borracha diagonal, vértice circular com adição e conexão diagonal. Inativo usa
+contorno de 1,65 unidades numa grade de 24; ativo troca a geometria por uma massa
+preenchida, sem depender de pequenos pontos internos. QIcon fornece Normal,
+Active, Selected e Disabled, com variantes Off/On e múltiplas resoluções em cache.
+O laranja compartilhado continua sendo a cor de ação; o desabilitado mistura
+texto secundário e canvas para reduzir contraste nos dois temas.
+
+A transição de 110 ms usa apenas a opacidade do botão, pode ser interrompida e
+pode ser desligada nas preferências. Timer e efeito ficam inativos em repouso.
+A faixa contextual tem altura constante e apresenta o gesto disponível; cancelar
+uma conexão não muda a altura do canvas. Origem de aresta tem ring sólido e
+preenchimento suave; seleção conserva o tracejado.
+
+A aba Física apresenta estado, ativação e pausa separados. Quatro controles
+principais e três perfis atendem aos ajustes comuns. O disclosure de ajustes
+avançados revela controles adicionais sem sugerir que eles estavam desativados.
+Sliders e campos numéricos ficam sincronizados; setas compartilhadas e área de
+texto verificada evitam controles vazios após troca de tema. A barra compacta
+mantém modos, ativação, pausa e ajustes acessíveis também a 1024 px com fonte maior.

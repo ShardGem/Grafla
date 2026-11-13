@@ -1,0 +1,4 @@
+{"vertices": 100, "edges": 99, "scene_build_ms": 9.28221999993184, "idle_scene_changes_100ms": 0, "live_move_median_ms": 0.22397100019588834, "commit_undo_median_ms": 1.606812000318314, "viewport_render_median_ms": 2.580208999916067}
+{"vertices": 500, "edges": 499, "scene_build_ms": 35.34067300006427, "idle_scene_changes_100ms": 0, "live_move_median_ms": 0.10176999967370648, "commit_undo_median_ms": 7.933939999929862, "viewport_render_median_ms": 5.7184610000149405}
+{"vertices": 1000, "edges": 999, "scene_build_ms": 80.3013849999843, "idle_scene_changes_100ms": 0, "live_move_median_ms": 0.1548380000713223, "commit_undo_median_ms": 21.11060000015641, "viewport_render_median_ms": 5.662827999913134}
+{"vertices": 5000, "edges": 4999, "scene_build_ms": 414.39456100033567, "idle_scene_changes_100ms": 0, "live_move_median_ms": 0.18893900005423347, "commit_undo_median_ms": 97.71599600026093, "viewport_render_median_ms": 7.634317999873019}

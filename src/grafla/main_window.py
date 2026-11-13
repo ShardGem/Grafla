@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+from dataclasses import asdict
 from pathlib import Path
 
 from PyQt6.QtCore import QByteArray, QMimeData, QSettings, Qt, QTimer
@@ -27,6 +28,7 @@ from grafla.exporting import export_graph
 from grafla.file_actions import FileActions
 from grafla.icons import icon
 from grafla.persistence import DocumentError, decode, encode
+from grafla.physics import PhysicsParameters
 from grafla.physics_controller import PhysicsController
 from grafla.theme import apply, resolve
 
@@ -50,6 +52,11 @@ class MainWindow(QMainWindow):
         self.resize(1366, 820)
         self.document = Document(self)
         self.physics = PhysicsController(self.document, self)
+        self.physics.set_parameters(
+            PhysicsParameters.from_mapping(
+                {key: self.settings.value(f"physics/{key}") for key in PhysicsParameters.LIMITS}
+            )
+        )
         self.canvas = Canvas(self.document)
         self.commands: dict[str, QAction] = {}
         self.command_icons: dict[str, str] = {}
@@ -68,6 +75,22 @@ class MainWindow(QMainWindow):
         self.canvas.message.connect(self.notify)
         self.canvas.zoom_changed.connect(self.update_zoom)
         self.canvas.mode_changed.connect(self.update_status)
+        self.canvas.edge_state_changed.connect(self.update_status)
+        self.physics_panel.parameters_changed.connect(self.set_physics_parameters)
+        self.physics_panel.enable_requested.connect(self.toggle_physics)
+        self.physics_panel.pause_requested.connect(self.physics.toggle_paused)
+        for key, control in (
+            ("chain_edges", self.inspector.chain_edges),
+            ("allow_loops", self.inspector.allow_loops),
+            ("create_directed", self.inspector.create_directed),
+            ("create_weighted", self.inspector.create_weighted),
+        ):
+            control.toggled.connect(
+                lambda checked, option=key: self.set_connection_option(option, checked)
+            )
+        self.inspector.create_weight.valueChanged.connect(
+            lambda value: self.settings.setValue("create_weight", value)
+        )
         self.inspector.apply_requested.connect(self.apply_properties)
         self.analysis.run_requested.connect(self.runner.run_analysis)
         self.analysis.cancel_requested.connect(self.runner.stop_execution)
@@ -127,12 +150,12 @@ class MainWindow(QMainWindow):
         self.action("open", "Abrir…", lambda: self.files.open(), "Ctrl+O", "open")
         self.action("save", "Salvar", lambda: self.files.save(), "Ctrl+S", "save")
         self.action("save_as", "Salvar como…", lambda: self.files.save(True), "Ctrl+Shift+S")
-        self.action("export", "Exportar imagem…", self.export_dialog, "Ctrl+Shift+E")
+        self.action("export", "Exportar imagem…", self.export_dialog, "Ctrl+Shift+E", "export")
         self.action("quit", "Sair", self.close, "Ctrl+Q")
         self.action("undo", "Desfazer", self.document.undo, "Ctrl+Z", "undo")
         self.action("redo", "Refazer", self.document.redo, ["Ctrl+Shift+Z", "Ctrl+Y"], "redo")
-        self.document.undo_stack.canUndoChanged.connect(self.commands["undo"].setEnabled)
-        self.document.undo_stack.canRedoChanged.connect(self.commands["redo"].setEnabled)
+        self.document.undo_stack.canUndoChanged.connect(self.update_history_actions)
+        self.document.undo_stack.canRedoChanged.connect(self.update_history_actions)
         self.commands["undo"].setEnabled(False)
         self.commands["redo"].setEnabled(False)
         self.action("copy", "Copiar subgrafo", self.copy_selection, "Ctrl+C", canvas_only=True)
@@ -171,6 +194,8 @@ class MainWindow(QMainWindow):
         self.action(
             "physics", "Física", self.toggle_physics, "Ctrl+Shift+P", "physics", checkable=True
         )
+        self.action("physics_pause", "Pausar física", self.physics.toggle_paused, image="pause")
+        self.action("physics_settings", "Ajustar física", self.show_physics, image="settings")
         self.action("about", "Sobre o Grafla", self.about)
         self.tool_group = QActionGroup(self)
         self.tool_group.setExclusive(True)
@@ -219,29 +244,48 @@ class MainWindow(QMainWindow):
         self.graph_status.setText(
             f"  {len(graph.vertices)} vértices  ·  {len(graph.edges)} arestas  ·  {graph.kind}  ·  {TOOL_NAMES[self.canvas.mode]}"
         )
+        hints = {
+            "select": "Clique para selecionar · Ctrl+clique para alternar · arraste para mover",
+            "hand": "Arraste para navegar · a seleção e as posições são preservadas",
+            "vertex": "Clique no fundo para criar um vértice · V para selecionar",
+            "edge": (
+                f"Origem #{self.canvas.edge_start} → escolha o destino"
+                if self.canvas.edge_start is not None
+                else "Clique na origem e no destino"
+                + (" · mesmo vértice cria laço" if self.canvas.allow_loops else "")
+            ),
+            "delete": "Clique no elemento para apagá-lo · Ctrl+Z para desfazer",
+        }
+        self.mode_hint.setText(hints[self.canvas.mode])
+        self.cancel_connection.setVisible(self.canvas.edge_start is not None)
         for key in TOOL_NAMES:
             action = self.commands[f"tool_{key}"]
             action.setChecked(key == self.canvas.mode)
-            if hasattr(self, "theme"):
+            if hasattr(self, "theme") and action.property("icon_active") != action.isChecked():
                 action.setIcon(
                     icon(
                         key,
                         self.theme.accent if action.isChecked() else self.theme.text,
                         action.isChecked(),
+                        self.theme.accent,
+                        self.theme.disabled,
                     )
                 )
+                action.setProperty("icon_active", action.isChecked())
 
     def update_zoom(self, scale):
         self.zoom_controls.set_scale(scale)
 
     def on_document_change(self, change):
-        if not change.preview:
-            self.runner.clear_analysis(stale=True)
-            if change.vertex_labels:
-                self.analysis.refresh_vertices(self.document.graph)
-            self.on_selection(self.canvas.selection())
-            self.building.matrix.set_graph(self.document.graph)
-            self.update_title()
+        if change.preview:
+            return
+        self.runner.clear_analysis(stale=True)
+        if change.vertex_labels:
+            self.analysis.refresh_vertices(self.document.graph)
+        self.on_selection(self.canvas.selection())
+        self.building.matrix.set_graph(self.document.graph)
+        self.update_title()
+        self.physics_state()
         self.update_status()
 
     def on_selection(self, selection):
@@ -265,6 +309,10 @@ class MainWindow(QMainWindow):
                     self.inspector.create_weighted.isChecked(),
                     self.inspector.create_weight.value(),
                 ),
+            )
+            self.canvas.edge_created(target)
+            self.notify(
+                f"{'Laço' if source == target else 'Aresta'} criado: #{source} → #{target}."
             )
         except GraphError as error:
             self.notify(str(error), error=True)
@@ -338,12 +386,61 @@ class MainWindow(QMainWindow):
             self.physics_state()
             self.notify(str(error), error=True)
 
+    def update_history_actions(self, *args):
+        self.commands["undo"].setEnabled(
+            self.document.undo_stack.canUndo() or self.physics.preview_pending
+        )
+        self.commands["redo"].setEnabled(self.document.undo_stack.canRedo())
+
+    def show_physics(self):
+        self.workspace.show()
+        self.tabs.setCurrentIndex(3)
+
+    def set_physics_parameters(self, parameters):
+        self.physics.set_parameters(parameters)
+        for key, value in asdict(parameters).items():
+            self.settings.setValue(f"physics/{key}", value)
+
+    def set_connection_option(self, key, value):
+        self.settings.setValue(key, value)
+        if key in {"chain_edges", "allow_loops"}:
+            setattr(self.canvas, key, value)
+            self.canvas.cancel_edge()
+            self.update_status()
+
     def physics_state(self):
         action = self.commands["physics"]
         action.blockSignals(True)
         action.setChecked(self.physics.enabled)
         action.blockSignals(False)
+        action.setToolTip(f"Física · {self.physics.state}\nAtivar/desativar · Ctrl+Shift+P")
         self.physics_label.setText(f"  {self.physics.state}  ")
+        moving = self.physics.timer.isActive()
+        pause = self.commands["physics_pause"]
+        pause.setEnabled(self.physics.enabled and bool(self.document.graph.vertices))
+        pause.setText("Pausar física" if moving else "Retomar física")
+        pause.setToolTip(pause.text())
+        if hasattr(self, "theme"):
+            pause.setIcon(
+                icon(
+                    "pause" if moving else "play",
+                    self.theme.text,
+                    True,
+                    self.theme.accent,
+                    self.theme.disabled,
+                )
+            )
+            action.setIcon(
+                icon(
+                    "physics",
+                    self.theme.accent if self.physics.enabled else self.theme.text,
+                    self.physics.enabled,
+                    self.theme.accent,
+                    self.theme.disabled,
+                )
+            )
+        self.physics_panel.refresh(self.physics)
+        self.update_history_actions()
         for spin in (self.inspector.vertex_x, self.inspector.vertex_y):
             spin.setEnabled(not self.physics.timer.isActive())
 
@@ -353,6 +450,39 @@ class MainWindow(QMainWindow):
         self.canvas.set_theme(self.theme)
         self.canvas.show_grid = self.settings.value("grid", True, type=bool)
         self.canvas.snap = self.settings.value("snap", False, type=bool)
+        self.canvas.highlight_neighbors = self.settings.value(
+            "highlight_neighbors", True, type=bool
+        )
+        self.canvas.double_click_creates = self.settings.value(
+            "double_click_creates", True, type=bool
+        )
+        self.canvas.hover_vertex(None)
+        for key, control, default in (
+            ("chain_edges", self.inspector.chain_edges, False),
+            ("allow_loops", self.inspector.allow_loops, True),
+            ("create_directed", self.inspector.create_directed, False),
+            ("create_weighted", self.inspector.create_weighted, False),
+        ):
+            value = self.settings.value(key, default, type=bool)
+            control.setChecked(value)
+            if key in {"chain_edges", "allow_loops"}:
+                setattr(self.canvas, key, value)
+        self.inspector.create_weight.setValue(self.settings.value("create_weight", 1.0, type=float))
+        self.physics_panel.set_parameters(self.physics.parameters)
+        for action in self.tools.mode_actions:
+            button = self.tools.widgetForAction(action)
+            button.setProperty(
+                "animate", self.settings.value("interface_animations", True, type=bool)
+            )
+        for button in self.tools.menu_buttons:
+            button.setIcon(
+                icon(
+                    button.property("glyph"),
+                    self.theme.text,
+                    hover_color=self.theme.accent,
+                    disabled_color=self.theme.disabled,
+                )
+            )
         for control, checked in (
             (self.zoom_controls.grid, self.canvas.show_grid),
             (self.zoom_controls.snap, self.canvas.snap),
@@ -361,8 +491,20 @@ class MainWindow(QMainWindow):
             control.setChecked(checked)
             control.blockSignals(False)
         for key, name in self.command_icons.items():
-            self.commands[key].setIcon(icon(name, self.theme.text))
+            action = self.commands[key]
+            active = action.isChecked()
+            action.setIcon(
+                icon(
+                    name,
+                    self.theme.accent if active else self.theme.text,
+                    active,
+                    self.theme.accent,
+                    self.theme.disabled,
+                )
+            )
+            action.setProperty("icon_active", active)
         self.update_status()
+        self.physics_state()
 
     def preferences(self):
         dialog = PreferencesDialog(self.settings, self)
@@ -381,6 +523,7 @@ class MainWindow(QMainWindow):
             if isinstance(dialog.chosen, QAction):
                 dialog.chosen.trigger()
             elif isinstance(dialog.chosen, int) and dialog.chosen in self.canvas.vertices:
+                self.canvas.set_mode("select")
                 self.canvas.graph_scene.clearSelection()
                 item = self.canvas.vertices[dialog.chosen]
                 item.setSelected(True)

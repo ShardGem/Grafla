@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import math
 
-from PyQt6.QtCore import QPoint, QPointF, QRectF, Qt, pyqtSignal
+from PyQt6.QtCore import QPoint, QPointF, QRectF, QSignalBlocker, Qt, pyqtSignal
 from PyQt6.QtGui import (
     QColor,
     QPainter,
@@ -11,6 +11,7 @@ from PyQt6.QtGui import (
     QPolygonF,
 )
 from PyQt6.QtWidgets import (
+    QGraphicsItem,
     QGraphicsPathItem,
     QGraphicsScene,
     QGraphicsView,
@@ -32,6 +33,7 @@ class Canvas(QGraphicsView):
     zoom_changed = pyqtSignal(float)
     interaction_started = pyqtSignal()
     mode_changed = pyqtSignal(str)
+    edge_state_changed = pyqtSignal()
     message = pyqtSignal(str)
 
     def __init__(self, document: Document, parent=None):
@@ -65,6 +67,10 @@ class Canvas(QGraphicsView):
         self.edge_start: int | None = None
         self.show_grid = True
         self.snap = False
+        self.chain_edges = False
+        self.allow_loops = True
+        self.highlight_neighbors = True
+        self.double_click_creates = True
         self._syncing = False
         self._dragging = False
         self._pan: QPoint | None = None
@@ -100,13 +106,37 @@ class Canvas(QGraphicsView):
             self.selection_changed.emit(self.selection())
 
     def reconcile(self, change: Change):
+        if change.origin == "physics":
+            self.emit_selection()
+            return
+        if change.preview:
+            # A física só mudou posições. Reaproveita os itens e atualiza
+            # apenas as arestas ligadas aos vértices que se moveram.
+            self._syncing = True
+            try:
+                affected = set()
+                for key in change.vertices:
+                    vertex = self.document.graph.vertices.get(key)
+                    if vertex is not None and key in self.vertices:
+                        self.vertices[key].setPos(vertex.x, vertex.y)
+                        affected.update(self.incident.get(key, set()))
+                for key in affected:
+                    self.edges[key].update_geometry()
+            finally:
+                self._syncing = False
+            return
         self._syncing = True
         graph = self.document.graph
+        if change.origin in {"history", "reset"}:
+            self.cancel_edge()
+        if change.origin == "reset":
+            self.graph_scene.clearSelection()
+            self.hover_vertex(None)
         affected = set(change.edges)
         for key in change.edges:
             old = self.edges.get(key)
             if old is not None:
-                # Removing an opposite edge also changes the survivor's curvature.
+                # Ao remover a aresta oposta, a conexão que sobrou volta a ser reta.
                 affected.update(
                     self.incident.get(old.edge.source, set())
                     & self.incident.get(old.edge.target, set())
@@ -125,6 +155,7 @@ class Canvas(QGraphicsView):
                     continue
                 if key not in self.vertices:
                     item = VertexItem(graph.vertices[key], self)
+                    self.configure_item(item)
                     self.vertices[key] = item
                     self.graph_scene.addItem(item)
                 else:
@@ -144,11 +175,12 @@ class Canvas(QGraphicsView):
                     continue
                 if key not in self.edges:
                     item = EdgeItem(graph.edges[key], self)
+                    self.configure_item(item)
                     self.edges[key] = item
                     self.graph_scene.addItem(item)
                 self.edges[key].refresh(graph.edges[key])
-            if self.edge_start not in graph.vertices:
-                self.edge_start = None
+            if self.edge_start is not None and self.edge_start not in graph.vertices:
+                self.cancel_edge()
             self.empty.setVisible(not graph.vertices)
         finally:
             self._syncing = False
@@ -169,30 +201,76 @@ class Canvas(QGraphicsView):
         self.viewport().update()
 
     def set_mode(self, mode: str):
+        if mode not in {"select", "hand", "vertex", "edge", "delete"}:
+            raise ValueError(f"Modo desconhecido: {mode}")
+        self.finish_drag()
         self.cancel_edge()
+        self.hover_vertex(None)
         self.mode = mode
+        with QSignalBlocker(self.graph_scene):
+            if mode not in {"select", "hand"}:
+                self.graph_scene.clearSelection()
+            for item in (*self.vertices.values(), *self.edges.values()):
+                self.configure_item(item)
+        self.emit_selection()
         self.setDragMode(
             QGraphicsView.DragMode.RubberBandDrag
             if mode == "select"
             else QGraphicsView.DragMode.NoDrag
         )
+        self.update_cursor()
+        self.mode_changed.emit(mode)
+
+    def configure_item(self, item):
+        item.setFlag(
+            QGraphicsItem.GraphicsItemFlag.ItemIsSelectable, self.mode in {"select", "hand"}
+        )
+        if isinstance(item, VertexItem):
+            item.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsMovable, self.mode == "select")
+
+    def update_cursor(self):
         cursor = (
             Qt.CursorShape.OpenHandCursor
-            if mode == "hand"
+            if self.mode == "hand" or self._space
             else (
                 Qt.CursorShape.CrossCursor
-                if mode in {"vertex", "edge"}
+                if self.mode in {"vertex", "edge"}
                 else Qt.CursorShape.ArrowCursor
             )
         )
         self.setCursor(cursor)
-        self.mode_changed.emit(mode)
 
     def cancel_edge(self):
         old, self.edge_start = self.edge_start, None
         self._preview.setPath(QPainterPath())
         if old in self.vertices:
             self.vertices[old].update()
+        self.edge_state_changed.emit()
+
+    def start_edge(self, key: int):
+        self.cancel_edge()
+        self.edge_start = key
+        self.vertices[key].update()
+        self.edge_state_changed.emit()
+
+    def connect_at(self, item):
+        if not isinstance(item, VertexItem):
+            self.cancel_edge()
+            return
+        target = item.vertex.id
+        if self.edge_start is None:
+            self.start_edge(target)
+            return
+        source = self.edge_start
+        self.cancel_edge()
+        if source == target and not self.allow_loops:
+            self.message.emit("Conexão cancelada. Laços estão desativados nas preferências.")
+            return
+        self.edge_requested.emit(source, target)
+
+    def edge_created(self, target: int):
+        if self.chain_edges and self.mode == "edge" and target in self.vertices:
+            self.start_edge(target)
 
     def object_at(self, point: QPoint):
         item = self.itemAt(point)
@@ -213,24 +291,21 @@ class Canvas(QGraphicsView):
         self.interaction_started.emit()
         item = self.object_at(event.pos())
         position = self.mapToScene(event.pos())
-        if self.mode == "vertex" and item is None:
-            self.create_vertex(position)
+        if self.mode == "vertex":
+            if item is None:
+                self.create_vertex(position)
+            event.accept()
             return
         if self.mode == "delete":
             if item:
-                self.graph_scene.clearSelection()
-                item.setSelected(True)
-                self.delete_selection()
+                nodes = {item.vertex.id} if isinstance(item, VertexItem) else set()
+                edges = {item.edge.id} if isinstance(item, EdgeItem) else set()
+                self.document.edit("Apagar elemento", lambda graph: graph.remove(nodes, edges))
+            event.accept()
             return
         if self.mode == "edge":
-            if isinstance(item, VertexItem):
-                if self.edge_start is None:
-                    self.edge_start = item.vertex.id
-                    item.update()
-                else:
-                    start = self.edge_start
-                    self.cancel_edge()
-                    self.edge_requested.emit(start, item.vertex.id)
+            self.connect_at(item)
+            event.accept()
             return
         self._dragging = isinstance(item, VertexItem)
         super().mousePressEvent(event)
@@ -246,27 +321,37 @@ class Canvas(QGraphicsView):
             path = QPainterPath(self.vertices[self.edge_start].pos())
             path.lineTo(self.mapToScene(event.pos()))
             self._preview.setPath(path)
-        super().mouseMoveEvent(event)
+        if self.mode == "select" and not self._space:
+            super().mouseMoveEvent(event)
+        else:
+            event.accept()
 
     def mouseReleaseEvent(self, event):
         if self._pan is not None:
             self._pan = None
-            self.setCursor(
-                Qt.CursorShape.OpenHandCursor if self.mode == "hand" else Qt.CursorShape.ArrowCursor
-            )
+            self.update_cursor()
+            event.accept()
+            return
+        if self.mode != "select" or self._space:
+            event.accept()
             return
         super().mouseReleaseEvent(event)
+        self.finish_drag()
+
+    def finish_drag(self):
         if self._dragging:
+            self._dragging = False
             positions = {}
             for key, item in self.vertices.items():
                 vertex = self.document.graph.vertices[key]
                 x, y = item.pos().x(), item.pos().y()
+                if (x, y) == (vertex.x, vertex.y):
+                    continue
                 if self.snap:
                     x, y = round(x / 40) * 40, round(y / 40) * 40
                 if (x, y) != (vertex.x, vertex.y):
                     positions[key] = (x, y)
             self.move_vertices(positions, "Mover vértices")
-            self._dragging = False
 
     def move_vertices(self, positions: dict[int, tuple[float, float]], label="Mover vértices"):
         def move(graph):
@@ -298,16 +383,31 @@ class Canvas(QGraphicsView):
             )
 
     def mouseDoubleClickEvent(self, event):
+        if event.button() != Qt.MouseButton.LeftButton or self._space:
+            event.accept()
+            return
+        # O Qt envia este evento no lugar do segundo clique.
+        # A ferramenta ativa decide o que fazer, sem cair na seleção.
+        if self.mode != "select":
+            if self.mode == "edge":
+                self.connect_at(self.object_at(event.pos()))
+            event.accept()
+            return
         item = self.object_at(event.pos())
         if item is not None:
-            self.graph_scene.clearSelection()
-            item.setSelected(True)
+            with QSignalBlocker(self.graph_scene):
+                self.graph_scene.clearSelection()
+                item.setSelected(True)
+            self.emit_selection()
             self.inspect_requested.emit()
-        elif self.mode == "select":
+        elif self.double_click_creates:
             self.create_vertex(self.mapToScene(event.pos()))
         event.accept()
 
     def contextMenuEvent(self, event):
+        self.cancel_edge()
+        self.set_mode("select")
+        self.interaction_started.emit()
         menu = QMenu(self)
         item = self.object_at(event.pos())
         if item and not item.isSelected():
@@ -332,6 +432,7 @@ class Canvas(QGraphicsView):
         elif event.key() == Qt.Key.Key_Escape:
             self.cancel_edge()
             self.graph_scene.clearSelection()
+            event.accept()
         elif event.key() == Qt.Key.Key_Delete:
             self.delete_selection()
         else:
@@ -341,15 +442,16 @@ class Canvas(QGraphicsView):
         if event.key() == Qt.Key.Key_Space and not event.isAutoRepeat():
             self._space = False
             self._pan = None
-            self.setCursor(
-                Qt.CursorShape.OpenHandCursor if self.mode == "hand" else Qt.CursorShape.ArrowCursor
-            )
+            self.update_cursor()
+            event.accept()
         else:
             super().keyReleaseEvent(event)
 
     def focusOutEvent(self, event):
         self._space = False
         self._pan = None
+        self.finish_drag()
+        self.update_cursor()
         super().focusOutEvent(event)
 
     def zoom(self, factor: float, point: QPoint | None = None):
@@ -405,6 +507,8 @@ class Canvas(QGraphicsView):
         self.zoom_changed.emit(1.0)
 
     def select_all(self):
+        if self.mode != "select":
+            self.set_mode("select")
         self.graph_scene.blockSignals(True)
         try:
             for item in self.vertices.values():
@@ -418,7 +522,13 @@ class Canvas(QGraphicsView):
     def hover_vertex(self, key: int | None):
         old_nodes, old_edges = self.neighbor_vertices, self.neighbor_edges
         self.neighbor_vertices, self.neighbor_edges = set(), set()
-        if key is not None and not self.highlight_vertices and not self.highlight_edges:
+        if (
+            key is not None
+            and self.mode in {"select", "hand"}
+            and self.highlight_neighbors
+            and not self.highlight_vertices
+            and not self.highlight_edges
+        ):
             self.neighbor_edges = self.incident.get(key, set()).copy()
             self.neighbor_vertices = {key}
             for edge_id in self.neighbor_edges:
