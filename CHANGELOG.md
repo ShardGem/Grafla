@@ -2,6 +2,8 @@
 
 ## Não lançado — precisão de interação e física configurável
 
+- GIF da física em funcionamento, com centros fixados, pausa e retomada após
+  ajustar a distância ideal. Inclui o grafo inicial e o roteiro de geração.
 - Galeria com 18 capturas de casos de uso, 14 grafos para abrir no editor e um
   roteiro para reproduzir as imagens. README com novas prévias das ferramentas.
 - Duplo clique respeita o modo ativo; construção não seleciona nem arrasta elementos.

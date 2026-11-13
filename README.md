@@ -68,6 +68,17 @@ A [galeria completa](docs/galeria.md) também mostra árvore geradora mínima,
 dependências, componentes, laços, conexões opostas, propriedades, geração de grafos,
 seleção em grupo e layouts. Os arquivos estão em [`examples/galeria/`](examples/galeria/).
 
+## Física em movimento
+
+![Física do Grafla: acomodação, pausa e retomada](docs/screenshots/fisica-em-acao.gif)
+
+Os três centros permanecem fixos enquanto os outros vértices se acomodam.
+A simulação é pausada e retomada com outra distância ideal entre os vértices.
+O GIF tem 12 segundos, 20 quadros por segundo e se repete automaticamente.
+
+[Abrir o GIF](docs/screenshots/fisica-em-acao.gif) ·
+[Abrir o grafo do exemplo](examples/fisica-em-acao.grafla)
+
 ## Executar
 
 Requer Python **3.12–3.15** e uma sessão gráfica. A versão de referência validada

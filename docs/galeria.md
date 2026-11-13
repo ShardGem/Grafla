@@ -6,6 +6,16 @@ As imagens foram capturadas no Qt em Linux offscreen, com uma janela de 1600×10
 
 ![Índice visual dos 18 casos de uso](screenshots/galeria/00-visao-geral.png)
 
+## Física em movimento
+
+![Acomodação dos vértices, pausa e retomada da física](screenshots/fisica-em-acao.gif)
+
+Os três centros permanecem fixos. A simulação acomoda os demais vértices, é pausada
+e retoma com outra distância ideal. O GIF se repete a cada 12 segundos.
+
+[Abrir o GIF](screenshots/fisica-em-acao.gif) ·
+[Abrir o grafo inicial](../examples/fisica-em-acao.grafla)
+
 ## Escolha um exemplo
 
 | Captura | O que mostra |
@@ -226,3 +236,12 @@ QT_QPA_PLATFORM=offscreen QT_SCALE_FACTOR=1.5 uv run python tools/capturar_galer
 ```
 
 A geração usa preferências temporárias e não altera os dados pessoais do editor.
+
+Para gerar o GIF da física, tenha o FFmpeg instalado e execute:
+
+```bash
+QT_QPA_PLATFORM=offscreen QT_SCALE_FACTOR=1 uv run python tools/animar_fisica.py
+```
+
+O roteiro usa o controlador do aplicativo em passos de 30 ms e captura a interface
+do Qt a 20 quadros por segundo. A câmera fica parada durante toda a animação.

@@ -1,0 +1,287 @@
+{
+  "format": "grafla",
+  "schema_version": 1,
+  "graph": {
+    "vertices": [
+      {
+        "id": 1,
+        "x": -260,
+        "y": -20,
+        "label": "Produto",
+        "color": "#82b6ff",
+        "radius": 36,
+        "pinned": true
+      },
+      {
+        "id": 2,
+        "x": -323.6396103067893,
+        "y": 43.63961030678928,
+        "label": "API",
+        "color": "#82b6ff",
+        "radius": 26,
+        "pinned": false
+      },
+      {
+        "id": 3,
+        "x": -323.6396103067893,
+        "y": -83.63961030678928,
+        "label": "Web 1",
+        "color": "#82b6ff",
+        "radius": 26,
+        "pinned": false
+      },
+      {
+        "id": 4,
+        "x": -221.96435644333707,
+        "y": 61.56770083329849,
+        "label": "Web 2",
+        "color": "#82b6ff",
+        "radius": 26,
+        "pinned": false
+      },
+      {
+        "id": 5,
+        "x": -221.96435644333704,
+        "y": -101.56770083329849,
+        "label": "App",
+        "color": "#82b6ff",
+        "radius": 26,
+        "pinned": false
+      },
+      {
+        "id": 6,
+        "x": 0,
+        "y": 150,
+        "label": "Dados",
+        "color": "#7ed8c5",
+        "radius": 36,
+        "pinned": true
+      },
+      {
+        "id": 7,
+        "x": 63.63961030678928,
+        "y": 213.63961030678928,
+        "label": "BI",
+        "color": "#7ed8c5",
+        "radius": 26,
+        "pinned": false
+      },
+      {
+        "id": 8,
+        "x": -63.63961030678927,
+        "y": 213.63961030678928,
+        "label": "ETL",
+        "color": "#7ed8c5",
+        "radius": 26,
+        "pinned": false
+      },
+      {
+        "id": 9,
+        "x": -63.639610306789294,
+        "y": 86.36038969321072,
+        "label": "SQL",
+        "color": "#7ed8c5",
+        "radius": 26,
+        "pinned": false
+      },
+      {
+        "id": 10,
+        "x": 63.63961030678926,
+        "y": 86.3603896932107,
+        "label": "Cache",
+        "color": "#7ed8c5",
+        "radius": 26,
+        "pinned": false
+      },
+      {
+        "id": 11,
+        "x": 260,
+        "y": -20,
+        "label": "Infra",
+        "color": "#b7a4f5",
+        "radius": 36,
+        "pinned": true
+      },
+      {
+        "id": 12,
+        "x": 323.6396103067893,
+        "y": 43.63961030678927,
+        "label": "Cloud",
+        "color": "#b7a4f5",
+        "radius": 26,
+        "pinned": false
+      },
+      {
+        "id": 13,
+        "x": 323.6396103067893,
+        "y": -83.6396103067893,
+        "label": "Logs",
+        "color": "#b7a4f5",
+        "radius": 26,
+        "pinned": false
+      },
+      {
+        "id": 14,
+        "x": 221.96435644333707,
+        "y": 61.5677008332985,
+        "label": "CI",
+        "color": "#b7a4f5",
+        "radius": 26,
+        "pinned": false
+      },
+      {
+        "id": 15,
+        "x": 221.96435644333707,
+        "y": -101.5677008332985,
+        "label": "DNS",
+        "color": "#b7a4f5",
+        "radius": 26,
+        "pinned": false
+      }
+    ],
+    "edges": [
+      {
+        "id": 1,
+        "source": 1,
+        "target": 2,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 2,
+        "source": 1,
+        "target": 3,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 3,
+        "source": 1,
+        "target": 4,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 4,
+        "source": 1,
+        "target": 5,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 5,
+        "source": 6,
+        "target": 7,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 6,
+        "source": 6,
+        "target": 8,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 7,
+        "source": 6,
+        "target": 9,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 8,
+        "source": 6,
+        "target": 10,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 9,
+        "source": 11,
+        "target": 12,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 10,
+        "source": 11,
+        "target": 13,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 11,
+        "source": 11,
+        "target": 14,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 12,
+        "source": 11,
+        "target": 15,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 13,
+        "source": 1,
+        "target": 6,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      },
+      {
+        "id": 14,
+        "source": 6,
+        "target": 11,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#71869d"
+      }
+    ],
+    "next_vertex": 16,
+    "next_edge": 15
+  }
+}
