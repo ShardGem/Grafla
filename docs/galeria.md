@@ -22,6 +22,14 @@ A busca reúne comandos e vértices por nome ou ID. As preferências controlam t
 
 [Busca de comandos](screenshots/busca-de-comandos.png) · [Preferências no tema escuro](screenshots/preferencias-dark.png) · [Preferências no tema claro](screenshots/preferencias-light.png)
 
+## Propriedades e cores
+
+Rótulo, cor, raio, posição e propriedades das arestas aparecem no canvas durante a edição. Aplicar confirma uma única operação de histórico; Cancelar restaura o estado confirmado. A roda de cores permite escolher matiz, saturação e brilho, com o hexadecimal disponível para quem precisar.
+
+![Prévia das propriedades antes de aplicar](screenshots/previa-de-propriedades.png)
+
+[Ver a roda de cores](screenshots/roda-de-cores.png)
+
 ## Física em movimento
 
 ![Acomodação dos vértices, pausa e retomada da física](screenshots/fisica-em-acao.gif)

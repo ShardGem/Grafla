@@ -55,9 +55,16 @@ Seleção tem contorno tracejado; execução tem ring no vértice atual, traço 
 espesso, lista de visitados e fila/pilha. Feedback não depende exclusivamente de
 cor. O grid de pontos adapta a densidade ao zoom e pode ser desligado.
 
-O inspector usa Apply explícito, sem misturar alteração instantânea com um botão
-Salvar fictício. Cores são editadas como #RRGGBB, validadas na transação. Inputs,
-checkboxes e combos recebem o estilo do tema e labels de formulário.
+O inspector mostra uma prévia visual durante a edição, separada do documento.
+Aplicar confirma as propriedades em uma única operação de histórico; Cancelar,
+trocar a seleção ou sair do inspector restaura os dados confirmados. Salvamento
+e recuperação não gravam a prévia. A física continua atualizando as posições
+durante a edição de rótulos e estilos. Cores usam roda de matiz/saturação e brilho,
+com hexadecimal opcional e cancelamento da própria escolha de cor. X/Y dividem
+uma linha. Inputs, checkboxes e combos recebem o estilo do tema.
+
+A marca não mantém borda ao receber foco: o contorno aparece apenas ao passar
+o mouse ou pressionar o botão. Buscar exibe uma lupa, mantendo Ctrl+K no teclado.
 
 Os painéis laterais são recolhíveis e a análise tem scroll para telas menores.
 O relatório é um dock secundário que o usuário abre quando precisa copiar detalhes.

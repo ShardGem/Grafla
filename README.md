@@ -25,7 +25,11 @@ e os grafos de exemplo para abrir no editor.
   de direção, peso e comportamento das novas conexões são persistidas.
 - Slider de zoom sincronizado
   com roda/atalhos e controles de construção dentro do workspace.
-- Inspector de rótulo, posição, raio, cor, fixação, direção e peso. Arestas podem
+- Inspector com prévia ao vivo de rótulo, posição, raio, cor, fixação, direção e
+  peso. **Aplicar propriedades** confirma tudo em um único undo; **Cancelar** ou
+  trocar a seleção descarta a prévia. Cores têm roda de matiz/saturação e brilho,
+  e X/Y dividem a mesma linha. Arquivos e recuperação guardam apenas edições confirmadas.
+  Arestas podem
   ser direcionadas ou não; pesos não negativos incluem zero.
 - Desfazer/refazer de edição, exclusão com incidentes, geração, layouts, colagem,
   matrizes e organização pela física. Histórico limitado às últimas 60 operações.

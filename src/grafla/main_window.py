@@ -29,6 +29,7 @@ from grafla.icons import icon
 from grafla.persistence import DocumentError, decode, encode
 from grafla.physics import PhysicsParameters
 from grafla.physics_controller import PhysicsController
+from grafla.property_editor import PropertyEditor
 from grafla.theme import apply, resolve
 
 logger = logging.getLogger(__name__)
@@ -64,6 +65,7 @@ class MainWindow(QMainWindow):
         self._build_actions()
         self._build_shell()
         self.runner = AnalysisController(self)
+        self.property_editor = PropertyEditor(self)
         self.document.changed.connect(self.on_document_change)
         self.document.dirty_changed.connect(self.update_title)
         self.document.path_changed.connect(self.update_title)
@@ -289,7 +291,9 @@ class MainWindow(QMainWindow):
         self.update_status()
 
     def on_selection(self, selection):
-        self.inspector.refresh(self.document.graph, selection)
+        if self.property_editor.selection != selection:
+            self.property_editor.cancel(refresh=False)
+            self.inspector.refresh(self.document.graph, selection)
         self.commands["delete_selection"].setEnabled(any(selection))
         self.commands["copy"].setEnabled(any(selection))
 
@@ -321,7 +325,7 @@ class MainWindow(QMainWindow):
         nodes, edges = self.canvas.selection()
         values = dict(values)
         if self.physics.timer.isActive():
-            # Coordinates shown before the simulation are not a requested move.
+            # A posição exibida antes da simulação não é um pedido de movimento.
             values.pop("x", None)
             values.pop("y", None)
 
@@ -333,7 +337,12 @@ class MainWindow(QMainWindow):
                     setattr(item, key, value)
 
         try:
+            candidate = self.document.graph.clone()
+            update(candidate)
+            candidate.validate()
+            self.property_editor.cancel(refresh=False)
             self.document.edit("Atualizar propriedades", update)
+            self.inspector.refresh(self.document.graph, self.canvas.selection())
             self.notify("Propriedades atualizadas.")
         except GraphError as error:
             self.notify(str(error), error=True)
@@ -448,6 +457,7 @@ class MainWindow(QMainWindow):
         self.theme = resolve(self.settings.value("theme", "dark"))
         apply(QApplication.instance(), self.theme)
         self.canvas.set_theme(self.theme)
+        self.search_button.setIcon(icon("search", self.theme.text))
         self.canvas.show_grid = self.settings.value("grid", True, type=bool)
         self.canvas.snap = self.settings.value("snap", False, type=bool)
         self.canvas.highlight_neighbors = self.settings.value(
@@ -584,6 +594,7 @@ class MainWindow(QMainWindow):
             self.notify(f"Não foi possível colar: {error}", error=True)
 
     def export_dialog(self):
+        self.property_editor.cancel()
         dialog = QDialog(self)
         dialog.setWindowTitle("Exportar grafo")
         layout = QVBoxLayout(dialog)
@@ -623,6 +634,7 @@ class MainWindow(QMainWindow):
         AboutDialog(self).exec()
 
     def closeEvent(self, event):
+        self.property_editor.cancel()
         if not self.files.maybe_save():
             event.ignore()
             return

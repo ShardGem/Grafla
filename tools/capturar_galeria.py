@@ -19,6 +19,7 @@ from PyQt6.QtTest import QTest
 from PyQt6.QtWidgets import QApplication, QScrollArea
 
 from grafla.branding import brand_pixmap
+from grafla.color_picker import ColorPicker
 from grafla.dialogs import AboutDialog, PreferencesDialog, SearchDialog
 from grafla.domain import Graph
 from grafla.main_window import MainWindow
@@ -1095,6 +1096,24 @@ class Galeria:
                     raise RuntimeError("Não foi possível capturar a abertura.")
         finally:
             splash.close()
+        self.preparar(equipe(), "equipe-do-projeto.grafla", tema="light")
+        self.window.canvas.vertices[1].setSelected(True)
+        panel = self.window.inspector
+        panel.vertex_label.setText("Estúdio")
+        panel.vertex_radius.setValue(46)
+        panel.vertex_color.setText("#bd437b")
+        self.assentar()
+        if not self.window.grab().save(str(destino / "previa-de-propriedades.png"), "PNG"):
+            raise RuntimeError("Não foi possível capturar a prévia de propriedades.")
+        picker = ColorPicker(QColor(panel.vertex_color.text()), self.window)
+        try:
+            picker.show()
+            self.assentar()
+            if not picker.grab().save(str(destino / "roda-de-cores.png"), "PNG"):
+                raise RuntimeError("Não foi possível capturar a roda de cores.")
+        finally:
+            picker.close()
+            self.window.property_editor.cancel()
 
     def criar_indice(self):
         self.montar_painel(
@@ -1226,6 +1245,17 @@ class Galeria:
             "[Busca de comandos](screenshots/busca-de-comandos.png) · "
             "[Preferências no tema escuro](screenshots/preferencias-dark.png) · "
             "[Preferências no tema claro](screenshots/preferencias-light.png)",
+            "",
+            "## Propriedades e cores",
+            "",
+            "Rótulo, cor, raio, posição e propriedades das arestas aparecem no canvas "
+            "durante a edição. Aplicar confirma uma única operação de histórico; Cancelar "
+            "restaura o estado confirmado. A roda de cores permite escolher matiz, "
+            "saturação e brilho, com o hexadecimal disponível para quem precisar.",
+            "",
+            "![Prévia das propriedades antes de aplicar](screenshots/previa-de-propriedades.png)",
+            "",
+            "[Ver a roda de cores](screenshots/roda-de-cores.png)",
             "",
             "## Física em movimento",
             "",

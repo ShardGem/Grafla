@@ -1,4 +1,4 @@
-from PyQt6.QtCore import Qt, pyqtSignal
+from PyQt6.QtCore import QSignalBlocker, Qt, pyqtSignal
 from PyQt6.QtWidgets import (
     QCheckBox,
     QComboBox,
@@ -18,6 +18,7 @@ from PyQt6.QtWidgets import (
 )
 
 from grafla.algorithms import ALGORITHMS
+from grafla.color_picker import ColorField
 
 
 def number(minimum=-1e7, maximum=1e7, decimals=2):
@@ -62,9 +63,12 @@ class ContextStack(QStackedWidget):
 
 class Inspector(QScrollArea):
     apply_requested = pyqtSignal(object)
+    preview_requested = pyqtSignal(object)
+    cancel_requested = pyqtSignal()
 
     def __init__(self, parent=None):
         super().__init__(parent)
+        self._refreshing = True
         self.setWidgetResizable(True)
         content = QWidget()
         self.setWidget(content)
@@ -96,14 +100,22 @@ class Inspector(QScrollArea):
         self.vertex_label = QLineEdit()
         self.vertex_label.setMaxLength(200)
         self.vertex_x, self.vertex_y = number(), number()
+        position = QWidget()
+        coordinates = QHBoxLayout(position)
+        coordinates.setContentsMargins(0, 0, 0, 0)
+        coordinates.setSpacing(8)
+        for axis, control in (("X", self.vertex_x), ("Y", self.vertex_y)):
+            coordinates.addWidget(QLabel(axis))
+            control.setMinimumWidth(0)
+            control.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Fixed)
+            control.setAccessibleName(f"Coordenada {axis}")
+            coordinates.addWidget(control, 1)
         self.vertex_radius = number(12, 100, 0)
-        self.vertex_color = QLineEdit()
-        self.vertex_color.setPlaceholderText("#RRGGBB")
+        self.vertex_color = ColorField()
         self.vertex_pinned = QCheckBox("Fixar durante a física e layouts")
+        form.addRow("Rótulo", self.vertex_label)
+        form.addRow(position)
         for label, widget in (
-            ("Rótulo", self.vertex_label),
-            ("X", self.vertex_x),
-            ("Y", self.vertex_y),
             ("Raio", self.vertex_radius),
             ("Cor", self.vertex_color),
             ("Posição", self.vertex_pinned),
@@ -119,7 +131,7 @@ class Inspector(QScrollArea):
         self.edge_directed = QCheckBox("Direcionada")
         self.edge_weighted = QCheckBox("Ponderada")
         self.edge_weight = number(0, 1e9)
-        self.edge_color = QLineEdit()
+        self.edge_color = ColorField()
         self.edge_weighted.toggled.connect(self.edge_weight.setEnabled)
         for label, widget in (
             ("Extremos", self.edge_endpoints),
@@ -134,13 +146,22 @@ class Inspector(QScrollArea):
         multi_page = QWidget()
         form = QFormLayout(multi_page)
         form.setContentsMargins(0, 0, 0, 0)
-        self.multi_color = QLineEdit("#ffad78")
+        self.multi_color = ColorField("#ffad78")
         form.addRow("Cor comum", self.multi_color)
         self.stack.addWidget(multi_page)
         self.apply_button = QPushButton("Aplicar propriedades")
         self.apply_button.setProperty("primary", True)
         self.apply_button.clicked.connect(self.submit)
-        layout.addWidget(self.apply_button)
+        self.cancel_button = QPushButton("Cancelar")
+        self.cancel_button.clicked.connect(self.cancel_requested.emit)
+        actions = QHBoxLayout()
+        actions.addWidget(self.apply_button, 1)
+        actions.addWidget(self.cancel_button)
+        layout.addLayout(actions)
+        self.feedback = QLabel()
+        self.feedback.setWordWrap(True)
+        self.feedback.setProperty("muted", True)
+        layout.addWidget(self.feedback)
         defaults = QGroupBox("Novas conexões")
         form = QFormLayout(defaults)
         self.create_directed = QCheckBox("Direcionadas")
@@ -167,11 +188,28 @@ class Inspector(QScrollArea):
         tips.setWordWrap(True)
         layout.addWidget(tips)
         layout.addStretch()
+        for control in (
+            self.vertex_label,
+            self.vertex_color,
+            self.edge_label,
+            self.edge_color,
+            self.multi_color,
+        ):
+            control.textChanged.connect(self.preview)
+        for control in (self.vertex_x, self.vertex_y, self.vertex_radius, self.edge_weight):
+            control.setKeyboardTracking(True)
+            control.valueChanged.connect(self.preview)
+        for control in (self.vertex_pinned, self.edge_directed, self.edge_weighted):
+            control.toggled.connect(self.preview)
         self.refresh(None, (set(), set()))
 
     def refresh(self, graph, selection):
+        self._refreshing = True
         vertices, edges = selection
         self.apply_button.setVisible(bool(vertices or edges))
+        self.cancel_button.setVisible(bool(vertices or edges))
+        self.feedback.clear()
+        self.feedback.hide()
         if not vertices and not edges:
             self.heading.setText("DOCUMENTO")
             self.stack.setCurrentIndex(0)
@@ -203,7 +241,31 @@ class Inspector(QScrollArea):
         else:
             self.heading.setText(f"SELEÇÃO · {len(vertices) + len(edges)} ELEMENTOS")
             self.stack.setCurrentIndex(3)
+            colors = {graph.vertices[key].color for key in vertices} | {
+                graph.edges[key].color for key in edges
+            }
+            self.multi_color.setText(next(iter(colors)) if len(colors) == 1 else "")
+            self.multi_color.setPlaceholderText("Várias cores · escolher na roda")
         self._displayed_values = self.values()
+        self._refreshing = False
+
+    def changed_values(self):
+        return {
+            key: value
+            for key, value in self.values().items()
+            if value != self._displayed_values.get(key)
+        }
+
+    def follow_position(self, vertex, edited):
+        for name, control in (("x", self.vertex_x), ("y", self.vertex_y)):
+            if name not in edited:
+                with QSignalBlocker(control):
+                    control.setValue(getattr(vertex, name))
+                self._displayed_values[name] = control.value()
+
+    def preview(self, *args):
+        if not self._refreshing and self.stack.currentIndex() != 0:
+            self.preview_requested.emit(self.changed_values())
 
     def values(self):
         if self.stack.currentIndex() == 1:
@@ -228,14 +290,8 @@ class Inspector(QScrollArea):
         return values
 
     def submit(self):
-        values = self.values()
-        if self.stack.currentIndex() in (1, 2):
-            # Preserva a precisão de coordenadas e pesos que não foram editados.
-            values = {
-                key: value
-                for key, value in values.items()
-                if value != self._displayed_values.get(key)
-            }
+        # Só confirma os campos editados; os demais mantêm sua precisão original.
+        values = self.changed_values()
         if values:
             self.apply_requested.emit(values)
 

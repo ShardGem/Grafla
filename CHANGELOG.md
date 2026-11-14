@@ -2,6 +2,12 @@
 
 ## Não lançado — precisão de interação e física configurável
 
+- Propriedades com prévia no canvas, Aplicar em uma operação de histórico e
+  Cancelar sem alterar o documento. Inclui vértices, arestas e grupos; recuperação
+  e arquivos guardam apenas edições confirmadas. Roda de cores com brilho e
+  hexadecimal opcional, seleção que preserva a cor escolhida, X/Y na mesma linha,
+  lupa em Buscar e marca sem borda de
+  foco persistente. Galeria atualizada com a prévia e o seletor de cores.
 - Galeria refeita com 30 capturas em 3360×2100, variações nos dois temas e 26 grafos
   para abrir no editor. Inclui metrô, árvore binária, serviços, mapa de estudos,
   pré-requisitos, malha, K8 e custos decimais. Imagens antigas substituídas,

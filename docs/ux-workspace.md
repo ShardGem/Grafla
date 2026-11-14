@@ -81,10 +81,15 @@ recolhíveis. Confira o [diagnóstico e as medições](refinamento-editor.md).
 As silhuetas preenchidas recuperam a mão, a borracha e as marcas de adição do
 legado. A barra compacta primeiro os menus auxiliares, conservando os rótulos dos
 modos quando há espaço; pausa e ajustes permanecem acessíveis a 1024 px. A suíte
-atual contém 135 casos aprovados, incluindo regressões de estado, visibilidade
+atual contém 147 casos aprovados, incluindo regressões de estado, visibilidade
 real dos campos numéricos nos dois temas e carregamento da marca em três escalas.
 
 A nova marca do autor também aparece no canto superior esquerdo, acima dos
 painéis, com acesso à tela Sobre. A abertura usa a versão horizontal, com versão
 e progresso das etapas reais. As quatro imagens recebidas ficam no pacote; veja
 o [mapeamento dos arquivos e seus usos](design-system.md#marca-do-aplicativo).
+
+O inspector agora permite experimentar as propriedades no canvas antes de
+confirmar. Aplicar registra uma operação; Cancelar ou trocar o contexto restaura
+o documento confirmado. A roda de cores também pode ser cancelada separadamente,
+e o destaque da seleção mantém a cor escolhida visível.

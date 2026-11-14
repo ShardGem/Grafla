@@ -193,6 +193,22 @@ class Canvas(QGraphicsView):
                 if edge_id in self.edges:
                     self.edges[edge_id].update_geometry()
 
+    def show_property_preview(self, graph, vertices, edges):
+        """Atualiza o desenho sem alterar o documento nem emitir uma nova seleção."""
+        affected = set(edges)
+        self._syncing = True
+        try:
+            for key in vertices:
+                if key in self.vertices and key in graph.vertices:
+                    self.vertices[key].refresh(graph.vertices[key])
+                    affected.update(self.incident.get(key, set()))
+            for key in affected:
+                if key in self.edges and key in graph.edges:
+                    self.edges[key].refresh(graph.edges[key])
+        finally:
+            self._syncing = False
+        self.viewport().update()
+
     def set_theme(self, theme: Theme):
         self.theme = theme
         self.setBackgroundBrush(QColor(theme.canvas))

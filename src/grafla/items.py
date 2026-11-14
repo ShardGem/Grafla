@@ -72,6 +72,8 @@ class VertexItem(QGraphicsEllipseItem):
             else theme.accent
         )
         color = QColor(highlight_color if active else self.vertex.color)
+        if self.isSelected():
+            color = QColor(self.vertex.color)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         painter.setPen(QPen(color, 2 if active or hovered else 1.4))
         fill = QColor(theme.panel)
@@ -95,6 +97,8 @@ class VertexItem(QGraphicsEllipseItem):
         painter.setPen(
             QColor(highlight_color if active else (theme.muted if dimmed else theme.text))
         )
+        if self.isSelected():
+            painter.setPen(QColor(self.vertex.color))
         font = QFont()
         font.setPointSizeF(10)
         font.setBold(active)
@@ -242,6 +246,11 @@ class EdgeItem(QGraphicsPathItem):
         )
         color = QColor(highlight_color if active or self.isUnderMouse() else self.edge.color)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        if self.isSelected():
+            color = QColor(self.edge.color)
+            painter.setBrush(Qt.BrushStyle.NoBrush)
+            painter.setPen(QPen(QColor(theme.accent), 6, Qt.PenStyle.DashLine))
+            painter.drawPath(self.line_path)
         pen = QPen(color, 3 if active else 1.8)
         pen.setCapStyle(Qt.PenCapStyle.RoundCap)
         painter.setPen(pen)

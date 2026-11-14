@@ -137,9 +137,10 @@ def build_shell(window):
         if key == "save":
             button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
         row.addWidget(button)
-    search = QPushButton("Buscar  Ctrl+K")
-    search.clicked.connect(window.search)
-    row.addWidget(search)
+    window.search_button = QPushButton("Buscar")
+    window.search_button.setProperty("glyph", "search")
+    window.search_button.clicked.connect(window.search)
+    row.addWidget(window.search_button)
     window.panel_button = QToolButton()
     row.addWidget(window.panel_button)
     header.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)

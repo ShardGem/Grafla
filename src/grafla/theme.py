@@ -167,7 +167,10 @@ def apply(app: QApplication, theme: Theme) -> None:
         QLabel[eyebrow="true"] {{ color: {theme.muted}; font-size: 11px; font-weight: 600; }}
         QLabel#PhysicsState {{ color: {theme.accent}; font-size: 20px; font-weight: 600; }}
         QFrame#AdvancedControls {{ border: 1px solid {theme.border}; border-radius: 5px; }}
-        QToolButton#BrandButton {{ padding: 4px; border-radius: 10px; }}
+        QToolButton#BrandButton, QToolButton#BrandButton:focus {{ padding: 4px;
+            border: 1px solid transparent; background: transparent; border-radius: 10px; }}
+        QToolButton#BrandButton:hover, QToolButton#BrandButton:pressed {{
+            border-color: {theme.accent}; background: {theme.hover}; }}
         QFrame#BrandCard {{ background: #18212d; border: 1px solid #303e50;
                             border-radius: 12px; }}
         QLabel#DocumentName {{ font-size: 14px; font-weight: 600; }}
