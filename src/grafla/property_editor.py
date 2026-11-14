@@ -56,7 +56,7 @@ class PropertyEditor(QObject):
             window.inspector.feedback.show()
             return
         window.inspector.feedback.setText(
-            "Prévia · Aplicar confirma; Cancelar restaura." if values else ""
+            "Prévia · Aplique ou reverta as alterações." if values else ""
         )
         window.inspector.feedback.setVisible(bool(values))
         window.canvas.show_property_preview(graph, vertices, edges)

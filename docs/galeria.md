@@ -24,7 +24,7 @@ A busca reúne comandos e vértices por nome ou ID. As preferências controlam t
 
 ## Propriedades e cores
 
-Rótulo, cor, raio, posição e propriedades das arestas aparecem no canvas durante a edição. Aplicar confirma uma única operação de histórico; Cancelar restaura o estado confirmado. A roda de cores permite escolher matiz, saturação e brilho, com o hexadecimal disponível para quem precisar.
+Rótulo, cor, raio, posição e propriedades das arestas aparecem no canvas durante a edição. Aplicar confirma uma única operação de histórico; Reverter Alterações restaura os últimos valores aplicados. A roda de cores permite escolher matiz, saturação e brilho, com o hexadecimal disponível para quem precisar.
 
 ![Prévia das propriedades antes de aplicar](screenshots/previa-de-propriedades.png)
 

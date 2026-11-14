@@ -2,8 +2,11 @@
 
 ## Não lançado — precisão de interação e física configurável
 
+- Reverter Alterações restaura os valores aplicados; X/Y e os campos do inspector
+  ficam alinhados, com espaçamento interno consistente. A splash usa 3 segundos
+  por padrão e atualiza a configuração antiga de 1,8 segundo uma única vez.
 - Propriedades com prévia no canvas, Aplicar em uma operação de histórico e
-  Cancelar sem alterar o documento. Inclui vértices, arestas e grupos; recuperação
+  Reverter Alterações sem alterar o documento. Inclui vértices, arestas e grupos; recuperação
   e arquivos guardam apenas edições confirmadas. Roda de cores com brilho e
   hexadecimal opcional, seleção que preserva a cor escolhida, X/Y na mesma linha,
   lupa em Buscar e marca sem borda de

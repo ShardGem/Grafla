@@ -116,7 +116,7 @@ o editor também quando ocorre falha.
 
 `app.py` cria QApplication e logging, apresenta splash, agenda etapas reais de tema
 e editor pelo event loop e mostra a janela pronta. A preferência de duração mínima
-(1,8 s por padrão) é atendida por um timer preciso, contado desde o showEvent.
+(3 s por padrão) é atendida por um timer preciso, contado desde o showEvent.
 Se o carregamento já consumiu esse tempo, a janela abre imediatamente. Não há sleep.
 
 ## Testes e distribuição

@@ -5,11 +5,22 @@ from PyQt6.QtWidgets import QApplication, QWidget
 from grafla import __version__
 from grafla.branding import application_icon, brand_pixmap
 
+DEFAULT_SPLASH_DURATION_MS = 3000
+
+
+def splash_duration(settings):
+    """Atualiza o padrão antigo uma vez e preserva os tempos personalizados."""
+    if settings.value("splash_default_ms", 0, type=int) != DEFAULT_SPLASH_DURATION_MS:
+        if settings.value("splash_duration_ms", DEFAULT_SPLASH_DURATION_MS, type=int) == 1800:
+            settings.setValue("splash_duration_ms", DEFAULT_SPLASH_DURATION_MS)
+        settings.setValue("splash_default_ms", DEFAULT_SPLASH_DURATION_MS)
+    return settings.value("splash_duration_ms", DEFAULT_SPLASH_DURATION_MS, type=int)
+
 
 class Splash(QWidget):
     """Mostra as etapas da abertura sem bloquear o editor ou somar uma espera extra."""
 
-    def __init__(self, animate=True, minimum_ms=1800):
+    def __init__(self, animate=True, minimum_ms=DEFAULT_SPLASH_DURATION_MS):
         super().__init__(None, Qt.WindowType.SplashScreen | Qt.WindowType.FramelessWindowHint)
         self.setFixedSize(660, 420)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)

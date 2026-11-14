@@ -5,6 +5,30 @@ import sys
 from grafla.splash import Splash
 
 
+def test_splash_default_is_three_seconds_and_preferences_keep_custom_durations(qapp, tmp_path):
+    from PyQt6.QtCore import QSettings
+
+    from grafla.dialogs import PreferencesDialog
+    from grafla.splash import splash_duration
+
+    settings = QSettings(str(tmp_path / "splash.ini"), QSettings.Format.IniFormat)
+    splash = Splash(animate=False)
+    assert splash.minimum_ms == 3000
+    splash.close()
+    assert splash_duration(settings) == 3000
+    dialog = PreferencesDialog(settings)
+    assert dialog.splash_duration.value() == 3
+    dialog.close()
+    legacy = QSettings(str(tmp_path / "legacy.ini"), QSettings.Format.IniFormat)
+    legacy.setValue("splash_duration_ms", 1800)
+    assert splash_duration(legacy) == 3000
+    legacy.setValue("splash_duration_ms", 1800)
+    assert splash_duration(legacy) == 1800
+    custom = QSettings(str(tmp_path / "custom.ini"), QSettings.Format.IniFormat)
+    custom.setValue("splash_duration_ms", 4200)
+    assert splash_duration(custom) == 4200
+
+
 def test_splash_renders_actual_stage_without_timing_delay(qapp, qtbot, tmp_path):
     splash = Splash(animate=False)
     qtbot.addWidget(splash)

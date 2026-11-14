@@ -16,6 +16,7 @@ from PyQt6.QtWidgets import (
 
 from grafla import __version__
 from grafla.branding import application_icon, brand_pixmap
+from grafla.splash import splash_duration
 
 
 class AboutDialog(QDialog):
@@ -111,7 +112,7 @@ class PreferencesDialog(QDialog):
         self.splash_duration.setDecimals(1)
         self.splash_duration.setSingleStep(0.2)
         self.splash_duration.setSuffix(" s")
-        self.splash_duration.setValue(settings.value("splash_duration_ms", 1800, type=int) / 1000)
+        self.splash_duration.setValue(splash_duration(settings) / 1000)
         for label, widget in (
             ("Aparência", self.theme),
             ("Canvas", self.grid),

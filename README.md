@@ -26,8 +26,9 @@ e os grafos de exemplo para abrir no editor.
 - Slider de zoom sincronizado
   com roda/atalhos e controles de construção dentro do workspace.
 - Inspector com prévia ao vivo de rótulo, posição, raio, cor, fixação, direção e
-  peso. **Aplicar propriedades** confirma tudo em um único undo; **Cancelar** ou
-  trocar a seleção descarta a prévia. Cores têm roda de matiz/saturação e brilho,
+  peso. **Aplicar propriedades** confirma tudo em um único undo; **Reverter Alterações**
+  restaura os últimos valores aplicados. Trocar a seleção descarta a prévia.
+  Cores têm roda de matiz/saturação e brilho,
   e X/Y dividem a mesma linha. Arquivos e recuperação guardam apenas edições confirmadas.
   Arestas podem
   ser direcionadas ou não; pesos não negativos incluem zero.
@@ -59,7 +60,7 @@ e os grafos de exemplo para abrir no editor.
   transparência em PNG/SVG. A exportação exclui controles e handles do editor.
 - Copiar/colar subgrafo, busca de comandos/vértices, zoom no cursor, navegação com
   Espaço/botão do meio, snap e temas Dark/Light/System.
-- Splash ligada às etapas reais do bootstrap, com mínimo de **1,8 s** ajustável
+- Splash ligada às etapas reais do bootstrap, com mínimo padrão de **3 s** ajustável
   nas preferências (0,5–5 s), usando timer sem bloquear a interface, e controles
   **nativos de janela** para minimizar, maximizar/restaurar, arrastar e fechar.
 

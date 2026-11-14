@@ -140,6 +140,9 @@ def apply(app: QApplication, theme: Theme) -> None:
         QLineEdit:focus, QSpinBox:focus, QDoubleSpinBox:focus, QComboBox:focus,
         QPushButton:focus, QToolButton:focus {{ border: 1px solid {theme.accent}; }}
         QLineEdit:disabled, QDoubleSpinBox:disabled {{ color: {theme.muted}; background: {theme.panel}; }}
+        QScrollArea#Inspector QLineEdit, QScrollArea#Inspector QDoubleSpinBox {{ padding: 6px 8px; }}
+        QScrollArea#Inspector QDoubleSpinBox QLineEdit {{ padding: 0; border: none;
+            background: transparent; }}
         QSpinBox::up-button, QDoubleSpinBox::up-button {{ subcontrol-origin: border;
             subcontrol-position: top right; width: 16px; border-left: 1px solid {theme.border};
             border-bottom: 1px solid {theme.border}; border-top-right-radius: 4px; }}

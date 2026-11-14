@@ -12,7 +12,7 @@ from PyQt6.QtWidgets import QApplication, QMessageBox
 
 from grafla import __version__
 from grafla.branding import application_icon
-from grafla.splash import Splash
+from grafla.splash import Splash, splash_duration
 
 
 def configure_logging(directory: Path) -> None:
@@ -65,7 +65,7 @@ def main() -> int:
         if args.no_splash
         else Splash(
             settings.value("animations", True, type=bool),
-            settings.value("splash_duration_ms", 1800, type=int),
+            splash_duration(settings),
         )
     )
     if splash:

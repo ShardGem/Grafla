@@ -26,6 +26,7 @@ def number(minimum=-1e7, maximum=1e7, decimals=2):
     spin.setRange(minimum, maximum)
     spin.setDecimals(decimals)
     spin.setKeyboardTracking(False)
+    spin.lineEdit().setTextMargins(6, 0, 6, 0)
     return spin
 
 
@@ -68,6 +69,7 @@ class Inspector(QScrollArea):
 
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.setObjectName("Inspector")
         self._refreshing = True
         self.setWidgetResizable(True)
         content = QWidget()
@@ -105,7 +107,8 @@ class Inspector(QScrollArea):
         coordinates.setContentsMargins(0, 0, 0, 0)
         coordinates.setSpacing(8)
         for axis, control in (("X", self.vertex_x), ("Y", self.vertex_y)):
-            coordinates.addWidget(QLabel(axis))
+            if axis == "Y":
+                coordinates.addWidget(QLabel(axis))
             control.setMinimumWidth(0)
             control.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Fixed)
             control.setAccessibleName(f"Coordenada {axis}")
@@ -114,7 +117,7 @@ class Inspector(QScrollArea):
         self.vertex_color = ColorField()
         self.vertex_pinned = QCheckBox("Fixar durante a física e layouts")
         form.addRow("Rótulo", self.vertex_label)
-        form.addRow(position)
+        form.addRow("X", position)
         for label, widget in (
             ("Raio", self.vertex_radius),
             ("Cor", self.vertex_color),
@@ -152,7 +155,8 @@ class Inspector(QScrollArea):
         self.apply_button = QPushButton("Aplicar propriedades")
         self.apply_button.setProperty("primary", True)
         self.apply_button.clicked.connect(self.submit)
-        self.cancel_button = QPushButton("Cancelar")
+        self.cancel_button = QPushButton("Reverter Alterações")
+        self.cancel_button.setToolTip("Restaurar os últimos valores aplicados ao elemento")
         self.cancel_button.clicked.connect(self.cancel_requested.emit)
         actions = QHBoxLayout()
         actions.addWidget(self.apply_button, 1)

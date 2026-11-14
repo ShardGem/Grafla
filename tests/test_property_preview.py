@@ -42,6 +42,11 @@ def test_properties_preview_cancel_and_one_undoable_commit(window, graph, qtbot)
     assert window.document.graph == graph
     window.document.redo()
     assert window.document.graph.vertices[1].color == "#43b8ac"
+    panel.vertex_label.setText("Ainda não aplicado")
+    qtbot.mouseClick(panel.cancel_button, Qt.MouseButton.LeftButton)
+    assert panel.vertex_label.text() == "Confirmado"
+    assert window.document.graph.vertices[1].label == "Confirmado"
+    assert window.document.undo_stack.count() == 1
 
 
 def test_edge_preview_changes_geometry_but_cancels_without_history(window, graph):
@@ -200,6 +205,13 @@ def test_coordinates_share_a_row_and_do_not_expand_the_dock(window, graph, qtbot
     x, y = panel.vertex_x, panel.vertex_y
     assert x.mapTo(window, QPoint()).y() == y.mapTo(window, QPoint()).y()
     assert abs(x.width() - y.width()) <= 2
+    left = panel.vertex_label.mapTo(window, QPoint()).x()
+    right = left + panel.vertex_label.width()
+    assert x.mapTo(window, QPoint()).x() == left
+    assert y.mapTo(window, QPoint()).x() + y.width() == right
+    for field in (panel.vertex_color, panel.vertex_radius):
+        assert field.mapTo(window, QPoint()).x() == left
+        assert field.width() == panel.vertex_label.width()
     assert window.workspace.width() < 450
     assert panel.horizontalScrollBar().maximum() == 0
 
