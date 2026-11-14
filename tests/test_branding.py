@@ -1,11 +1,45 @@
+import ctypes
+from types import SimpleNamespace
+from unittest.mock import Mock
+
 import pytest
 from PyQt6.QtCore import QPoint, Qt, QTimer
-from PyQt6.QtGui import QImageReader
+from PyQt6.QtGui import QImageReader, QPixmap
 from PyQt6.QtWidgets import QDialogButtonBox
 
+from grafla import branding
 from grafla.branding import BRAND_FILES, RESOURCES, application_icon, brand_pixmap
 from grafla.dialogs import AboutDialog
 from grafla.splash import Splash
+
+
+def test_window_uses_ico_and_header_keeps_the_png(window):
+    expected = QPixmap(str(RESOURCES / "grafla.ico")).toImage()
+    assert not expected.isNull()
+    assert window.windowIcon().pixmap(256, 256).toImage() == expected
+    assert (
+        window.brand_button.icon().pixmap(256, 256).toImage()
+        == brand_pixmap("symbol", 256, 256).toImage()
+    )
+
+
+@pytest.mark.parametrize(("result", "success"), [(0, True), (-2147467259, False)])
+def test_windows_taskbar_identity_uses_the_grafla_id(monkeypatch, result, success):
+    setter = Mock(return_value=result)
+    loader = Mock(return_value=SimpleNamespace(SetCurrentProcessExplicitAppUserModelID=setter))
+    monkeypatch.setattr(branding.sys, "platform", "win32")
+    monkeypatch.setattr(ctypes, "WinDLL", loader, raising=False)
+    assert branding.register_taskbar_identity() is success
+    loader.assert_called_once_with("shell32")
+    setter.assert_called_once_with("ShardGem.Grafla")
+    assert setter.argtypes == [ctypes.c_wchar_p]
+    assert setter.restype == ctypes.c_long
+
+
+def test_missing_windows_shell_does_not_prevent_startup(monkeypatch):
+    monkeypatch.setattr(branding.sys, "platform", "win32")
+    monkeypatch.setattr(ctypes, "WinDLL", Mock(side_effect=OSError("Indisponível")), raising=False)
+    assert not branding.register_taskbar_identity()
 
 
 @pytest.mark.parametrize("variant", ["symbol", "horizontal", "vertical"])

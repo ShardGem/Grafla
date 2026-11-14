@@ -2,6 +2,8 @@
 
 ## Não lançado — precisão de interação e física configurável
 
+- ICO do autor na janela e na barra de tarefas, com identificação própria no
+  Windows. A marca dentro do editor continua usando o PNG.
 - Reverter Alterações restaura os valores aplicados; X/Y e os campos do inspector
   ficam alinhados, com espaçamento interno consistente. A splash usa 3 segundos
   por padrão e atualiza a configuração antiga de 1,8 segundo uma única vez.

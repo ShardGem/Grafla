@@ -17,7 +17,7 @@ from PyQt6.QtWidgets import (
     QWidget,
 )
 
-from grafla.branding import application_icon
+from grafla.branding import brand_icon
 from grafla.icons import ToolFeedback
 from grafla.panels import AnalysisPanel, Inspector
 from grafla.physics_panel import PhysicsPanel
@@ -114,7 +114,7 @@ def build_shell(window):
     window.brand_button = QToolButton()
     window.brand_button.setObjectName("BrandButton")
     window.brand_button.setDefaultAction(commands["about"])
-    window.brand_button.setIcon(application_icon())
+    window.brand_button.setIcon(brand_icon())
     window.brand_button.setIconSize(QSize(38, 38))
     window.brand_button.setFixedSize(50, 50)
     window.brand_button.setFocusPolicy(Qt.FocusPolicy.StrongFocus)

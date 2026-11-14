@@ -52,6 +52,7 @@ def test_actual_entrypoint_starts_and_exits_cleanly(tmp_path):
     assert result.returncode == 0, result.stderr
     assert "initialized" in result.stderr
     assert (tmp_path / "smoke-window.png").is_file()
+    assert (tmp_path / "smoke-icon.png").is_file()
     assert "Traceback" not in result.stderr
 
 

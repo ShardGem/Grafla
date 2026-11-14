@@ -33,14 +33,15 @@ sem alterações no desenho, nas cores ou na transparência:
 
 | Arquivo recebido | Recurso no pacote | Uso |
 | --- | --- | --- |
-| `grafla.png` | `grafla.png` | Janela, diálogos e símbolo no canto superior esquerdo |
-| `grafla_icone.ico` | `grafla.ico` | Ícone do executável Windows |
+| `grafla.png` | `grafla.png` | Símbolo no canto superior esquerdo do editor |
+| `grafla_icone.ico` | `grafla.ico` | Executável, janela, barra de tarefas e diálogos |
 | `Grafla ícone alt.png` | `grafla-horizontal.png` | Marca horizontal na abertura |
 | `Grafla ícone alt 2.png` | `grafla-vertical.png` | Marca vertical na tela Sobre |
 
 `branding.py` concentra a leitura das imagens, preserva a proporção e mantém um
-cache por tamanho e escala. O ícone da janela deriva de uma única leitura a 256 px;
-os tamanhos menores são preparados em memória, sem decodificar o PNG a cada uso.
+cache por tamanho e escala. A janela e a barra de tarefas usam o ICO original.
+O botão da marca usa o PNG, com os tamanhos menores preparados em memória.
+O Windows recebe uma identificação fixa do Grafla antes da criação das janelas.
 O empacotamento inclui as quatro imagens.
 
 O cabeçalho do documento ocupa toda a largura da janela, acima do canvas e dos

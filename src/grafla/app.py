@@ -11,7 +11,7 @@ from PyQt6.QtCore import QCoreApplication, QSettings, QStandardPaths, QTimer
 from PyQt6.QtWidgets import QApplication, QMessageBox
 
 from grafla import __version__
-from grafla.branding import application_icon
+from grafla.branding import application_icon, register_taskbar_identity
 from grafla.splash import Splash, splash_duration
 
 
@@ -48,12 +48,17 @@ def main() -> int:
     QCoreApplication.setOrganizationName("Grafla")
     QCoreApplication.setApplicationName("Grafla")
     QCoreApplication.setApplicationVersion(__version__)
+    taskbar_registered = register_taskbar_identity()
     app = QApplication(sys.argv[:1])
     app.setWindowIcon(application_icon())
     data_dir = args.data_dir or Path(
         QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppLocalDataLocation)
     )
     configure_logging(data_dir)
+    if not taskbar_registered:
+        logging.getLogger("grafla.app").warning(
+            "Não foi possível registrar a identificação do Grafla na barra de tarefas."
+        )
     if args.smoke_test and (data_dir / "recovery.grafla").exists():
         logging.getLogger("grafla.app").error(
             "Smoke test recusado: há recuperação nesse diretório. Use outro --data-dir."
@@ -145,6 +150,11 @@ def main() -> int:
         from grafla.exporting import export_graph
         from grafla.persistence import load
 
+        if not taskbar_registered:
+            raise RuntimeError("Não foi possível identificar o Grafla na barra de tarefas.")
+        icon = window.windowIcon().pixmap(64, 64)
+        if icon.isNull() or not icon.save(str(data_dir / "smoke-icon.png"), "PNG"):
+            raise RuntimeError("Não foi possível carregar o ICO do aplicativo.")
         window.physics.set_enabled(False)
         if not window.document.graph.vertices:
             window.document.replace("Smoke", generate_graph(6, 8, True, True))
