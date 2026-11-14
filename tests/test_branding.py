@@ -25,7 +25,7 @@ def test_supplied_brand_keeps_proportions_and_transparency_at_each_scale(qapp, v
 
 
 @pytest.mark.parametrize(("width", "theme"), [(1024, "dark"), (1280, "light")])
-def test_brand_stays_at_upper_right_and_opens_about_without_editing(
+def test_brand_stays_at_upper_left_and_opens_about_without_editing(
     window, graph, qtbot, qapp, width, theme
 ):
     window.document.reset(graph)
@@ -38,11 +38,13 @@ def test_brand_stays_at_upper_right_and_opens_about_without_editing(
     for visible in (False, True):
         window.workspace.setVisible(visible)
         qtbot.wait(20)
-        top_right = window.brand_button.mapTo(window, window.brand_button.rect().topRight())
-        assert window.width() - 30 <= top_right.x() < window.width()
-        assert top_right.y() < 110
+        top_left = window.brand_button.mapTo(window, QPoint())
+        assert 0 <= top_left.x() <= 30
+        assert top_left.y() < 110
         assert window.brand_button.isVisible()
-        assert window.brand_button.mapTo(window, QPoint()).x() > window.document_name.x()
+        brand_right = window.brand_button.mapTo(window, window.brand_button.rect().topRight())
+        document_left = window.document_name.mapTo(window, QPoint())
+        assert brand_right.x() < document_left.x()
     assert not window.windowIcon().isNull()
     opened = []
 

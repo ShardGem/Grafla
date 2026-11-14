@@ -1,0 +1,363 @@
+{
+  "format": "grafla",
+  "schema_version": 1,
+  "graph": {
+    "vertices": [
+      {
+        "id": 1,
+        "x": 0,
+        "y": 0,
+        "label": "Grafos",
+        "color": "#ffad78",
+        "radius": 62,
+        "pinned": false
+      },
+      {
+        "id": 2,
+        "x": 2.0818995585505004e-14,
+        "y": -210.0,
+        "label": "Buscas",
+        "color": "#82b6ff",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 3,
+        "x": -137.22171593972118,
+        "y": -391.2590402935223,
+        "label": "BFS",
+        "color": "#82b6ff",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 4,
+        "x": 137.22171593972124,
+        "y": -391.2590402935222,
+        "label": "DFS",
+        "color": "#82b6ff",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 5,
+        "x": 294.4486372867092,
+        "y": -104.99999999999999,
+        "label": "Caminhos",
+        "color": "#7ed8c5",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 6,
+        "x": 490.47558481508025,
+        "y": -267.65224254354325,
+        "label": "Dijkstra",
+        "color": "#7ed8c5",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 7,
+        "x": 627.6973007548014,
+        "y": -123.60679774997894,
+        "label": "Rotas",
+        "color": "#7ed8c5",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 8,
+        "x": 294.4486372867092,
+        "y": 104.99999999999999,
+        "label": "Árvores",
+        "color": "#b7a4f5",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 9,
+        "x": 627.6973007548014,
+        "y": 123.60679774997894,
+        "label": "Mínima",
+        "color": "#b7a4f5",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 10,
+        "x": 490.47558481508025,
+        "y": 267.65224254354325,
+        "label": "Geradora",
+        "color": "#b7a4f5",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 11,
+        "x": 2.0818995585505004e-14,
+        "y": 210.0,
+        "label": "Matrizes",
+        "color": "#efa4bb",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 12,
+        "x": 137.22171593972124,
+        "y": 391.2590402935222,
+        "label": "Binária",
+        "color": "#efa4bb",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 13,
+        "x": -137.22171593972118,
+        "y": 391.2590402935223,
+        "label": "Pesos",
+        "color": "#efa4bb",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 14,
+        "x": -294.4486372867092,
+        "y": 104.99999999999999,
+        "label": "Física",
+        "color": "#e6c47c",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 15,
+        "x": -490.47558481508025,
+        "y": 267.6522425435432,
+        "label": "Fixados",
+        "color": "#e6c47c",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 16,
+        "x": -627.6973007548013,
+        "y": 123.60679774997901,
+        "label": "Forças",
+        "color": "#e6c47c",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 17,
+        "x": -294.44863728670913,
+        "y": -105.00000000000003,
+        "label": "Modelos",
+        "color": "#ffad78",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 18,
+        "x": -627.6973007548013,
+        "y": -123.6067977499791,
+        "label": "Direção",
+        "color": "#ffad78",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 19,
+        "x": -490.4755848150802,
+        "y": -267.6522425435433,
+        "label": "Laços",
+        "color": "#ffad78",
+        "radius": 44,
+        "pinned": false
+      }
+    ],
+    "edges": [
+      {
+        "id": 1,
+        "source": 1,
+        "target": 2,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#82b6ff"
+      },
+      {
+        "id": 2,
+        "source": 2,
+        "target": 3,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#82b6ff"
+      },
+      {
+        "id": 3,
+        "source": 2,
+        "target": 4,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#82b6ff"
+      },
+      {
+        "id": 4,
+        "source": 1,
+        "target": 5,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#7ed8c5"
+      },
+      {
+        "id": 5,
+        "source": 5,
+        "target": 6,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#7ed8c5"
+      },
+      {
+        "id": 6,
+        "source": 5,
+        "target": 7,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#7ed8c5"
+      },
+      {
+        "id": 7,
+        "source": 1,
+        "target": 8,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#b7a4f5"
+      },
+      {
+        "id": 8,
+        "source": 8,
+        "target": 9,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#b7a4f5"
+      },
+      {
+        "id": 9,
+        "source": 8,
+        "target": 10,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#b7a4f5"
+      },
+      {
+        "id": 10,
+        "source": 1,
+        "target": 11,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#efa4bb"
+      },
+      {
+        "id": 11,
+        "source": 11,
+        "target": 12,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#efa4bb"
+      },
+      {
+        "id": 12,
+        "source": 11,
+        "target": 13,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#efa4bb"
+      },
+      {
+        "id": 13,
+        "source": 1,
+        "target": 14,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#e6c47c"
+      },
+      {
+        "id": 14,
+        "source": 14,
+        "target": 15,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#e6c47c"
+      },
+      {
+        "id": 15,
+        "source": 14,
+        "target": 16,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#e6c47c"
+      },
+      {
+        "id": 16,
+        "source": 1,
+        "target": 17,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#ffad78"
+      },
+      {
+        "id": 17,
+        "source": 17,
+        "target": 18,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#ffad78"
+      },
+      {
+        "id": 18,
+        "source": 17,
+        "target": 19,
+        "directed": false,
+        "weighted": false,
+        "weight": 1,
+        "label": "",
+        "color": "#ffad78"
+      }
+    ],
+    "next_vertex": 20,
+    "next_edge": 19
+  }
+}

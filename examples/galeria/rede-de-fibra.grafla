@@ -8,7 +8,7 @@
         "x": -300,
         "y": -230,
         "label": "Norte",
-        "color": "#82b6ff",
+        "color": "#386faa",
         "radius": 34,
         "pinned": false
       },
@@ -17,7 +17,7 @@
         "x": 0,
         "y": -230,
         "label": "Campus",
-        "color": "#7ed8c5",
+        "color": "#218674",
         "radius": 34,
         "pinned": false
       },
@@ -26,7 +26,7 @@
         "x": 300,
         "y": -230,
         "label": "Parque",
-        "color": "#b7a4f5",
+        "color": "#8061b5",
         "radius": 34,
         "pinned": false
       },
@@ -35,7 +35,7 @@
         "x": -300,
         "y": 0,
         "label": "Oeste",
-        "color": "#82b6ff",
+        "color": "#386faa",
         "radius": 34,
         "pinned": false
       },
@@ -44,7 +44,7 @@
         "x": 0,
         "y": 0,
         "label": "Centro",
-        "color": "#7ed8c5",
+        "color": "#218674",
         "radius": 34,
         "pinned": false
       },
@@ -53,7 +53,7 @@
         "x": 300,
         "y": 0,
         "label": "Leste",
-        "color": "#b7a4f5",
+        "color": "#8061b5",
         "radius": 34,
         "pinned": false
       },
@@ -62,7 +62,7 @@
         "x": -300,
         "y": 230,
         "label": "Hub",
-        "color": "#82b6ff",
+        "color": "#386faa",
         "radius": 34,
         "pinned": false
       },
@@ -71,7 +71,7 @@
         "x": 0,
         "y": 230,
         "label": "Sul",
-        "color": "#7ed8c5",
+        "color": "#218674",
         "radius": 34,
         "pinned": false
       },
@@ -80,7 +80,7 @@
         "x": 300,
         "y": 230,
         "label": "Porto",
-        "color": "#b7a4f5",
+        "color": "#8061b5",
         "radius": 34,
         "pinned": false
       }
@@ -94,7 +94,7 @@
         "weighted": true,
         "weight": 4,
         "label": "",
-        "color": "#71869d"
+        "color": "#65788f"
       },
       {
         "id": 2,
@@ -104,7 +104,7 @@
         "weighted": true,
         "weight": 7,
         "label": "",
-        "color": "#71869d"
+        "color": "#65788f"
       },
       {
         "id": 3,
@@ -114,7 +114,7 @@
         "weighted": true,
         "weight": 3,
         "label": "",
-        "color": "#71869d"
+        "color": "#65788f"
       },
       {
         "id": 4,
@@ -124,7 +124,7 @@
         "weighted": true,
         "weight": 6,
         "label": "",
-        "color": "#71869d"
+        "color": "#65788f"
       },
       {
         "id": 5,
@@ -134,7 +134,7 @@
         "weighted": true,
         "weight": 4,
         "label": "",
-        "color": "#71869d"
+        "color": "#65788f"
       },
       {
         "id": 6,
@@ -144,7 +144,7 @@
         "weighted": true,
         "weight": 5,
         "label": "",
-        "color": "#71869d"
+        "color": "#65788f"
       },
       {
         "id": 7,
@@ -154,7 +154,7 @@
         "weighted": true,
         "weight": 8,
         "label": "",
-        "color": "#71869d"
+        "color": "#65788f"
       },
       {
         "id": 8,
@@ -164,7 +164,7 @@
         "weighted": true,
         "weight": 7,
         "label": "",
-        "color": "#71869d"
+        "color": "#65788f"
       },
       {
         "id": 9,
@@ -174,7 +174,7 @@
         "weighted": true,
         "weight": 2,
         "label": "",
-        "color": "#71869d"
+        "color": "#65788f"
       },
       {
         "id": 10,
@@ -184,7 +184,7 @@
         "weighted": true,
         "weight": 9,
         "label": "",
-        "color": "#71869d"
+        "color": "#65788f"
       },
       {
         "id": 11,
@@ -194,7 +194,7 @@
         "weighted": true,
         "weight": 3,
         "label": "",
-        "color": "#71869d"
+        "color": "#65788f"
       },
       {
         "id": 12,
@@ -204,7 +204,7 @@
         "weighted": true,
         "weight": 4,
         "label": "",
-        "color": "#71869d"
+        "color": "#65788f"
       },
       {
         "id": 13,
@@ -214,7 +214,7 @@
         "weighted": true,
         "weight": 6,
         "label": "",
-        "color": "#71869d"
+        "color": "#65788f"
       },
       {
         "id": 14,
@@ -224,7 +224,7 @@
         "weighted": true,
         "weight": 5,
         "label": "",
-        "color": "#71869d"
+        "color": "#65788f"
       },
       {
         "id": 15,
@@ -234,7 +234,7 @@
         "weighted": true,
         "weight": 8,
         "label": "",
-        "color": "#71869d"
+        "color": "#65788f"
       },
       {
         "id": 16,
@@ -244,7 +244,7 @@
         "weighted": true,
         "weight": 7,
         "label": "",
-        "color": "#71869d"
+        "color": "#65788f"
       }
     ],
     "next_vertex": 10,

@@ -1,0 +1,260 @@
+{
+  "format": "grafla",
+  "schema_version": 1,
+  "graph": {
+    "vertices": [
+      {
+        "id": 1,
+        "x": -600,
+        "y": -180,
+        "label": "App",
+        "color": "#82b6ff",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 2,
+        "x": -600,
+        "y": 180,
+        "label": "Web",
+        "color": "#82b6ff",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 3,
+        "x": -320,
+        "y": 0,
+        "label": "Gateway",
+        "color": "#ffad78",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 4,
+        "x": -40,
+        "y": -300,
+        "label": "Login",
+        "color": "#b7a4f5",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 5,
+        "x": -40,
+        "y": -100,
+        "label": "Busca",
+        "color": "#7ed8c5",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 6,
+        "x": -40,
+        "y": 150,
+        "label": "Pedidos",
+        "color": "#efa4bb",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 7,
+        "x": 260,
+        "y": -250,
+        "label": "Cache",
+        "color": "#7ed8c5",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 8,
+        "x": 260,
+        "y": -30,
+        "label": "Banco",
+        "color": "#82b6ff",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 9,
+        "x": 260,
+        "y": 250,
+        "label": "Fila",
+        "color": "#e6c47c",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 10,
+        "x": 540,
+        "y": 250,
+        "label": "Worker",
+        "color": "#e6c47c",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 11,
+        "x": 540,
+        "y": -250,
+        "label": "Logs",
+        "color": "#b7a4f5",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 12,
+        "x": 540,
+        "y": -30,
+        "label": "Storage",
+        "color": "#82b6ff",
+        "radius": 44,
+        "pinned": false
+      }
+    ],
+    "edges": [
+      {
+        "id": 1,
+        "source": 1,
+        "target": 3,
+        "directed": true,
+        "weighted": false,
+        "weight": 1,
+        "label": "HTTPS",
+        "color": "#ffad78"
+      },
+      {
+        "id": 2,
+        "source": 2,
+        "target": 3,
+        "directed": true,
+        "weighted": false,
+        "weight": 1,
+        "label": "HTTPS",
+        "color": "#ffad78"
+      },
+      {
+        "id": 3,
+        "source": 3,
+        "target": 4,
+        "directed": true,
+        "weighted": false,
+        "weight": 1,
+        "label": "JWT",
+        "color": "#b7a4f5"
+      },
+      {
+        "id": 4,
+        "source": 3,
+        "target": 5,
+        "directed": true,
+        "weighted": false,
+        "weight": 1,
+        "label": "GET",
+        "color": "#7ed8c5"
+      },
+      {
+        "id": 5,
+        "source": 3,
+        "target": 6,
+        "directed": true,
+        "weighted": false,
+        "weight": 1,
+        "label": "POST",
+        "color": "#efa4bb"
+      },
+      {
+        "id": 6,
+        "source": 4,
+        "target": 7,
+        "directed": true,
+        "weighted": false,
+        "weight": 1,
+        "label": "sessão",
+        "color": "#7ed8c5"
+      },
+      {
+        "id": 7,
+        "source": 5,
+        "target": 7,
+        "directed": true,
+        "weighted": false,
+        "weight": 1,
+        "label": "leitura",
+        "color": "#7ed8c5"
+      },
+      {
+        "id": 8,
+        "source": 5,
+        "target": 8,
+        "directed": true,
+        "weighted": false,
+        "weight": 1,
+        "label": "consulta",
+        "color": "#82b6ff"
+      },
+      {
+        "id": 9,
+        "source": 6,
+        "target": 8,
+        "directed": true,
+        "weighted": false,
+        "weight": 1,
+        "label": "gravar",
+        "color": "#82b6ff"
+      },
+      {
+        "id": 10,
+        "source": 6,
+        "target": 9,
+        "directed": true,
+        "weighted": false,
+        "weight": 1,
+        "label": "evento",
+        "color": "#e6c47c"
+      },
+      {
+        "id": 11,
+        "source": 9,
+        "target": 10,
+        "directed": true,
+        "weighted": false,
+        "weight": 1,
+        "label": "consumir",
+        "color": "#e6c47c"
+      },
+      {
+        "id": 12,
+        "source": 10,
+        "target": 12,
+        "directed": true,
+        "weighted": false,
+        "weight": 1,
+        "label": "salvar",
+        "color": "#82b6ff"
+      },
+      {
+        "id": 13,
+        "source": 7,
+        "target": 11,
+        "directed": true,
+        "weighted": false,
+        "weight": 1,
+        "label": "métricas",
+        "color": "#b7a4f5"
+      },
+      {
+        "id": 14,
+        "source": 8,
+        "target": 12,
+        "directed": true,
+        "weighted": false,
+        "weight": 1,
+        "label": "réplica",
+        "color": "#82b6ff"
+      }
+    ],
+    "next_vertex": 13,
+    "next_edge": 15
+  }
+}

@@ -84,7 +84,7 @@ modos quando há espaço; pausa e ajustes permanecem acessíveis a 1024 px. A su
 atual contém 135 casos aprovados, incluindo regressões de estado, visibilidade
 real dos campos numéricos nos dois temas e carregamento da marca em três escalas.
 
-A nova marca do autor também aparece no canto superior direito, acima dos
+A nova marca do autor também aparece no canto superior esquerdo, acima dos
 painéis, com acesso à tela Sobre. A abertura usa a versão horizontal, com versão
 e progresso das etapas reais. As quatro imagens recebidas ficam no pacote; veja
 o [mapeamento dos arquivos e seus usos](design-system.md#marca-do-aplicativo).

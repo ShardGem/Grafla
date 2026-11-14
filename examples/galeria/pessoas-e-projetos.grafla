@@ -8,7 +8,7 @@
         "x": -320,
         "y": -270,
         "label": "Ana",
-        "color": "#82b6ff",
+        "color": "#386faa",
         "radius": 38,
         "pinned": false
       },
@@ -17,7 +17,7 @@
         "x": -320,
         "y": -90,
         "label": "Bia",
-        "color": "#82b6ff",
+        "color": "#386faa",
         "radius": 38,
         "pinned": false
       },
@@ -26,7 +26,7 @@
         "x": -320,
         "y": 90,
         "label": "Caio",
-        "color": "#82b6ff",
+        "color": "#386faa",
         "radius": 38,
         "pinned": false
       },
@@ -35,7 +35,7 @@
         "x": -320,
         "y": 270,
         "label": "Dani",
-        "color": "#82b6ff",
+        "color": "#386faa",
         "radius": 38,
         "pinned": false
       },
@@ -44,7 +44,7 @@
         "x": 280,
         "y": -220,
         "label": "Web",
-        "color": "#7ed8c5",
+        "color": "#218674",
         "radius": 38,
         "pinned": false
       },
@@ -53,7 +53,7 @@
         "x": 280,
         "y": 0,
         "label": "API",
-        "color": "#b7a4f5",
+        "color": "#8061b5",
         "radius": 38,
         "pinned": false
       },
@@ -62,7 +62,7 @@
         "x": 280,
         "y": 220,
         "label": "App",
-        "color": "#efa4bb",
+        "color": "#b34d77",
         "radius": 38,
         "pinned": false
       }
@@ -76,7 +76,7 @@
         "weighted": false,
         "weight": 1,
         "label": "",
-        "color": "#71869d"
+        "color": "#65788f"
       },
       {
         "id": 2,
@@ -86,7 +86,7 @@
         "weighted": false,
         "weight": 1,
         "label": "",
-        "color": "#71869d"
+        "color": "#65788f"
       },
       {
         "id": 3,
@@ -96,7 +96,7 @@
         "weighted": false,
         "weight": 1,
         "label": "",
-        "color": "#71869d"
+        "color": "#65788f"
       },
       {
         "id": 4,
@@ -106,7 +106,7 @@
         "weighted": false,
         "weight": 1,
         "label": "",
-        "color": "#71869d"
+        "color": "#65788f"
       },
       {
         "id": 5,
@@ -116,7 +116,7 @@
         "weighted": false,
         "weight": 1,
         "label": "",
-        "color": "#71869d"
+        "color": "#65788f"
       },
       {
         "id": 6,
@@ -126,7 +126,7 @@
         "weighted": false,
         "weight": 1,
         "label": "",
-        "color": "#71869d"
+        "color": "#65788f"
       },
       {
         "id": 7,
@@ -136,7 +136,7 @@
         "weighted": false,
         "weight": 1,
         "label": "",
-        "color": "#71869d"
+        "color": "#65788f"
       }
     ],
     "next_vertex": 8,

@@ -1,0 +1,204 @@
+{
+  "format": "grafla",
+  "schema_version": 1,
+  "graph": {
+    "vertices": [
+      {
+        "id": 1,
+        "x": -530,
+        "y": 0,
+        "label": "Casa",
+        "color": "#b45220",
+        "radius": 42,
+        "pinned": false
+      },
+      {
+        "id": 2,
+        "x": -280,
+        "y": -240,
+        "label": "Praça",
+        "color": "#386faa",
+        "radius": 42,
+        "pinned": false
+      },
+      {
+        "id": 3,
+        "x": 20,
+        "y": -240,
+        "label": "Museu",
+        "color": "#386faa",
+        "radius": 42,
+        "pinned": false
+      },
+      {
+        "id": 4,
+        "x": 320,
+        "y": -240,
+        "label": "Feira",
+        "color": "#218674",
+        "radius": 42,
+        "pinned": false
+      },
+      {
+        "id": 5,
+        "x": 570,
+        "y": 0,
+        "label": "Café",
+        "color": "#b45220",
+        "radius": 42,
+        "pinned": false
+      },
+      {
+        "id": 6,
+        "x": 320,
+        "y": 240,
+        "label": "Teatro",
+        "color": "#8061b5",
+        "radius": 42,
+        "pinned": false
+      },
+      {
+        "id": 7,
+        "x": 20,
+        "y": 240,
+        "label": "Parque",
+        "color": "#218674",
+        "radius": 42,
+        "pinned": false
+      },
+      {
+        "id": 8,
+        "x": -280,
+        "y": 240,
+        "label": "Lago",
+        "color": "#8061b5",
+        "radius": 42,
+        "pinned": false
+      }
+    ],
+    "edges": [
+      {
+        "id": 1,
+        "source": 1,
+        "target": 2,
+        "directed": false,
+        "weighted": true,
+        "weight": 0,
+        "label": "livre",
+        "color": "#65788f"
+      },
+      {
+        "id": 2,
+        "source": 2,
+        "target": 3,
+        "directed": false,
+        "weighted": true,
+        "weight": 1.5,
+        "label": "",
+        "color": "#65788f"
+      },
+      {
+        "id": 3,
+        "source": 3,
+        "target": 4,
+        "directed": false,
+        "weighted": true,
+        "weight": 2.75,
+        "label": "",
+        "color": "#65788f"
+      },
+      {
+        "id": 4,
+        "source": 4,
+        "target": 5,
+        "directed": false,
+        "weighted": true,
+        "weight": 1.25,
+        "label": "",
+        "color": "#65788f"
+      },
+      {
+        "id": 5,
+        "source": 5,
+        "target": 6,
+        "directed": false,
+        "weighted": true,
+        "weight": 2,
+        "label": "",
+        "color": "#65788f"
+      },
+      {
+        "id": 6,
+        "source": 6,
+        "target": 7,
+        "directed": false,
+        "weighted": true,
+        "weight": 1,
+        "label": "",
+        "color": "#65788f"
+      },
+      {
+        "id": 7,
+        "source": 7,
+        "target": 8,
+        "directed": false,
+        "weighted": true,
+        "weight": 2.5,
+        "label": "",
+        "color": "#65788f"
+      },
+      {
+        "id": 8,
+        "source": 8,
+        "target": 1,
+        "directed": false,
+        "weighted": true,
+        "weight": 1.5,
+        "label": "",
+        "color": "#65788f"
+      },
+      {
+        "id": 9,
+        "source": 2,
+        "target": 8,
+        "directed": false,
+        "weighted": true,
+        "weight": 0.5,
+        "label": "",
+        "color": "#65788f"
+      },
+      {
+        "id": 10,
+        "source": 3,
+        "target": 7,
+        "directed": false,
+        "weighted": true,
+        "weight": 1.75,
+        "label": "",
+        "color": "#65788f"
+      },
+      {
+        "id": 11,
+        "source": 4,
+        "target": 6,
+        "directed": false,
+        "weighted": true,
+        "weight": 0.75,
+        "label": "",
+        "color": "#65788f"
+      },
+      {
+        "id": 12,
+        "source": 3,
+        "target": 6,
+        "directed": false,
+        "weighted": true,
+        "weight": 3,
+        "label": "",
+        "color": "#65788f"
+      }
+    ],
+    "next_vertex": 9,
+    "next_edge": 13
+  }
+}

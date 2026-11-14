@@ -11,14 +11,15 @@ import time
 from pathlib import Path
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
-os.environ.setdefault("QT_SCALE_FACTOR", "1.5")
+os.environ.setdefault("QT_SCALE_FACTOR", "2")
 
 from PyQt6.QtCore import QEvent, QPoint, QPointF, QRectF, QSettings, Qt
 from PyQt6.QtGui import QColor, QFont, QImage, QMouseEvent, QPainter, QPainterPath, QPen
 from PyQt6.QtTest import QTest
 from PyQt6.QtWidgets import QApplication, QScrollArea
 
-from grafla.dialogs import AboutDialog
+from grafla.branding import brand_pixmap
+from grafla.dialogs import AboutDialog, PreferencesDialog, SearchDialog
 from grafla.domain import Graph
 from grafla.main_window import MainWindow
 from grafla.persistence import load
@@ -33,6 +34,24 @@ ROXO = "#b7a4f5"
 ROSA = "#efa4bb"
 AMARELO = "#e6c47c"
 CORES = (AZUL, VERDE, ROXO, ROSA, AMARELO)
+JANELA = (1680, 1050)
+
+
+def paleta_clara(grafo):
+    """Usa cores mais escuras nos exemplos destinados ao fundo claro."""
+    grafo = grafo.clone()
+    cores = {
+        LARANJA: "#b45220",
+        AZUL: "#386faa",
+        VERDE: "#218674",
+        ROXO: "#8061b5",
+        ROSA: "#b34d77",
+        AMARELO: "#967022",
+        "#71869d": "#65788f",
+    }
+    for elemento in (*grafo.vertices.values(), *grafo.edges.values()):
+        elemento.color = cores.get(elemento.color, elemento.color)
+    return grafo
 
 
 def criar_grafo(vertices, arestas, *, direcionado=False, ponderado=False, raio=34):
@@ -342,6 +361,253 @@ def atribuicoes():
     )
 
 
+def rede_metro():
+    grafo = criar_grafo(
+        [
+            ("Oeste", -650, 40, AZUL),
+            ("Vila", -430, 40, AZUL),
+            ("Centro", -210, 40, LARANJA),
+            ("Luz", 10, 40, LARANJA),
+            ("Museu", 230, 40, AZUL),
+            ("Leste", 450, 40, AZUL),
+            ("Terminal", 670, 40, AZUL),
+            ("Parque", -210, -200, VERDE),
+            ("Campus", -430, -420, VERDE),
+            ("Sul", -210, 280, VERDE),
+            ("Jardim", 10, 500, VERDE),
+            ("Teatro", 230, -180, LARANJA),
+            ("Aero", 450, -400, LARANJA),
+            ("Praça", 230, 260, LARANJA),
+            ("Porto", 450, 480, LARANJA),
+            ("Mercado", -650, -200, VERDE),
+            ("Estádio", -650, 300, VERDE),
+        ],
+        [],
+        raio=44,
+    )
+    for cor, trechos in (
+        (AZUL, [(1, 2, 3), (2, 3, 2), (3, 4, 2), (4, 5, 3), (5, 6, 2), (6, 7, 4)]),
+        (
+            VERDE,
+            [
+                (3, 8, 3),
+                (8, 9, 4),
+                (3, 10, 3),
+                (10, 11, 4),
+                (1, 16, 3),
+                (16, 9, 4),
+                (1, 17, 3),
+                (17, 10, 5),
+            ],
+        ),
+        (LARANJA, [(4, 12, 3), (12, 13, 4), (4, 14, 3), (14, 15, 4)]),
+    ):
+        for origem, destino, minutos in trechos:
+            aresta = grafo.add_edge(origem, destino, weighted=True, weight=minutos)
+            aresta.color = cor
+    for vertice in grafo.vertices.values():
+        vertice.y *= 0.72
+    grafo.validate()
+    return grafo
+
+
+def pre_requisitos():
+    nomes = [
+        "Álgebra",
+        "Lógica",
+        "Prog 1",
+        "Cálculo",
+        "Discreta",
+        "Prog 2",
+        "Modelos",
+        "Grafos",
+        "Dados",
+        "Otimizar",
+        "Projeto",
+        "Sistemas",
+    ]
+    return criar_grafo(
+        [
+            (nome, (i // 3 - 1.5) * 330, (i % 3 - 1) * 250, CORES[i % 3])
+            for i, nome in enumerate(nomes)
+        ],
+        ligacoes(
+            [
+                (1, 4, 1),
+                (1, 5, 1),
+                (2, 5, 1),
+                (3, 6, 1),
+                (4, 7, 1),
+                (5, 8, 1),
+                (6, 9, 1),
+                (7, 10, 1),
+                (8, 10, 1),
+                (8, 11, 1),
+                (9, 11, 1),
+                (9, 12, 1),
+                (10, 11, 1),
+            ]
+        ),
+        direcionado=True,
+        raio=44,
+    )
+
+
+def arvore_binaria():
+    vertices = []
+    for i, valor in enumerate((50, 25, 75, 12, 37, 62, 87, 6, 18, 31, 43, 56, 68, 81, 93)):
+        nivel = (i + 1).bit_length() - 1
+        posicao = i - (2**nivel - 1)
+        x = (posicao - (2**nivel - 1) / 2) * 1140 / 2**nivel
+        cor = LARANJA if nivel == 0 else (AZUL if (i + 1) >> (nivel - 1) == 2 else VERDE)
+        vertices.append((str(valor), x, nivel * 230 - 345, cor))
+    grafo = criar_grafo(
+        vertices, ligacoes([(i // 2, i, 1) for i in range(2, 16)]), direcionado=True, raio=32
+    )
+    grafo.vertices[1].radius = 42
+    return grafo
+
+
+def arquitetura_servicos():
+    grafo = criar_grafo(
+        [
+            ("App", -600, -180, AZUL),
+            ("Web", -600, 180, AZUL),
+            ("Gateway", -320, 0, LARANJA),
+            ("Login", -40, -300, ROXO),
+            ("Busca", -40, -100, VERDE),
+            ("Pedidos", -40, 150, ROSA),
+            ("Cache", 260, -250, VERDE),
+            ("Banco", 260, -30, AZUL),
+            ("Fila", 260, 250, AMARELO),
+            ("Worker", 540, 250, AMARELO),
+            ("Logs", 540, -250, ROXO),
+            ("Storage", 540, -30, AZUL),
+        ],
+        [
+            (1, 3, 1, "HTTPS"),
+            (2, 3, 1, "HTTPS"),
+            (3, 4, 1, "JWT"),
+            (3, 5, 1, "GET"),
+            (3, 6, 1, "POST"),
+            (4, 7, 1, "sessão"),
+            (5, 7, 1, "leitura"),
+            (5, 8, 1, "consulta"),
+            (6, 8, 1, "gravar"),
+            (6, 9, 1, "evento"),
+            (9, 10, 1, "consumir"),
+            (10, 12, 1, "salvar"),
+            (7, 11, 1, "métricas"),
+            (8, 12, 1, "réplica"),
+        ],
+        direcionado=True,
+        raio=44,
+    )
+    for aresta in grafo.edges.values():
+        aresta.color = grafo.vertices[aresta.target].color
+    return grafo
+
+
+def mapa_estudos():
+    vertices = [("Grafos", 0, 0, LARANJA)]
+    arestas = []
+    for i, (assunto, folhas) in enumerate(
+        [
+            ("Buscas", ("BFS", "DFS")),
+            ("Caminhos", ("Dijkstra", "Rotas")),
+            ("Árvores", ("Mínima", "Geradora")),
+            ("Matrizes", ("Binária", "Pesos")),
+            ("Física", ("Fixados", "Forças")),
+            ("Modelos", ("Direção", "Laços")),
+        ]
+    ):
+        angulo = math.radians(i * 60 - 90)
+        cor = (*CORES, LARANJA)[i]
+        ramo = len(vertices) + 1
+        vertices.append((assunto, 340 * math.cos(angulo), 210 * math.sin(angulo), cor))
+        arestas.append((1, ramo, 1))
+        for nome, deslocamento in zip(folhas, (-12, 12), strict=True):
+            ponta = angulo + math.radians(deslocamento)
+            folha = len(vertices) + 1
+            vertices.append((nome, 660 * math.cos(ponta), 400 * math.sin(ponta), cor))
+            arestas.append((ramo, folha, 1))
+    grafo = criar_grafo(vertices, ligacoes(arestas), raio=44)
+    grafo.vertices[1].radius = 62
+    for aresta in grafo.edges.values():
+        aresta.color = grafo.vertices[aresta.target].color
+    return grafo
+
+
+def malha_rede():
+    return criar_grafo(
+        [
+            (f"{chr(65 + linha)}{coluna + 1}", (coluna - 2) * 210, (linha - 2) * 180, CORES[coluna])
+            for linha in range(5)
+            for coluna in range(5)
+        ],
+        ligacoes(
+            [
+                (linha * 5 + coluna + 1, linha * 5 + coluna + 2, 1)
+                for linha in range(5)
+                for coluna in range(4)
+            ]
+            + [
+                (linha * 5 + coluna + 1, (linha + 1) * 5 + coluna + 1, 1)
+                for linha in range(4)
+                for coluna in range(5)
+            ]
+        ),
+        raio=31,
+    )
+
+
+def grafo_completo():
+    return criar_grafo(
+        [
+            (
+                str(i + 1),
+                420 * math.cos(math.tau * i / 8 - math.pi / 2),
+                310 * math.sin(math.tau * i / 8 - math.pi / 2),
+                CORES[i % 5],
+            )
+            for i in range(8)
+        ],
+        ligacoes([(a, b, 1) for a in range(1, 9) for b in range(a + 1, 9)]),
+        raio=38,
+    )
+
+
+def circuito_cultural():
+    return criar_grafo(
+        [
+            ("Casa", -530, 0, LARANJA),
+            ("Praça", -280, -240, AZUL),
+            ("Museu", 20, -240, AZUL),
+            ("Feira", 320, -240, VERDE),
+            ("Café", 570, 0, LARANJA),
+            ("Teatro", 320, 240, ROXO),
+            ("Parque", 20, 240, VERDE),
+            ("Lago", -280, 240, ROXO),
+        ],
+        [
+            (1, 2, 0, "livre"),
+            (2, 3, 1.5, ""),
+            (3, 4, 2.75, ""),
+            (4, 5, 1.25, ""),
+            (5, 6, 2, ""),
+            (6, 7, 1, ""),
+            (7, 8, 2.5, ""),
+            (8, 1, 1.5, ""),
+            (2, 8, 0.5, ""),
+            (3, 7, 1.75, ""),
+            (4, 6, 0.75, ""),
+            (3, 6, 3, ""),
+        ],
+        ponderado=True,
+        raio=42,
+    )
+
+
 class Galeria:
     def __init__(self, app, destino, exemplos, temporario):
         self.app, self.destino, self.exemplos = app, destino, exemplos
@@ -353,7 +619,7 @@ class Galeria:
         apply(app, DARK)
         self.window = MainWindow(temporario / "dados", settings)
         self.window.autosave_timer.stop()
-        self.window.resize(1600, 1000)
+        self.window.resize(*JANELA)
         self.window.show()
         self.registros = []
 
@@ -363,12 +629,16 @@ class Galeria:
         janela.physics.set_enabled(False)
         janela.canvas.cancel_edge()
         janela.canvas.set_mode("select")
+        if tema == "light":
+            grafo = paleta_clara(grafo)
         janela.settings.setValue("theme", tema)
         janela.settings.setValue("chain_edges", False)
         janela.settings.setValue("create_directed", False)
         janela.settings.setValue("create_weighted", False)
         janela.settings.setValue("create_weight", 1)
-        janela.resize(1600, 1000)
+        janela.settings.setValue("grid", True)
+        janela.settings.setValue("snap", False)
+        janela.resize(*JANELA)
         janela.apply_preferences()
         janela.physics_panel.choose_preset("Equilibrada")
         janela.physics_panel.advanced.setChecked(False)
@@ -377,8 +647,6 @@ class Galeria:
         janela.results_dock.hide()
         janela.tabs.setCurrentIndex(painel)
         janela.resizeDocks([janela.workspace], [largura], Qt.Orientation.Horizontal)
-        janela.set_grid(True)
-        janela.set_snap(False)
         self.arquivo = self.exemplos / arquivo
         self.salvar()
         self.assentar()
@@ -418,6 +686,7 @@ class Galeria:
     def capturar(self, nome, titulo, descricao, *, mover_ponteiro=True):
         janela = self.window
         self.salvar()
+        self.assentar()
         janela.canvas.fit_graph()
         janela.canvas.setFocus()
         if mover_ponteiro:
@@ -431,7 +700,7 @@ class Galeria:
             if not regiao.contains(item.sceneBoundingRect()):
                 raise RuntimeError(f"Há um elemento fora do enquadramento: {nome}")
         imagem = janela.grab().toImage()
-        if imagem.isNull() or imagem.width() < 1600 or imagem.height() < 1000:
+        if imagem.isNull() or imagem.width() < JANELA[0] or imagem.height() < JANELA[1]:
             raise RuntimeError(f"A captura ficou vazia ou pequena: {nome}")
         caminho = self.destino / nome
         if not imagem.save(str(caminho), "PNG") or QImage(str(caminho)).isNull():
@@ -473,7 +742,7 @@ class Galeria:
             "A mesma rede percorrida em profundidade, com a pilha e o passo atual visíveis.",
         )
 
-        self.preparar(rede_fibra(), "rede-de-fibra.grafla")
+        self.preparar(rede_fibra(), "rede-de-fibra.grafla", tema="light")
         self.analisar("mst")
         self.capturar(
             "05-arvore-geradora-minima.png",
@@ -495,7 +764,7 @@ class Galeria:
             "Quatro componentes, incluindo um vértice isolado. Um dos grupos está em destaque.",
         )
 
-        self.preparar(equipe(), "equipe-do-projeto.grafla")
+        self.preparar(equipe(), "equipe-do-projeto.grafla", tema="light")
         janela.canvas.vertices[1].setSelected(True)
         self.capturar(
             "08-propriedades.png",
@@ -535,7 +804,7 @@ class Galeria:
             "Um pedido pode aguardar, avançar, voltar ou falhar. Laços e arestas opostas coexistem.",
         )
 
-        self.preparar(matriz_pesos(), "matriz-de-pesos.grafla", painel=2, largura=480)
+        self.preparar(matriz_pesos(), "matriz-de-pesos.grafla", tema="light", painel=2, largura=480)
         janela.matrix(False)
         janela.building.matrix.weighted.setChecked(True)
         self.assentar()
@@ -616,7 +885,7 @@ class Galeria:
             janela.physics.tick()
         janela.physics.pause(suspend=True)
         self.arquivo = self.exemplos / "fisica-com-gravidade.grafla"
-        janela.resize(1600, 1320)
+        janela.resize(JANELA[0], 1350)
         self.assentar()
         painel_fisica = janela.tabs.widget(3)
         if isinstance(painel_fisica, QScrollArea):
@@ -628,14 +897,14 @@ class Galeria:
             "Gravidade, direção, rigidez, centralização e limites de movimento nos ajustes avançados.",
         )
 
-        self.preparar(rotas_entrega(), "rotas-de-entrega.grafla", tema="light")
+        self.preparar(rotas_entrega(), "rotas-tema-claro.grafla", tema="light")
         self.analisar("shortest", destino=10)
         self.capturar(
             "16-tema-claro.png",
             "O mesmo trabalho no tema claro",
             "A rota de menor custo no tema claro, preservando os destaques e o contraste dos controles.",
         )
-        self.preparar(atribuicoes(), "pessoas-e-projetos.grafla")
+        self.preparar(atribuicoes(), "pessoas-e-projetos.grafla", tema="light")
         for chave in (1, 2, 5):
             janela.canvas.vertices[chave].setSelected(True)
         self.capturar(
@@ -651,20 +920,130 @@ class Galeria:
             "Trocar o enquadramento da rede",
             "A rede do gerador reorganizada em círculo pelo painel de layouts, sem mudar as conexões.",
         )
+        self.gerar_variacoes()
         self.criar_indice()
+        self.criar_destaques()
         self.capturar_identidade()
         self.criar_pagina()
         janela.physics.set_enabled(False)
         janela.document.undo_stack.setClean()
         janela.close()
 
+    def gerar_variacoes(self):
+        janela = self.window
+        self.preparar(rede_metro(), "metro-urbano.grafla")
+        janela.workspace.hide()
+        janela.zoom_controls.grid.setChecked(False)
+        self.capturar(
+            "19-rede-de-metro.png",
+            "Uma rede de metrô no canvas inteiro",
+            "Dezessete estações e três linhas coloridas, com tempos por trecho. "
+            "Painéis recolhidos e grade desligada deixam o mapa em primeiro plano.",
+        )
+        self.preparar(rede_metro(), "metro-tema-claro.grafla", tema="light", largura=460)
+        self.analisar("shortest", origem=9, destino=15)
+        self.capturar(
+            "20-metro-tema-claro.png",
+            "Do campus ao porto",
+            "Dijkstra encontra a viagem de menor custo entre Campus e Porto. "
+            "O mesmo metrô aparece no tema claro, com as cores ajustadas para esse fundo.",
+        )
+        self.preparar(pre_requisitos(), "pre-requisitos.grafla", largura=470)
+        self.analisar("topological", etapa=7)
+        self.capturar(
+            "21-pre-requisitos.png",
+            "Planejar uma trilha de estudos",
+            "Doze disciplinas e seus pré-requisitos. A ordenação topológica mostra "
+            "uma sequência possível, com a etapa atual em destaque.",
+        )
+        self.preparar(arvore_binaria(), "arvore-binaria.grafla", tema="light", largura=460)
+        self.analisar("bfs", etapa=8)
+        self.capturar(
+            "22-arvore-binaria.png",
+            "Percorrer uma árvore por níveis",
+            "Uma árvore binária com quinze valores. A busca em largura mostra "
+            "as visitas, o vértice atual e a fila ao lado do desenho.",
+        )
+        self.preparar(arquitetura_servicos(), "arquitetura-de-servicos.grafla")
+        janela.canvas.edges[10].setSelected(True)
+        self.capturar(
+            "23-arquitetura-de-servicos.png",
+            "Desenhar as conexões de um sistema",
+            "Clientes, gateway, serviços, banco e fila. Os rótulos descrevem as "
+            "chamadas; uma conexão está selecionada para edição no inspector.",
+        )
+        self.preparar(arquitetura_servicos(), "servicos-tema-claro.grafla", tema="light")
+        janela.workspace.hide()
+        janela.zoom_controls.grid.setChecked(False)
+        self.capturar(
+            "24-servicos-tema-claro.png",
+            "Revisar um diagrama sem os painéis",
+            "A arquitetura no tema claro, com mais espaço no canvas. Direções, "
+            "protocolos e cores ajudam a acompanhar o fluxo entre os serviços.",
+        )
+        self.preparar(mapa_estudos(), "mapa-de-estudos.grafla")
+        janela.workspace.hide()
+        janela.zoom_controls.grid.setChecked(False)
+        self.capturar(
+            "25-mapa-de-estudos.png",
+            "Organizar os assuntos de uma aula",
+            "Um mapa com dezenove vértices e seis assuntos. Cores e tamanhos "
+            "foram editados no grafo para separar os ramos do estudo.",
+        )
+        self.preparar(mapa_estudos(), "mapa-tema-claro.grafla", tema="light")
+        for chave in (5, 6, 7):
+            janela.canvas.vertices[chave].setSelected(True)
+        self.capturar(
+            "26-selecao-no-mapa.png",
+            "Editar um ramo em conjunto",
+            "Três vértices do ramo Caminhos selecionados no tema claro. "
+            "O inspector apresenta as propriedades da seleção em grupo.",
+        )
+        self.preparar(rede_metro(), "metro-urbano.grafla", largura=460)
+        self.analisar("all", origem=9, destino=15)
+        janela.analysis.browser.report_requested.emit()
+        janela.resizeDocks([janela.results_dock], [230], Qt.Orientation.Vertical)
+        self.capturar(
+            "27-relatorio-de-rotas.png",
+            "Consultar e copiar as rotas",
+            "Caminhos alternativos no metrô, com o relatório textual aberto "
+            "abaixo do canvas e a lista navegável de rotas ao lado.",
+        )
+        self.preparar(malha_rede(), "malha-de-rede.grafla", tema="light", painel=2)
+        janela.building.setCurrentIndex(2)
+        janela.commands["layout_grid"].trigger()
+        janela.zoom_controls.snap.setChecked(True)
+        self.capturar(
+            "28-layout-em-grade.png",
+            "Organizar uma malha em grade",
+            "Vinte e cinco vértices e quarenta conexões, organizados pelo layout "
+            "em grade. O snap está ligado para os próximos movimentos.",
+        )
+        self.preparar(grafo_completo(), "grafo-completo-k8.grafla", painel=2)
+        janela.building.setCurrentIndex(2)
+        janela.commands["layout_circular"].trigger()
+        self.capturar(
+            "29-grafo-completo.png",
+            "Explorar um grafo completo",
+            "K8 tem oito vértices e vinte e oito arestas. O layout circular "
+            "separa os vértices e evidencia todas as conexões entre eles.",
+        )
+        self.preparar(circuito_cultural(), "circuito-cultural.grafla", tema="light", largura=460)
+        self.analisar("shortest", origem=1, destino=5)
+        self.capturar(
+            "30-pesos-decimais.png",
+            "Combinar custos decimais e custo zero",
+            "Um circuito cultural com pesos fracionários e uma conexão de custo "
+            "zero. A rota até o Café mantém esses valores no cálculo de Dijkstra.",
+        )
+
     def capturar_identidade(self):
         destino = self.destino.parent
         for nome, captura in {
-            "editor.png": "01-rotas-de-entrega.png",
-            "light.png": "16-tema-claro.png",
+            "editor.png": "19-rede-de-metro.png",
+            "light.png": "24-servicos-tema-claro.png",
             "physics.png": "14-fisica.png",
-            "steps.png": "03-busca-em-largura.png",
+            "steps.png": "22-arvore-binaria.png",
         }.items():
             shutil.copyfile(self.destino / captura, destino / nome)
         for tema in ("dark", "light"):
@@ -678,20 +1057,68 @@ class Galeria:
                     raise RuntimeError(f"Não foi possível capturar o Sobre no tema {tema}.")
             finally:
                 sobre.close()
+            preferencias = PreferencesDialog(self.window.settings, self.window)
+            try:
+                preferencias.resize(700, preferencias.sizeHint().height())
+                preferencias.show()
+                self.assentar()
+                if not preferencias.grab().save(str(destino / f"preferencias-{tema}.png"), "PNG"):
+                    raise RuntimeError(f"Não foi possível capturar as preferências no tema {tema}.")
+            finally:
+                preferencias.close()
+        self.window.settings.setValue("theme", "dark")
+        self.window.apply_preferences()
+        busca = SearchDialog(
+            list(self.window.commands.values()),
+            self.window.document.graph.vertices.values(),
+            self.window,
+        )
+        try:
+            busca.search.setText("Física")
+            busca.show()
+            self.assentar()
+            if not busca.grab().save(str(destino / "busca-de-comandos.png"), "PNG"):
+                raise RuntimeError("Não foi possível capturar a busca de comandos.")
+        finally:
+            busca.close()
         splash = Splash(animate=False, minimum_ms=0)
         try:
             splash.show()
-            splash.report("Preparando editor, documentos e algoritmos…", 0.55)
-            self.assentar()
-            if not splash.grab().save(str(destino / "splash.png"), "PNG"):
-                raise RuntimeError("Não foi possível capturar a abertura.")
+            for nome, status, progresso in [
+                ("splash-carregando.png", "Carregando preferências e recursos…", 0.2),
+                ("splash.png", "Preparando editor, documentos e algoritmos…", 0.55),
+                ("splash-pronta.png", "Pronto para explorar.", 1),
+            ]:
+                splash.report(status, progresso)
+                self.assentar()
+                if not splash.grab().save(str(destino / nome), "PNG"):
+                    raise RuntimeError("Não foi possível capturar a abertura.")
         finally:
             splash.close()
 
     def criar_indice(self):
-        colunas, largura, altura = 4, 600, 375
-        margem, topo, passo = 24, 130, 445
-        linhas = math.ceil(len(self.registros) / colunas)
+        self.montar_painel(
+            "00-visao-geral.png",
+            self.registros,
+            f"Grafla · {len(self.registros)} capturas",
+            "Grafos, temas e ferramentas · capturas reais do aplicativo",
+        )
+
+    def criar_destaques(self):
+        destaques = [self.registros[i - 1] for i in (19, 24, 25, 22, 14, 29)]
+        self.montar_painel(
+            "00-destaques.png",
+            destaques,
+            "Grafla · construir, explorar e compreender",
+            "Redes urbanas, sistemas, mapas de estudo e algoritmos · temas claro e escuro",
+            colunas=2,
+            largura=1000,
+        )
+
+    def montar_painel(self, nome, registros, titulo, subtitulo, *, colunas=4, largura=600):
+        altura = round(largura * JANELA[1] / JANELA[0])
+        margem, topo, passo = 28, 130, altura + 70
+        linhas = math.ceil(len(registros) / colunas)
         imagem = QImage(
             colunas * largura + (colunas + 1) * margem,
             topo + linhas * passo + 35,
@@ -700,23 +1127,26 @@ class Galeria:
         imagem.fill(QColor("#11161e"))
         painter = QPainter(imagem)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        painter.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
+        painter.drawPixmap(margem, 22, brand_pixmap("symbol", 64, 64))
         painter.setPen(QColor(LARANJA))
         painter.setFont(QFont("Noto Sans", 25, QFont.Weight.DemiBold))
-        painter.drawText(margem + 2, 55, f"Grafla · {len(self.registros)} casos de uso")
+        painter.drawText(margem + 84, 55, titulo)
         painter.setPen(QColor("#aebacc"))
         painter.setFont(QFont("Noto Sans", 12))
-        painter.drawText(
-            margem + 2, 94, "Capturas reais do aplicativo · exemplos para abrir e explorar"
-        )
-        for indice, (nome, titulo, _, _) in enumerate(self.registros):
+        painter.drawText(margem + 84, 94, subtitulo)
+        for indice, (captura, legenda, _, _) in enumerate(registros):
             linha, coluna = divmod(indice, colunas)
-            restantes = len(self.registros) - linha * colunas
+            restantes = len(registros) - linha * colunas
             deslocamento = (
                 (colunas - restantes) * (largura + margem) / 2 if restantes < colunas else 0
             )
             x = margem + coluna * (largura + margem) + deslocamento
             y = topo + linha * passo
-            foto = QImage(str(self.destino / nome)).scaled(
+            foto = QImage(str(self.destino / captura))
+            if foto.isNull():
+                raise RuntimeError(f"A imagem do painel está vazia: {captura}")
+            foto = foto.scaled(
                 largura,
                 altura,
                 Qt.AspectRatioMode.KeepAspectRatio,
@@ -745,37 +1175,57 @@ class Galeria:
             painter.drawText(
                 QRectF(x, y + altura + 10, largura, 36),
                 Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,
-                f"{indice + 1:02}  {titulo}",
+                f"{captura.split('-')[0]}  {legenda}",
             )
         painter.end()
-        if not imagem.save(str(self.destino / "00-visao-geral.png"), "PNG"):
+        if not imagem.save(str(self.destino / nome), "PNG"):
             raise RuntimeError("Não foi possível salvar o índice visual.")
 
     def criar_pagina(self):
+        quantidade = len(self.registros)
+        foto = QImage(str(self.destino / self.registros[0][0]))
+        escala = self.window.devicePixelRatioF() * 100
         pagina = [
             "# Grafla em uso",
             "",
-            "Rotas, redes, buscas, matrizes e edição: 18 capturas do aplicativo em funcionamento. "
-            "Os grafos são exemplos fictícios, feitos para explorar as ferramentas.",
+            f"{quantidade} capturas do aplicativo, com variações de tema, enquadramento e ferramentas. "
+            "Metrô, arquitetura de serviços, estudos, árvores, matrizes e física: "
+            "os exemplos são fictícios e podem ser abertos no editor.",
             "",
-            "As imagens foram capturadas no Qt em Linux offscreen, com uma janela de 1600×1000 "
-            "e escala de 150%. A captura dos ajustes avançados usa uma janela mais alta para "
+            f"As imagens foram capturadas no Qt em Linux offscreen, com uma janela de "
+            f"{JANELA[0]}×{JANELA[1]}, escala de {escala:.0f}% e PNGs de "
+            f"{foto.width()}×{foto.height()}. A captura dos ajustes avançados usa uma janela mais alta para "
             "mostrar o painel inteiro. A interface e os resultados são os do aplicativo, sem retoques. "
             "Clique em qualquer imagem para ver o tamanho completo.",
             "",
-            "![Índice visual dos 18 casos de uso](screenshots/galeria/00-visao-geral.png)",
+            "![Seis maneiras de usar o Grafla](screenshots/galeria/00-destaques.png)",
+            "",
+            f"[Ver as {quantidade} capturas em um painel](screenshots/galeria/00-visao-geral.png) · "
+            "[Tema escuro](#caso-19) · [Tema claro](#caso-24) · "
+            "[Canvas inteiro](#caso-25) · [Algoritmos](#caso-22) · [Layouts](#caso-28)",
             "",
             "## Marca do Grafla",
             "",
-            "O símbolo aparece no canto superior direito do editor e abre a tela Sobre. "
+            "O símbolo aparece no canto superior esquerdo do editor e abre a tela Sobre. "
             "A abertura usa a marca horizontal enviada pelo autor, com o progresso das etapas "
             "de inicialização. As versões com o nome branco ficam sobre um fundo escuro "
             "nos dois temas, preservando as cores e o contraste.",
             "",
             "![Abertura do Grafla com a nova marca](screenshots/splash.png)",
             "",
+            "[Carregando preferências](screenshots/splash-carregando.png) · "
+            "[Editor pronto](screenshots/splash-pronta.png) · "
             "[Sobre no tema escuro](screenshots/sobre-dark.png) · "
             "[Sobre no tema claro](screenshots/sobre-light.png)",
+            "",
+            "## Busca e preferências",
+            "",
+            "A busca reúne comandos e vértices por nome ou ID. As preferências "
+            "controlam tema, grade, snap, interação, recuperação e abertura.",
+            "",
+            "[Busca de comandos](screenshots/busca-de-comandos.png) · "
+            "[Preferências no tema escuro](screenshots/preferencias-dark.png) · "
+            "[Preferências no tema claro](screenshots/preferencias-light.png)",
             "",
             "## Física em movimento",
             "",
@@ -825,7 +1275,7 @@ class Galeria:
                 "Para gerar as capturas novamente:",
                 "",
                 "```bash",
-                "QT_QPA_PLATFORM=offscreen QT_SCALE_FACTOR=1.5 uv run python tools/capturar_galeria.py",
+                "QT_QPA_PLATFORM=offscreen QT_SCALE_FACTOR=2 uv run python tools/capturar_galeria.py",
                 "```",
                 "",
                 "A geração usa preferências temporárias e não altera os dados pessoais do editor.",

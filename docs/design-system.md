@@ -33,7 +33,7 @@ sem alterações no desenho, nas cores ou na transparência:
 
 | Arquivo recebido | Recurso no pacote | Uso |
 | --- | --- | --- |
-| `grafla.png` | `grafla.png` | Janela, diálogos e símbolo no canto superior direito |
+| `grafla.png` | `grafla.png` | Janela, diálogos e símbolo no canto superior esquerdo |
 | `grafla_icone.ico` | `grafla.ico` | Ícone do executável Windows |
 | `Grafla ícone alt.png` | `grafla-horizontal.png` | Marca horizontal na abertura |
 | `Grafla ícone alt 2.png` | `grafla-vertical.png` | Marca vertical na tela Sobre |
@@ -44,7 +44,7 @@ os tamanhos menores são preparados em memória, sem decodificar o PNG a cada us
 O empacotamento inclui as quatro imagens.
 
 O cabeçalho do documento ocupa toda a largura da janela, acima do canvas e dos
-painéis. O símbolo à direita abre Sobre e pode receber foco pelo teclado.
+painéis. O símbolo à esquerda abre Sobre e pode receber foco pelo teclado.
 As marcas com texto branco usam uma superfície escura também no tema claro.
 A splash tem cantos arredondados, fundo discreto, versão e progresso real; mantém
 o mínimo configurável e encerra os timers e a animação ao fechar.

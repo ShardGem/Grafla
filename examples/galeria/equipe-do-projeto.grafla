@@ -8,7 +8,7 @@
         "x": 0,
         "y": 0,
         "label": "Oficina",
-        "color": "#ffad78",
+        "color": "#b45220",
         "radius": 36,
         "pinned": true
       },
@@ -17,7 +17,7 @@
         "x": -300,
         "y": -200,
         "label": "Design",
-        "color": "#efa4bb",
+        "color": "#b34d77",
         "radius": 36,
         "pinned": false
       },
@@ -26,7 +26,7 @@
         "x": 0,
         "y": -310,
         "label": "Dados",
-        "color": "#82b6ff",
+        "color": "#386faa",
         "radius": 36,
         "pinned": false
       },
@@ -35,7 +35,7 @@
         "x": 300,
         "y": -200,
         "label": "Web",
-        "color": "#7ed8c5",
+        "color": "#218674",
         "radius": 36,
         "pinned": false
       },
@@ -44,7 +44,7 @@
         "x": 340,
         "y": 110,
         "label": "API",
-        "color": "#82b6ff",
+        "color": "#386faa",
         "radius": 36,
         "pinned": false
       },
@@ -53,7 +53,7 @@
         "x": 130,
         "y": 310,
         "label": "App",
-        "color": "#7ed8c5",
+        "color": "#218674",
         "radius": 36,
         "pinned": false
       },
@@ -62,7 +62,7 @@
         "x": -160,
         "y": 290,
         "label": "Infra",
-        "color": "#b7a4f5",
+        "color": "#8061b5",
         "radius": 36,
         "pinned": false
       },
@@ -71,7 +71,7 @@
         "x": -340,
         "y": 70,
         "label": "Docs",
-        "color": "#e6c47c",
+        "color": "#967022",
         "radius": 36,
         "pinned": false
       }
@@ -85,7 +85,7 @@
         "weighted": false,
         "weight": 1,
         "label": "",
-        "color": "#71869d"
+        "color": "#65788f"
       },
       {
         "id": 2,
@@ -95,7 +95,7 @@
         "weighted": false,
         "weight": 1,
         "label": "",
-        "color": "#71869d"
+        "color": "#65788f"
       },
       {
         "id": 3,
@@ -105,7 +105,7 @@
         "weighted": false,
         "weight": 1,
         "label": "",
-        "color": "#71869d"
+        "color": "#65788f"
       },
       {
         "id": 4,
@@ -115,7 +115,7 @@
         "weighted": false,
         "weight": 1,
         "label": "",
-        "color": "#71869d"
+        "color": "#65788f"
       },
       {
         "id": 5,
@@ -125,7 +125,7 @@
         "weighted": false,
         "weight": 1,
         "label": "",
-        "color": "#71869d"
+        "color": "#65788f"
       },
       {
         "id": 6,
@@ -135,7 +135,7 @@
         "weighted": false,
         "weight": 1,
         "label": "",
-        "color": "#71869d"
+        "color": "#65788f"
       },
       {
         "id": 7,
@@ -145,7 +145,7 @@
         "weighted": false,
         "weight": 1,
         "label": "",
-        "color": "#71869d"
+        "color": "#65788f"
       },
       {
         "id": 8,
@@ -155,7 +155,7 @@
         "weighted": false,
         "weight": 1,
         "label": "",
-        "color": "#71869d"
+        "color": "#65788f"
       },
       {
         "id": 9,
@@ -165,7 +165,7 @@
         "weighted": false,
         "weight": 1,
         "label": "",
-        "color": "#71869d"
+        "color": "#65788f"
       }
     ],
     "next_vertex": 9,

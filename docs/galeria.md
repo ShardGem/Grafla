@@ -1,18 +1,26 @@
 # Grafla em uso
 
-Rotas, redes, buscas, matrizes e edição: 18 capturas do aplicativo em funcionamento. Os grafos são exemplos fictícios, feitos para explorar as ferramentas.
+30 capturas do aplicativo, com variações de tema, enquadramento e ferramentas. Metrô, arquitetura de serviços, estudos, árvores, matrizes e física: os exemplos são fictícios e podem ser abertos no editor.
 
-As imagens foram capturadas no Qt em Linux offscreen, com uma janela de 1600×1000 e escala de 150%. A captura dos ajustes avançados usa uma janela mais alta para mostrar o painel inteiro. A interface e os resultados são os do aplicativo, sem retoques. Clique em qualquer imagem para ver o tamanho completo.
+As imagens foram capturadas no Qt em Linux offscreen, com uma janela de 1680×1050, escala de 200% e PNGs de 3360×2100. A captura dos ajustes avançados usa uma janela mais alta para mostrar o painel inteiro. A interface e os resultados são os do aplicativo, sem retoques. Clique em qualquer imagem para ver o tamanho completo.
 
-![Índice visual dos 18 casos de uso](screenshots/galeria/00-visao-geral.png)
+![Seis maneiras de usar o Grafla](screenshots/galeria/00-destaques.png)
+
+[Ver as 30 capturas em um painel](screenshots/galeria/00-visao-geral.png) · [Tema escuro](#caso-19) · [Tema claro](#caso-24) · [Canvas inteiro](#caso-25) · [Algoritmos](#caso-22) · [Layouts](#caso-28)
 
 ## Marca do Grafla
 
-O símbolo aparece no canto superior direito do editor e abre a tela Sobre. A abertura usa a marca horizontal enviada pelo autor, com o progresso das etapas de inicialização. As versões com o nome branco ficam sobre um fundo escuro nos dois temas, preservando as cores e o contraste.
+O símbolo aparece no canto superior esquerdo do editor e abre a tela Sobre. A abertura usa a marca horizontal enviada pelo autor, com o progresso das etapas de inicialização. As versões com o nome branco ficam sobre um fundo escuro nos dois temas, preservando as cores e o contraste.
 
 ![Abertura do Grafla com a nova marca](screenshots/splash.png)
 
-[Sobre no tema escuro](screenshots/sobre-dark.png) · [Sobre no tema claro](screenshots/sobre-light.png)
+[Carregando preferências](screenshots/splash-carregando.png) · [Editor pronto](screenshots/splash-pronta.png) · [Sobre no tema escuro](screenshots/sobre-dark.png) · [Sobre no tema claro](screenshots/sobre-light.png)
+
+## Busca e preferências
+
+A busca reúne comandos e vértices por nome ou ID. As preferências controlam tema, grade, snap, interação, recuperação e abertura.
+
+[Busca de comandos](screenshots/busca-de-comandos.png) · [Preferências no tema escuro](screenshots/preferencias-dark.png) · [Preferências no tema claro](screenshots/preferencias-light.png)
 
 ## Física em movimento
 
@@ -46,6 +54,18 @@ e retoma com outra distância ideal. O GIF se repete a cada 12 segundos.
 | [16 · O mesmo trabalho no tema claro](#caso-16) | A rota de menor custo no tema claro, preservando os destaques e o contraste dos controles. |
 | [17 · Editar uma seleção inteira](#caso-17) | Pessoas e projetos numa rede bipartida, com três elementos selecionados para edição em grupo. |
 | [18 · Trocar o enquadramento da rede](#caso-18) | A rede do gerador reorganizada em círculo pelo painel de layouts, sem mudar as conexões. |
+| [19 · Uma rede de metrô no canvas inteiro](#caso-19) | Dezessete estações e três linhas coloridas, com tempos por trecho. Painéis recolhidos e grade desligada deixam o mapa em primeiro plano. |
+| [20 · Do campus ao porto](#caso-20) | Dijkstra encontra a viagem de menor custo entre Campus e Porto. O mesmo metrô aparece no tema claro, com as cores ajustadas para esse fundo. |
+| [21 · Planejar uma trilha de estudos](#caso-21) | Doze disciplinas e seus pré-requisitos. A ordenação topológica mostra uma sequência possível, com a etapa atual em destaque. |
+| [22 · Percorrer uma árvore por níveis](#caso-22) | Uma árvore binária com quinze valores. A busca em largura mostra as visitas, o vértice atual e a fila ao lado do desenho. |
+| [23 · Desenhar as conexões de um sistema](#caso-23) | Clientes, gateway, serviços, banco e fila. Os rótulos descrevem as chamadas; uma conexão está selecionada para edição no inspector. |
+| [24 · Revisar um diagrama sem os painéis](#caso-24) | A arquitetura no tema claro, com mais espaço no canvas. Direções, protocolos e cores ajudam a acompanhar o fluxo entre os serviços. |
+| [25 · Organizar os assuntos de uma aula](#caso-25) | Um mapa com dezenove vértices e seis assuntos. Cores e tamanhos foram editados no grafo para separar os ramos do estudo. |
+| [26 · Editar um ramo em conjunto](#caso-26) | Três vértices do ramo Caminhos selecionados no tema claro. O inspector apresenta as propriedades da seleção em grupo. |
+| [27 · Consultar e copiar as rotas](#caso-27) | Caminhos alternativos no metrô, com o relatório textual aberto abaixo do canvas e a lista navegável de rotas ao lado. |
+| [28 · Organizar uma malha em grade](#caso-28) | Vinte e cinco vértices e quarenta conexões, organizados pelo layout em grade. O snap está ligado para os próximos movimentos. |
+| [29 · Explorar um grafo completo](#caso-29) | K8 tem oito vértices e vinte e oito arestas. O layout circular separa os vértices e evidencia todas as conexões entre eles. |
+| [30 · Combinar custos decimais e custo zero](#caso-30) | Um circuito cultural com pesos fracionários e uma conexão de custo zero. A rota até o Café mantém esses valores no cálculo de Dijkstra. |
 
 ## Capturas
 
@@ -205,7 +225,7 @@ Gravidade, direção, rigidez, centralização e limites de movimento nos ajuste
 
 A rota de menor custo no tema claro, preservando os destaques e o contraste dos controles.
 
-[Abrir o grafo de exemplo](../examples/galeria/rotas-de-entrega.grafla) · [Ver a imagem completa](screenshots/galeria/16-tema-claro.png)
+[Abrir o grafo de exemplo](../examples/galeria/rotas-tema-claro.grafla) · [Ver a imagem completa](screenshots/galeria/16-tema-claro.png)
 
 ![O mesmo trabalho no tema claro](screenshots/galeria/16-tema-claro.png)
 
@@ -229,6 +249,126 @@ A rede do gerador reorganizada em círculo pelo painel de layouts, sem mudar as 
 
 ![Trocar o enquadramento da rede](screenshots/galeria/18-layout-circular.png)
 
+<a id="caso-19"></a>
+
+### 19 · Uma rede de metrô no canvas inteiro
+
+Dezessete estações e três linhas coloridas, com tempos por trecho. Painéis recolhidos e grade desligada deixam o mapa em primeiro plano.
+
+[Abrir o grafo de exemplo](../examples/galeria/metro-urbano.grafla) · [Ver a imagem completa](screenshots/galeria/19-rede-de-metro.png)
+
+![Uma rede de metrô no canvas inteiro](screenshots/galeria/19-rede-de-metro.png)
+
+<a id="caso-20"></a>
+
+### 20 · Do campus ao porto
+
+Dijkstra encontra a viagem de menor custo entre Campus e Porto. O mesmo metrô aparece no tema claro, com as cores ajustadas para esse fundo.
+
+[Abrir o grafo de exemplo](../examples/galeria/metro-tema-claro.grafla) · [Ver a imagem completa](screenshots/galeria/20-metro-tema-claro.png)
+
+![Do campus ao porto](screenshots/galeria/20-metro-tema-claro.png)
+
+<a id="caso-21"></a>
+
+### 21 · Planejar uma trilha de estudos
+
+Doze disciplinas e seus pré-requisitos. A ordenação topológica mostra uma sequência possível, com a etapa atual em destaque.
+
+[Abrir o grafo de exemplo](../examples/galeria/pre-requisitos.grafla) · [Ver a imagem completa](screenshots/galeria/21-pre-requisitos.png)
+
+![Planejar uma trilha de estudos](screenshots/galeria/21-pre-requisitos.png)
+
+<a id="caso-22"></a>
+
+### 22 · Percorrer uma árvore por níveis
+
+Uma árvore binária com quinze valores. A busca em largura mostra as visitas, o vértice atual e a fila ao lado do desenho.
+
+[Abrir o grafo de exemplo](../examples/galeria/arvore-binaria.grafla) · [Ver a imagem completa](screenshots/galeria/22-arvore-binaria.png)
+
+![Percorrer uma árvore por níveis](screenshots/galeria/22-arvore-binaria.png)
+
+<a id="caso-23"></a>
+
+### 23 · Desenhar as conexões de um sistema
+
+Clientes, gateway, serviços, banco e fila. Os rótulos descrevem as chamadas; uma conexão está selecionada para edição no inspector.
+
+[Abrir o grafo de exemplo](../examples/galeria/arquitetura-de-servicos.grafla) · [Ver a imagem completa](screenshots/galeria/23-arquitetura-de-servicos.png)
+
+![Desenhar as conexões de um sistema](screenshots/galeria/23-arquitetura-de-servicos.png)
+
+<a id="caso-24"></a>
+
+### 24 · Revisar um diagrama sem os painéis
+
+A arquitetura no tema claro, com mais espaço no canvas. Direções, protocolos e cores ajudam a acompanhar o fluxo entre os serviços.
+
+[Abrir o grafo de exemplo](../examples/galeria/servicos-tema-claro.grafla) · [Ver a imagem completa](screenshots/galeria/24-servicos-tema-claro.png)
+
+![Revisar um diagrama sem os painéis](screenshots/galeria/24-servicos-tema-claro.png)
+
+<a id="caso-25"></a>
+
+### 25 · Organizar os assuntos de uma aula
+
+Um mapa com dezenove vértices e seis assuntos. Cores e tamanhos foram editados no grafo para separar os ramos do estudo.
+
+[Abrir o grafo de exemplo](../examples/galeria/mapa-de-estudos.grafla) · [Ver a imagem completa](screenshots/galeria/25-mapa-de-estudos.png)
+
+![Organizar os assuntos de uma aula](screenshots/galeria/25-mapa-de-estudos.png)
+
+<a id="caso-26"></a>
+
+### 26 · Editar um ramo em conjunto
+
+Três vértices do ramo Caminhos selecionados no tema claro. O inspector apresenta as propriedades da seleção em grupo.
+
+[Abrir o grafo de exemplo](../examples/galeria/mapa-tema-claro.grafla) · [Ver a imagem completa](screenshots/galeria/26-selecao-no-mapa.png)
+
+![Editar um ramo em conjunto](screenshots/galeria/26-selecao-no-mapa.png)
+
+<a id="caso-27"></a>
+
+### 27 · Consultar e copiar as rotas
+
+Caminhos alternativos no metrô, com o relatório textual aberto abaixo do canvas e a lista navegável de rotas ao lado.
+
+[Abrir o grafo de exemplo](../examples/galeria/metro-urbano.grafla) · [Ver a imagem completa](screenshots/galeria/27-relatorio-de-rotas.png)
+
+![Consultar e copiar as rotas](screenshots/galeria/27-relatorio-de-rotas.png)
+
+<a id="caso-28"></a>
+
+### 28 · Organizar uma malha em grade
+
+Vinte e cinco vértices e quarenta conexões, organizados pelo layout em grade. O snap está ligado para os próximos movimentos.
+
+[Abrir o grafo de exemplo](../examples/galeria/malha-de-rede.grafla) · [Ver a imagem completa](screenshots/galeria/28-layout-em-grade.png)
+
+![Organizar uma malha em grade](screenshots/galeria/28-layout-em-grade.png)
+
+<a id="caso-29"></a>
+
+### 29 · Explorar um grafo completo
+
+K8 tem oito vértices e vinte e oito arestas. O layout circular separa os vértices e evidencia todas as conexões entre eles.
+
+[Abrir o grafo de exemplo](../examples/galeria/grafo-completo-k8.grafla) · [Ver a imagem completa](screenshots/galeria/29-grafo-completo.png)
+
+![Explorar um grafo completo](screenshots/galeria/29-grafo-completo.png)
+
+<a id="caso-30"></a>
+
+### 30 · Combinar custos decimais e custo zero
+
+Um circuito cultural com pesos fracionários e uma conexão de custo zero. A rota até o Café mantém esses valores no cálculo de Dijkstra.
+
+[Abrir o grafo de exemplo](../examples/galeria/circuito-cultural.grafla) · [Ver a imagem completa](screenshots/galeria/30-pesos-decimais.png)
+
+![Combinar custos decimais e custo zero](screenshots/galeria/30-pesos-decimais.png)
+
 ## Reproduzir as capturas
 
 Os arquivos `.grafla` ficam em [`examples/galeria/`](../examples/galeria/). Abra pelo menu Arquivo ou passe o caminho ao iniciar:
@@ -240,7 +380,7 @@ uv run grafla examples/galeria/rotas-de-entrega.grafla
 Para gerar as capturas novamente:
 
 ```bash
-QT_QPA_PLATFORM=offscreen QT_SCALE_FACTOR=1.5 uv run python tools/capturar_galeria.py
+QT_QPA_PLATFORM=offscreen QT_SCALE_FACTOR=2 uv run python tools/capturar_galeria.py
 ```
 
 A geração usa preferências temporárias e não altera os dados pessoais do editor.

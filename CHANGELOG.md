@@ -2,13 +2,15 @@
 
 ## Não lançado — precisão de interação e física configurável
 
-- Nova marca do autor na janela e no executável, símbolo no canto superior direito
+- Galeria refeita com 30 capturas em 3360×2100, variações nos dois temas e 26 grafos
+  para abrir no editor. Inclui metrô, árvore binária, serviços, mapa de estudos,
+  pré-requisitos, malha, K8 e custos decimais. Imagens antigas substituídas,
+  novo painel de destaques e capturas da busca, preferências e etapas da abertura.
+- Nova marca do autor na janela e no executável, símbolo no canto superior esquerdo
   com acesso ao Sobre, splash redesenhada com progresso real e tela Sobre nos dois
   temas. Capturas e GIF atualizados para mostrar a identidade nova.
 - GIF da física em funcionamento, com centros fixados, pausa e retomada após
   ajustar a distância ideal. Inclui o grafo inicial e o roteiro de geração.
-- Galeria com 18 capturas de casos de uso, 14 grafos para abrir no editor e um
-  roteiro para reproduzir as imagens. README com novas prévias das ferramentas.
 - Duplo clique respeita o modo ativo; construção não seleciona nem arrasta elementos.
   Origem de aresta distinta da seleção, cancelamento explícito, laços opcionais e
   conexões em sequência. Snap deixa vértices não movidos intactos.

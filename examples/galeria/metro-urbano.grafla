@@ -1,0 +1,345 @@
+{
+  "format": "grafla",
+  "schema_version": 1,
+  "graph": {
+    "vertices": [
+      {
+        "id": 1,
+        "x": -650,
+        "y": 28.799999999999997,
+        "label": "Oeste",
+        "color": "#82b6ff",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 2,
+        "x": -430,
+        "y": 28.799999999999997,
+        "label": "Vila",
+        "color": "#82b6ff",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 3,
+        "x": -210,
+        "y": 28.799999999999997,
+        "label": "Centro",
+        "color": "#ffad78",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 4,
+        "x": 10,
+        "y": 28.799999999999997,
+        "label": "Luz",
+        "color": "#ffad78",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 5,
+        "x": 230,
+        "y": 28.799999999999997,
+        "label": "Museu",
+        "color": "#82b6ff",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 6,
+        "x": 450,
+        "y": 28.799999999999997,
+        "label": "Leste",
+        "color": "#82b6ff",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 7,
+        "x": 670,
+        "y": 28.799999999999997,
+        "label": "Terminal",
+        "color": "#82b6ff",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 8,
+        "x": -210,
+        "y": -144.0,
+        "label": "Parque",
+        "color": "#7ed8c5",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 9,
+        "x": -430,
+        "y": -302.4,
+        "label": "Campus",
+        "color": "#7ed8c5",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 10,
+        "x": -210,
+        "y": 201.6,
+        "label": "Sul",
+        "color": "#7ed8c5",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 11,
+        "x": 10,
+        "y": 360.0,
+        "label": "Jardim",
+        "color": "#7ed8c5",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 12,
+        "x": 230,
+        "y": -129.6,
+        "label": "Teatro",
+        "color": "#ffad78",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 13,
+        "x": 450,
+        "y": -288.0,
+        "label": "Aero",
+        "color": "#ffad78",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 14,
+        "x": 230,
+        "y": 187.2,
+        "label": "Praça",
+        "color": "#ffad78",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 15,
+        "x": 450,
+        "y": 345.59999999999997,
+        "label": "Porto",
+        "color": "#ffad78",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 16,
+        "x": -650,
+        "y": -144.0,
+        "label": "Mercado",
+        "color": "#7ed8c5",
+        "radius": 44,
+        "pinned": false
+      },
+      {
+        "id": 17,
+        "x": -650,
+        "y": 216.0,
+        "label": "Estádio",
+        "color": "#7ed8c5",
+        "radius": 44,
+        "pinned": false
+      }
+    ],
+    "edges": [
+      {
+        "id": 1,
+        "source": 1,
+        "target": 2,
+        "directed": false,
+        "weighted": true,
+        "weight": 3,
+        "label": "",
+        "color": "#82b6ff"
+      },
+      {
+        "id": 2,
+        "source": 2,
+        "target": 3,
+        "directed": false,
+        "weighted": true,
+        "weight": 2,
+        "label": "",
+        "color": "#82b6ff"
+      },
+      {
+        "id": 3,
+        "source": 3,
+        "target": 4,
+        "directed": false,
+        "weighted": true,
+        "weight": 2,
+        "label": "",
+        "color": "#82b6ff"
+      },
+      {
+        "id": 4,
+        "source": 4,
+        "target": 5,
+        "directed": false,
+        "weighted": true,
+        "weight": 3,
+        "label": "",
+        "color": "#82b6ff"
+      },
+      {
+        "id": 5,
+        "source": 5,
+        "target": 6,
+        "directed": false,
+        "weighted": true,
+        "weight": 2,
+        "label": "",
+        "color": "#82b6ff"
+      },
+      {
+        "id": 6,
+        "source": 6,
+        "target": 7,
+        "directed": false,
+        "weighted": true,
+        "weight": 4,
+        "label": "",
+        "color": "#82b6ff"
+      },
+      {
+        "id": 7,
+        "source": 3,
+        "target": 8,
+        "directed": false,
+        "weighted": true,
+        "weight": 3,
+        "label": "",
+        "color": "#7ed8c5"
+      },
+      {
+        "id": 8,
+        "source": 8,
+        "target": 9,
+        "directed": false,
+        "weighted": true,
+        "weight": 4,
+        "label": "",
+        "color": "#7ed8c5"
+      },
+      {
+        "id": 9,
+        "source": 3,
+        "target": 10,
+        "directed": false,
+        "weighted": true,
+        "weight": 3,
+        "label": "",
+        "color": "#7ed8c5"
+      },
+      {
+        "id": 10,
+        "source": 10,
+        "target": 11,
+        "directed": false,
+        "weighted": true,
+        "weight": 4,
+        "label": "",
+        "color": "#7ed8c5"
+      },
+      {
+        "id": 11,
+        "source": 1,
+        "target": 16,
+        "directed": false,
+        "weighted": true,
+        "weight": 3,
+        "label": "",
+        "color": "#7ed8c5"
+      },
+      {
+        "id": 12,
+        "source": 16,
+        "target": 9,
+        "directed": false,
+        "weighted": true,
+        "weight": 4,
+        "label": "",
+        "color": "#7ed8c5"
+      },
+      {
+        "id": 13,
+        "source": 1,
+        "target": 17,
+        "directed": false,
+        "weighted": true,
+        "weight": 3,
+        "label": "",
+        "color": "#7ed8c5"
+      },
+      {
+        "id": 14,
+        "source": 17,
+        "target": 10,
+        "directed": false,
+        "weighted": true,
+        "weight": 5,
+        "label": "",
+        "color": "#7ed8c5"
+      },
+      {
+        "id": 15,
+        "source": 4,
+        "target": 12,
+        "directed": false,
+        "weighted": true,
+        "weight": 3,
+        "label": "",
+        "color": "#ffad78"
+      },
+      {
+        "id": 16,
+        "source": 12,
+        "target": 13,
+        "directed": false,
+        "weighted": true,
+        "weight": 4,
+        "label": "",
+        "color": "#ffad78"
+      },
+      {
+        "id": 17,
+        "source": 4,
+        "target": 14,
+        "directed": false,
+        "weighted": true,
+        "weight": 3,
+        "label": "",
+        "color": "#ffad78"
+      },
+      {
+        "id": 18,
+        "source": 14,
+        "target": 15,
+        "directed": false,
+        "weighted": true,
+        "weight": 4,
+        "label": "",
+        "color": "#ffad78"
+      }
+    ],
+    "next_vertex": 18,
+    "next_edge": 19
+  }
+}

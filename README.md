@@ -6,14 +6,14 @@ Grafla 2.1 é um editor desktop de grafos em Python e Qt: edição direta, docum
 versionados, histórico de alterações, física opcional e análises com visualização.
 O alvo principal é Windows; a base também pode ser executada em Linux e macOS.
 
-![Grafla: planejamento de rotas com Dijkstra](docs/screenshots/galeria/01-rotas-de-entrega.png)
+![Grafla: três linhas de metrô no canvas inteiro](docs/screenshots/galeria/19-rede-de-metro.png)
 
-[Veja a galeria com 18 casos de uso](docs/galeria.md), com capturas em alta resolução
+[Veja a galeria com 30 capturas e variações](docs/galeria.md), com imagens em alta resolução
 e os grafos de exemplo para abrir no editor.
 
 ## O que funciona
 
-- Nova marca no aplicativo e no executável, com símbolo no canto superior direito
+- Nova marca no aplicativo e no executável, com símbolo no canto superior esquerdo
   para abrir Sobre. A [splash e as telas Sobre](docs/galeria.md#marca-do-grafla)
   usam as versões horizontal e vertical criadas pelo autor.
 - Canvas com seleção individual/múltipla e por retângulo, movimento em grupo,
@@ -61,15 +61,19 @@ e os grafos de exemplo para abrir no editor.
 
 ## Um passeio pelo editor
 
-| Buscas passo a passo | Física com vértices fixados |
+| Rede de metrô | Arquitetura no tema claro |
 | --- | --- |
-| [![Busca em largura com a fila de visitas](docs/screenshots/galeria/03-busca-em-largura.png)](docs/galeria.md#caso-03) | [![Organização de uma rede com três centros fixados](docs/screenshots/galeria/14-fisica.png)](docs/galeria.md#caso-14) |
-| **Matrizes e pesos** | **Tema claro** |
-| [![Grafo e sua matriz de pesos](docs/screenshots/galeria/11-grafo-para-matriz.png)](docs/galeria.md#caso-11) | [![Planejamento de rotas no tema claro](docs/screenshots/galeria/16-tema-claro.png)](docs/galeria.md#caso-16) |
+| [![Estações e tempos por trecho](docs/screenshots/galeria/19-rede-de-metro.png)](docs/galeria.md#caso-19) | [![Clientes, serviços, banco e fila](docs/screenshots/galeria/24-servicos-tema-claro.png)](docs/galeria.md#caso-24) |
+| **Árvore binária e BFS** | **Física com vértices fixados** |
+| [![Visitas e fila na árvore binária](docs/screenshots/galeria/22-arvore-binaria.png)](docs/galeria.md#caso-22) | [![Organização de uma rede com três centros fixados](docs/screenshots/galeria/14-fisica.png)](docs/galeria.md#caso-14) |
+| **Mapa de estudos** | **Custos decimais e custo zero** |
+| [![Seis assuntos em um mapa colorido](docs/screenshots/galeria/25-mapa-de-estudos.png)](docs/galeria.md#caso-25) | [![Dijkstra no circuito cultural](docs/screenshots/galeria/30-pesos-decimais.png)](docs/galeria.md#caso-30) |
 
 A [galeria completa](docs/galeria.md) também mostra árvore geradora mínima,
 dependências, componentes, laços, conexões opostas, propriedades, geração de grafos,
-seleção em grupo e layouts. Os arquivos estão em [`examples/galeria/`](examples/galeria/).
+seleção em grupo, relatório de rotas, grafos completos e layouts. Há também capturas
+da busca, das preferências e da abertura. Os 26 grafos estão em
+[`examples/galeria/`](examples/galeria/).
 
 ## Física em movimento
 
