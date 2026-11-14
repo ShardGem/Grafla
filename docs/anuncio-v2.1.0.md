@@ -92,7 +92,7 @@ Quando o arquivo estiver publicado:
 3. Execute o instalador e siga o assistente em português.
 4. Abra o **Grafla** pelo menu Iniciar.
 
-Não é necessário instalar Python para usar o aplicativo. O instalador inclui
+**Não é necessário instalar Python para usar o aplicativo.** O instalador inclui
 o que ele precisa para funcionar, um desinstalador e a opção de criar um atalho
 na área de trabalho.
 
