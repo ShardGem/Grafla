@@ -1,4 +1,4 @@
-name: Grafla checks and desktop build
+name: Testes e instalador do Grafla
 on:
   push:
     branches: [main]
@@ -43,22 +43,48 @@ jobs:
   desktop:
     needs: checks
     runs-on: windows-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
+          architecture: x64
       - uses: astral-sh/setup-uv@v10.3.3
       - run: uv sync --frozen --extra build
-      - run: uv run pyinstaller --noconfirm packaging/grafla.spec
-      - name: Smoke test packaged application with native Windows backend
+      - name: Gerar e testar o aplicativo e o instalador
+        run: uv run python tools/criar_instalador.py
+      - name: Testar a instalação e a remoção
         shell: pwsh
         run: |
-          $process = Start-Process -FilePath "dist/Grafla/Grafla.exe" -ArgumentList "--smoke-test", "--data-dir", "$env:RUNNER_TEMP/grafla-smoke" -PassThru
-          if (-not $process.WaitForExit(30000)) { $process.Kill(); throw "Grafla startup timed out" }
-          if ($process.ExitCode -ne 0) { throw "Grafla exited with $($process.ExitCode)" }
-          if (-not (Test-Path "$env:RUNNER_TEMP/grafla-smoke/smoke-window.png")) { throw "Missing startup evidence" }
+          $setup = (Get-ChildItem "dist/installer/*-Setup.exe").FullName
+          $installDir = Join-Path $env:RUNNER_TEMP "Grafla instalado"
+          $smokeDir = Join-Path $env:RUNNER_TEMP "Grafla teste instalado"
+          try {
+            $install = Start-Process -FilePath $setup -ArgumentList @("/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/SP-", "/DIR=`"$installDir`"") -Wait -PassThru
+            if ($install.ExitCode -ne 0) { throw "A instalação falhou: $($install.ExitCode)" }
+            if (-not (Test-Path "$installDir/unins000.exe")) { throw "O desinstalador não foi criado." }
+            $process = Start-Process -FilePath "$installDir/Grafla.exe" -ArgumentList @("--smoke-test", "--no-splash", "--data-dir", "`"$smokeDir`"") -PassThru
+            if (-not $process.WaitForExit(30000)) { $process.Kill($true); throw "O Grafla instalado não encerrou o teste." }
+            if ($process.ExitCode -ne 0) {
+              if (Test-Path "$smokeDir/grafla.log") { Get-Content "$smokeDir/grafla.log" }
+              throw "O Grafla instalado falhou: $($process.ExitCode)"
+            }
+            if (-not (Test-Path "$smokeDir/smoke-icon.png")) { throw "O aplicativo instalado não carregou o ícone." }
+          } finally {
+            if (Test-Path "$installDir/unins000.exe") {
+              $uninstall = Start-Process -FilePath "$installDir/unins000.exe" -ArgumentList @("/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART") -Wait -PassThru
+              if ($uninstall.ExitCode -ne 0) { throw "A desinstalação falhou: $($uninstall.ExitCode)" }
+              if (Test-Path "$installDir/Grafla.exe") { throw "O executável permaneceu após a desinstalação." }
+            }
+          }
       - uses: actions/upload-artifact@v4
         with:
-          name: Grafla-Windows
+          name: Grafla-Windows-Instalador
+          path: dist/installer/*-Setup.exe
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Grafla-Windows-Portatil
           path: dist/Grafla/
+          if-no-files-found: error

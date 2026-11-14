@@ -218,6 +218,19 @@ persistência; Ruff verifica todo o código novo.
 
 ## Build desktop
 
+Para criar o **instalador Windows**, siga o
+[passo a passo de geração e publicação](docs/instalador.md). Com o Inno Setup 6
+instalado no Windows x64:
+
+```powershell
+uv sync --frozen --extra build --python 3.12
+uv run python .\tools\criar_instalador.py
+```
+
+O resultado fica em `dist/installer/Grafla-2.1.0-Windows-x64-Setup.exe`.
+
+Para gerar apenas a pasta portátil do aplicativo:
+
 ```bash
 uv sync --frozen --extra build
 uv run pyinstaller --noconfirm packaging/grafla.spec

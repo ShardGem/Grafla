@@ -2,6 +2,9 @@
 
 ## Não lançado — precisão de interação e física configurável
 
+- Instalador Windows em português, com atalhos e desinstalação, gerado por um
+  comando. Actions prepara e testa a instalação antes de disponibilizar os arquivos.
+  Guia com os passos para gerar no Windows e publicar a primeira release.
 - ICO do autor na janela e na barra de tarefas, com identificação própria no
   Windows. A marca dentro do editor continua usando o PNG.
 - Reverter Alterações restaura os valores aplicados; X/Y e os campos do inspector
