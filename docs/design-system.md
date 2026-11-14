@@ -1,8 +1,8 @@
 # Linguagem visual
 
 Grafla é um editor técnico: canvas prioritário, controles compactos e propriedades
-contextuais. A identidade mantém o nome e o ícone original do aplicativo, com
-tipografia forte, superfícies neutras e laranja reservado para ação/seleção.
+contextuais. A identidade usa a nova marca enviada pelo autor, com tipografia
+forte, superfícies neutras e laranja reservado para ação/seleção.
 
 Tokens são definidos em `src/grafla/theme.py`. QPalette/QSS estilizam widgets;
 os itens gráficos usam o mesmo objeto Theme. Há Dark, Light e System. A troca de
@@ -25,6 +25,31 @@ Fonte de sistema via QFontDatabase, base de 10 pt; brand e cabeçalhos estabelec
 hierarquia. Espaçamentos 4/8/12/16/24, bordas de um pixel lógico e raios discretos.
 Ícones da toolbar são vetores SVG centrais renderizados/cacheados em múltiplas
 resoluções; não existem PNGs diferentes para cada estado de hover/click.
+
+## Marca do aplicativo
+
+Os quatro arquivos recebidos em `grafla.zip` estão em `src/grafla/resources/`,
+sem alterações no desenho, nas cores ou na transparência:
+
+| Arquivo recebido | Recurso no pacote | Uso |
+| --- | --- | --- |
+| `grafla.png` | `grafla.png` | Janela, diálogos e símbolo no canto superior direito |
+| `grafla_icone.ico` | `grafla.ico` | Ícone do executável Windows |
+| `Grafla ícone alt.png` | `grafla-horizontal.png` | Marca horizontal na abertura |
+| `Grafla ícone alt 2.png` | `grafla-vertical.png` | Marca vertical na tela Sobre |
+
+`branding.py` concentra a leitura das imagens, preserva a proporção e mantém um
+cache por tamanho e escala. O ícone da janela deriva de uma única leitura a 256 px;
+os tamanhos menores são preparados em memória, sem decodificar o PNG a cada uso.
+O empacotamento inclui as quatro imagens.
+
+O cabeçalho do documento ocupa toda a largura da janela, acima do canvas e dos
+painéis. O símbolo à direita abre Sobre e pode receber foco pelo teclado.
+As marcas com texto branco usam uma superfície escura também no tema claro.
+A splash tem cantos arredondados, fundo discreto, versão e progresso real; mantém
+o mínimo configurável e encerra os timers e a animação ao fechar.
+
+## Canvas e controles
 
 Seleção tem contorno tracejado; execução tem ring no vértice atual, traço mais
 espesso, lista de visitados e fila/pilha. Feedback não depende exclusivamente de

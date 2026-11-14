@@ -17,6 +17,7 @@ from PyQt6.QtWidgets import (
     QWidget,
 )
 
+from grafla.branding import application_icon
 from grafla.icons import ToolFeedback
 from grafla.panels import AnalysisPanel, Inspector
 from grafla.physics_panel import PhysicsPanel
@@ -108,12 +109,8 @@ def build_shell(window):
     header = QFrame()
     header.setObjectName("Header")
     row = QHBoxLayout(header)
-    row.setContentsMargins(16, 10, 12, 10)
+    row.setContentsMargins(16, 6, 12, 6)
     row.setSpacing(10)
-    brand = QLabel("GRAFLA")
-    brand.setObjectName("Brand")
-    row.addWidget(brand)
-    row.addSpacing(6)
     window.document_name = QLabel()
     window.document_name.setObjectName("DocumentName")
     window.document_name.setTextFormat(Qt.TextFormat.PlainText)
@@ -134,7 +131,27 @@ def build_shell(window):
     row.addWidget(search)
     window.panel_button = QToolButton()
     row.addWidget(window.panel_button)
-    layout.addWidget(header)
+    row.addSpacing(8)
+    window.brand_button = QToolButton()
+    window.brand_button.setObjectName("BrandButton")
+    window.brand_button.setDefaultAction(commands["about"])
+    window.brand_button.setIcon(application_icon())
+    window.brand_button.setIconSize(QSize(38, 38))
+    window.brand_button.setFixedSize(50, 50)
+    window.brand_button.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
+    window.brand_button.setAccessibleName("Sobre o Grafla")
+    window.brand_button.setToolTip("Grafla · Sobre o aplicativo")
+    row.addWidget(window.brand_button)
+    header.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
+    window.document_bar = QToolBar("Documento", window)
+    window.document_bar.setObjectName("DocumentBar")
+    window.document_bar.setMovable(False)
+    window.document_bar.setFloatable(False)
+    window.document_bar.setAllowedAreas(Qt.ToolBarArea.TopToolBarArea)
+    window.document_bar.setContextMenuPolicy(Qt.ContextMenuPolicy.PreventContextMenu)
+    window.document_bar.toggleViewAction().setEnabled(False)
+    window.document_bar.addWidget(header)
+    window.addToolBar(Qt.ToolBarArea.TopToolBarArea, window.document_bar)
 
     window.tools = ToolStrip()
     window.tools.setObjectName("ToolStrip")

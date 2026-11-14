@@ -6,6 +6,14 @@ As imagens foram capturadas no Qt em Linux offscreen, com uma janela de 1600×10
 
 ![Índice visual dos 18 casos de uso](screenshots/galeria/00-visao-geral.png)
 
+## Marca do Grafla
+
+O símbolo aparece no canto superior direito do editor e abre a tela Sobre. A abertura usa a marca horizontal enviada pelo autor, com o progresso das etapas de inicialização. As versões com o nome branco ficam sobre um fundo escuro nos dois temas, preservando as cores e o contraste.
+
+![Abertura do Grafla com a nova marca](screenshots/splash.png)
+
+[Sobre no tema escuro](screenshots/sobre-dark.png) · [Sobre no tema claro](screenshots/sobre-light.png)
+
 ## Física em movimento
 
 ![Acomodação dos vértices, pausa e retomada da física](screenshots/fisica-em-acao.gif)

@@ -8,10 +8,10 @@ from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
 from PyQt6.QtCore import QCoreApplication, QSettings, QStandardPaths, QTimer
-from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QApplication, QMessageBox
 
 from grafla import __version__
+from grafla.branding import application_icon
 from grafla.splash import Splash
 
 
@@ -49,7 +49,7 @@ def main() -> int:
     QCoreApplication.setApplicationName("Grafla")
     QCoreApplication.setApplicationVersion(__version__)
     app = QApplication(sys.argv[:1])
-    app.setWindowIcon(QIcon(str(Path(__file__).parent / "resources" / "grafla.png")))
+    app.setWindowIcon(application_icon())
     data_dir = args.data_dir or Path(
         QStandardPaths.writableLocation(QStandardPaths.StandardLocation.AppLocalDataLocation)
     )
@@ -119,8 +119,6 @@ def main() -> int:
             splash.report("Editor pronto.", 1.0)
         window.show()
         if splash:
-            if splash.animation:
-                splash.animation.stop()
             splash.close()
         logging.getLogger("grafla.app").info("Grafla %s initialized", __version__)
         if args.smoke_test:

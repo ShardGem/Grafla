@@ -13,6 +13,9 @@ e os grafos de exemplo para abrir no editor.
 
 ## O que funciona
 
+- Nova marca no aplicativo e no executável, com símbolo no canto superior direito
+  para abrir Sobre. A [splash e as telas Sobre](docs/galeria.md#marca-do-grafla)
+  usam as versões horizontal e vertical criadas pelo autor.
 - Canvas com seleção individual/múltipla e por retângulo, movimento em grupo,
   conexões por dois cliques, laços, arestas opostas, exclusão e menus contextuais.
 - Ferramentas horizontais com silhuetas preenchidas inspiradas nos ícones originais,

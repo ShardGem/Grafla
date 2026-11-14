@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import math
 import os
+import shutil
 import tempfile
 import time
 from pathlib import Path
@@ -17,9 +18,11 @@ from PyQt6.QtGui import QColor, QFont, QImage, QMouseEvent, QPainter, QPainterPa
 from PyQt6.QtTest import QTest
 from PyQt6.QtWidgets import QApplication, QScrollArea
 
+from grafla.dialogs import AboutDialog
 from grafla.domain import Graph
 from grafla.main_window import MainWindow
 from grafla.persistence import load
+from grafla.splash import Splash
 from grafla.theme import DARK, apply
 
 RAIZ = Path(__file__).resolve().parents[1]
@@ -649,10 +652,41 @@ class Galeria:
             "A rede do gerador reorganizada em círculo pelo painel de layouts, sem mudar as conexões.",
         )
         self.criar_indice()
+        self.capturar_identidade()
         self.criar_pagina()
         janela.physics.set_enabled(False)
         janela.document.undo_stack.setClean()
         janela.close()
+
+    def capturar_identidade(self):
+        destino = self.destino.parent
+        for nome, captura in {
+            "editor.png": "01-rotas-de-entrega.png",
+            "light.png": "16-tema-claro.png",
+            "physics.png": "14-fisica.png",
+            "steps.png": "03-busca-em-largura.png",
+        }.items():
+            shutil.copyfile(self.destino / captura, destino / nome)
+        for tema in ("dark", "light"):
+            self.window.settings.setValue("theme", tema)
+            self.window.apply_preferences()
+            sobre = AboutDialog(self.window)
+            try:
+                sobre.show()
+                self.assentar()
+                if not sobre.grab().save(str(destino / f"sobre-{tema}.png"), "PNG"):
+                    raise RuntimeError(f"Não foi possível capturar o Sobre no tema {tema}.")
+            finally:
+                sobre.close()
+        splash = Splash(animate=False, minimum_ms=0)
+        try:
+            splash.show()
+            splash.report("Preparando editor, documentos e algoritmos…", 0.55)
+            self.assentar()
+            if not splash.grab().save(str(destino / "splash.png"), "PNG"):
+                raise RuntimeError("Não foi possível capturar a abertura.")
+        finally:
+            splash.close()
 
     def criar_indice(self):
         colunas, largura, altura = 4, 600, 375
@@ -730,6 +764,18 @@ class Galeria:
             "Clique em qualquer imagem para ver o tamanho completo.",
             "",
             "![Índice visual dos 18 casos de uso](screenshots/galeria/00-visao-geral.png)",
+            "",
+            "## Marca do Grafla",
+            "",
+            "O símbolo aparece no canto superior direito do editor e abre a tela Sobre. "
+            "A abertura usa a marca horizontal enviada pelo autor, com o progresso das etapas "
+            "de inicialização. As versões com o nome branco ficam sobre um fundo escuro "
+            "nos dois temas, preservando as cores e o contraste.",
+            "",
+            "![Abertura do Grafla com a nova marca](screenshots/splash.png)",
+            "",
+            "[Sobre no tema escuro](screenshots/sobre-dark.png) · "
+            "[Sobre no tema claro](screenshots/sobre-light.png)",
             "",
             "## Física em movimento",
             "",

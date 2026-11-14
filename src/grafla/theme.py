@@ -105,6 +105,7 @@ def apply(app: QApplication, theme: Theme) -> None:
         QMenu {{ background: {theme.surface}; border: 1px solid {theme.border}; padding: 5px; }}
         QMenu::item {{ padding: 7px 24px 7px 12px; }}
         QToolBar {{ background: {theme.surface}; border: none; spacing: 5px; padding: 6px; }}
+        QToolBar#DocumentBar {{ padding: 0; spacing: 0; border: none; }}
         QToolBar::separator {{ background: {theme.border}; width: 1px; height: 1px; margin: 6px; }}
         QToolButton {{ border: 1px solid transparent; border-radius: 7px; padding: 6px; }}
         QToolButton:hover, QPushButton:hover {{ background: {theme.hover}; }}
@@ -166,7 +167,9 @@ def apply(app: QApplication, theme: Theme) -> None:
         QLabel[eyebrow="true"] {{ color: {theme.muted}; font-size: 11px; font-weight: 600; }}
         QLabel#PhysicsState {{ color: {theme.accent}; font-size: 20px; font-weight: 600; }}
         QFrame#AdvancedControls {{ border: 1px solid {theme.border}; border-radius: 5px; }}
-        QLabel#Brand {{ font-size: 19px; font-weight: 700; color: {theme.accent}; }}
+        QToolButton#BrandButton {{ padding: 4px; border-radius: 10px; }}
+        QFrame#BrandCard {{ background: #18212d; border: 1px solid #303e50;
+                            border-radius: 12px; }}
         QLabel#DocumentName {{ font-size: 14px; font-weight: 600; }}
         QFrame#Header {{ background: {theme.surface}; border-bottom: 1px solid {theme.border}; }}
         QScrollArea {{ border: none; background: {theme.surface}; }}

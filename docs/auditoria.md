@@ -61,7 +61,8 @@ coordenadas antigas; reativar começa nas posições atuais, com velocidades zer
 
 **Ícones vetoriais.** Os PNGs antigos somavam menos de 1 MB comprimido: sua remoção
 não é apresentada como grande otimização de memória. A troca simplifica estados,
-portabilidade e DPI. O ícone original do aplicativo foi preservado.
+portabilidade e DPI. O ícone do aplicativo foi depois substituído pela nova marca
+enviada pelo autor; símbolo, assinaturas horizontal/vertical e ICO ficam no pacote.
 
 **Build único onedir.** Os dois specs divergiam de entrypoint e assets. Um spec
 com recursos/metadata, sem UPX e com versão central facilita diagnóstico. A CI

@@ -2,6 +2,9 @@
 
 ## Não lançado — precisão de interação e física configurável
 
+- Nova marca do autor na janela e no executável, símbolo no canto superior direito
+  com acesso ao Sobre, splash redesenhada com progresso real e tela Sobre nos dois
+  temas. Capturas e GIF atualizados para mostrar a identidade nova.
 - GIF da física em funcionamento, com centros fixados, pausa e retomada após
   ajustar a distância ideal. Inclui o grafo inicial e o roteiro de geração.
 - Galeria com 18 capturas de casos de uso, 14 grafos para abrir no editor e um

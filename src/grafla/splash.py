@@ -1,19 +1,22 @@
-from PyQt6.QtCore import QElapsedTimer, QPropertyAnimation, QRectF, Qt, QTimer
-from PyQt6.QtGui import QColor, QFont, QPainter, QPen
+from PyQt6.QtCore import QElapsedTimer, QPointF, QPropertyAnimation, QRectF, Qt, QTimer
+from PyQt6.QtGui import QColor, QFont, QLinearGradient, QPainter, QPainterPath, QPen
 from PyQt6.QtWidgets import QApplication, QWidget
 
 from grafla import __version__
+from grafla.branding import application_icon, brand_pixmap
 
 
 class Splash(QWidget):
-    """A nonblocking bootstrap surface with a user-configurable minimum duration."""
+    """Mostra as etapas da abertura sem bloquear o editor ou somar uma espera extra."""
 
     def __init__(self, animate=True, minimum_ms=1800):
         super().__init__(None, Qt.WindowType.SplashScreen | Qt.WindowType.FramelessWindowHint)
-        self.setFixedSize(620, 340)
+        self.setFixedSize(660, 420)
+        self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+        self.setWindowIcon(application_icon())
         self.setAccessibleName("Inicialização do Grafla")
         self.status = "Inicializando…"
-        self.progress = 0
+        self.progress = 0.0
         self.animation = None
         self.minimum_ms = max(0, min(5000, minimum_ms))
         self.elapsed = QElapsedTimer()
@@ -24,7 +27,7 @@ class Splash(QWidget):
         self.hold.timeout.connect(self.release)
         if animate and QApplication.platformName() not in {"offscreen", "minimal"}:
             self.animation = QPropertyAnimation(self, b"windowOpacity", self)
-            self.animation.setDuration(140)
+            self.animation.setDuration(180)
             self.animation.setStartValue(0.0)
             self.animation.setEndValue(1.0)
             self.animation.start()
@@ -53,42 +56,89 @@ class Splash(QWidget):
 
     def closeEvent(self, event):
         self.hold.stop()
+        if self.animation is not None:
+            self.animation.stop()
         self.callback = None
         super().closeEvent(event)
 
     def report(self, status, progress):
-        self.status, self.progress = status, progress
+        self.status = status
+        self.progress = max(0.0, min(1.0, progress))
+        self.setAccessibleDescription(f"{status} · {self.progress:.0%}")
         self.update()
 
     def paintEvent(self, event):
         painter = QPainter(self)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-        painter.fillRect(self.rect(), QColor("#11161e"))
-        painter.setPen(QPen(QColor("#303d4e"), 1))
-        painter.drawRect(self.rect().adjusted(0, 0, -1, -1))
-        nodes = [(406, 74), (530, 74), (406, 148), (468, 148), (530, 148), (406, 222), (530, 222)]
-        painter.setPen(QPen(QColor("#775744"), 1.5))
-        for a, b in ((0, 1), (0, 2), (2, 3), (3, 4), (2, 5), (5, 6), (4, 6)):
-            painter.drawLine(*nodes[a], *nodes[b])
-        for index, (x, y) in enumerate(nodes):
-            painter.setPen(QPen(QColor("#ffad78" if index in {0, 2, 5, 6} else "#596b83"), 2))
-            painter.setBrush(QColor("#11161e"))
-            painter.drawEllipse(QRectF(x - 7, y - 7, 14, 14))
-        font = QFont()
-        font.setPointSize(29)
-        font.setBold(True)
+        painter.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
+        card = QRectF(8, 8, self.width() - 16, self.height() - 16)
+        shape = QPainterPath()
+        shape.addRoundedRect(card, 18, 18)
+        background = QLinearGradient(card.topLeft(), card.bottomRight())
+        background.setColorAt(0, QColor("#242f3f"))
+        background.setColorAt(0.6, QColor("#192330"))
+        background.setColorAt(1, QColor("#131b26"))
+        painter.fillPath(shape, background)
+        painter.setClipPath(shape)
+
+        # A malha fica ao fundo para não disputar espaço com a marca.
+        painter.setPen(QPen(QColor("#344153"), 1))
+        nodes = [(491, 23), (574, 71), (574, 166), (657, 214), (657, 23)]
+        for a, b in ((0, 1), (1, 2), (2, 3), (1, 4)):
+            painter.drawLine(QPointF(*nodes[a]), QPointF(*nodes[b]))
+        painter.setBrush(QColor("#263344"))
+        for x, y in nodes:
+            painter.drawEllipse(QPointF(x, y), 4, 4)
+
+        font = QFont(self.font())
+        font.setPixelSize(11)
+        font.setLetterSpacing(QFont.SpacingType.AbsoluteSpacing, 1.6)
+        font.setWeight(QFont.Weight.DemiBold)
         painter.setFont(font)
-        painter.setPen(QColor("#ffad78"))
-        painter.drawText(34, 112, "GRAFLA")
-        font.setPointSize(11)
-        font.setBold(False)
+        painter.setPen(QColor("#aebdd0"))
+        painter.drawText(QRectF(42, 38, 260, 20), Qt.AlignmentFlag.AlignVCenter, "EDITOR DE GRAFOS")
+        font.setLetterSpacing(QFont.SpacingType.AbsoluteSpacing, 0)
         painter.setFont(font)
-        painter.setPen(QColor("#edf2f8"))
-        painter.drawText(36, 146, "Construir. Explorar. Compreender.")
-        painter.setPen(QColor("#aebacc"))
-        painter.drawText(36, 174, f"Editor de grafos · {__version__}")
-        font.setPointSize(9)
+        painter.drawText(
+            QRectF(516, 38, 102, 20),
+            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter,
+            f"v{__version__}",
+        )
+
+        logo = brand_pixmap("horizontal", 480, 176, self.devicePixelRatioF())
+        painter.drawPixmap(QPointF(90, 91), logo)
+        font.setPixelSize(16)
+        font.setWeight(QFont.Weight.Normal)
         painter.setFont(font)
-        painter.drawText(36, 280, self.status)
-        painter.fillRect(QRectF(36, 301, 548, 2), QColor("#303d4e"))
-        painter.fillRect(QRectF(36, 301, 548 * self.progress, 2), QColor("#ffad78"))
+        painter.setPen(QColor("#dce5ef"))
+        painter.drawText(
+            QRectF(42, 277, 576, 26),
+            Qt.AlignmentFlag.AlignCenter,
+            "Construir. Explorar. Compreender.",
+        )
+
+        painter.setPen(QPen(QColor("#303d4f"), 1))
+        painter.drawLine(QPointF(42, 326), QPointF(618, 326))
+        font.setPixelSize(12)
+        painter.setFont(font)
+        painter.setPen(QColor("#aebdd0"))
+        status = painter.fontMetrics().elidedText(self.status, Qt.TextElideMode.ElideRight, 520)
+        painter.drawText(QRectF(42, 343, 520, 24), Qt.AlignmentFlag.AlignVCenter, status)
+        painter.drawText(
+            QRectF(568, 343, 50, 24),
+            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter,
+            f"{self.progress:.0%}",
+        )
+        painter.setPen(Qt.PenStyle.NoPen)
+        painter.setBrush(QColor("#303d4f"))
+        painter.drawRoundedRect(QRectF(42, 379, 576, 4), 2, 2)
+        progress = QLinearGradient(42, 0, 618, 0)
+        progress.setColorAt(0, QColor("#fa5846"))
+        progress.setColorAt(1, QColor("#fa892e"))
+        painter.setBrush(progress)
+        if self.progress > 0:
+            painter.drawRoundedRect(QRectF(42, 379, 576 * self.progress, 4), 2, 2)
+        painter.setClipping(False)
+        painter.setPen(QPen(QColor("#3a485c"), 1))
+        painter.setBrush(Qt.BrushStyle.NoBrush)
+        painter.drawPath(shape)

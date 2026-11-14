@@ -6,12 +6,65 @@ from PyQt6.QtWidgets import (
     QDialogButtonBox,
     QDoubleSpinBox,
     QFormLayout,
+    QFrame,
     QLabel,
     QLineEdit,
     QListWidget,
     QListWidgetItem,
     QVBoxLayout,
 )
+
+from grafla import __version__
+from grafla.branding import application_icon, brand_pixmap
+
+
+class AboutDialog(QDialog):
+    """Apresenta a marca, a versão e os atalhos mais usados do editor."""
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Sobre o Grafla")
+        self.setWindowIcon(application_icon())
+        self.setMinimumWidth(440)
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(24, 24, 24, 20)
+        layout.setSpacing(16)
+        card = QFrame()
+        card.setObjectName("BrandCard")
+        card_layout = QVBoxLayout(card)
+        card_layout.setContentsMargins(28, 24, 28, 24)
+        self.brand = QLabel()
+        self.brand.setAccessibleName("Grafla")
+        self.brand.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.brand.setPixmap(brand_pixmap("vertical", 248, 224, self.devicePixelRatioF()))
+        card_layout.addWidget(self.brand)
+        layout.addWidget(card)
+        tagline = QLabel("Construir. Explorar. Compreender.")
+        tagline.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(tagline)
+        version = QLabel(f"Versão {__version__} · Python, PyQt6 e NetworkX")
+        version.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        version.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
+        version.setProperty("muted", True)
+        layout.addWidget(version)
+        shortcuts = QLabel(
+            "<b>Atalhos para o dia a dia</b><br>"
+            "V selecionar · H mão · N vértice · E aresta<br>"
+            "Ctrl+K buscar · Ctrl+Z desfazer · Ctrl+Shift+P física"
+        )
+        shortcuts.setWordWrap(True)
+        layout.addWidget(shortcuts)
+        licenses = QLabel(
+            "PyQt6: GPLv3 / licença comercial.\nQt: termos por módulo. NetworkX: BSD-3-Clause."
+        )
+        licenses.setWordWrap(True)
+        licenses.setProperty("muted", True)
+        layout.addWidget(licenses)
+        close = QDialogButtonBox(QDialogButtonBox.StandardButton.Close)
+        close.button(QDialogButtonBox.StandardButton.Close).setText("Fechar")
+        close.button(QDialogButtonBox.StandardButton.Close).setDefault(True)
+        close.rejected.connect(self.reject)
+        layout.addWidget(close)
 
 
 def buttons(dialog, label="Aplicar"):

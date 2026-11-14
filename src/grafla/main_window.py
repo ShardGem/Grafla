@@ -13,15 +13,14 @@ from PyQt6.QtWidgets import (
     QFileDialog,
     QLabel,
     QMainWindow,
-    QMessageBox,
     QSpinBox,
     QVBoxLayout,
 )
 
-from grafla import __version__
 from grafla.analysis_controller import AnalysisController
+from grafla.branding import application_icon
 from grafla.canvas import Canvas
-from grafla.dialogs import PreferencesDialog, SearchDialog, buttons
+from grafla.dialogs import AboutDialog, PreferencesDialog, SearchDialog, buttons
 from grafla.document import Change, Document
 from grafla.domain import GraphError, layout_positions
 from grafla.exporting import export_graph
@@ -46,6 +45,7 @@ class MainWindow(QMainWindow):
     def __init__(self, data_dir: Path, settings: QSettings | None = None):
         super().__init__()
         self.setObjectName("GraflaWindow")
+        self.setWindowIcon(application_icon())
         self.data_dir = data_dir
         self.data_dir.mkdir(parents=True, exist_ok=True)
         self.settings = settings if settings is not None else QSettings()
@@ -620,11 +620,7 @@ class MainWindow(QMainWindow):
             self.notify(str(error), error=True)
 
     def about(self):
-        QMessageBox.about(
-            self,
-            "Sobre o Grafla",
-            f"<h2>Grafla {__version__}</h2><p>Construir. Explorar. Compreender.</p><p>Editor de grafos com Python, PyQt6 e NetworkX.</p><p>PyQt6: GPLv3 / licença comercial. Qt: termos por módulo. NetworkX: BSD-3-Clause.</p><p>V selecionar · H mão · N vértice · E aresta<br>Ctrl+K buscar · Ctrl+Z desfazer · Ctrl+Shift+P física</p>",
-        )
+        AboutDialog(self).exec()
 
     def closeEvent(self, event):
         if not self.files.maybe_save():
