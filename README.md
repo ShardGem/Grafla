@@ -2,268 +2,74 @@
 
 **Construir. Explorar. Compreender.**
 
-Grafla 2.1 é um editor desktop de grafos em Python e Qt: edição direta, documentos
-versionados, histórico de alterações, física opcional e análises com visualização.
-O alvo principal é Windows; a base também pode ser executada em Linux e macOS.
+O Grafla é um editor de grafos para desenhar conexões e acompanhar algoritmos em
+ação. Dá para montar uma rede de rotas, organizar dependências ou estudar uma
+busca passo a passo, vendo o que acontece no próprio grafo.
 
-![Grafla: três linhas de metrô no canvas inteiro](docs/screenshots/galeria/19-rede-de-metro.png)
+**[Baixar o Grafla 2.1.0 para Windows](https://github.com/ShardGem/Grafla/releases/download/2.1.0/Grafla-2.1.0-Windows-x64-Setup.exe)** ·
+[Ver a galeria](docs/galeria.md) ·
+[Novidades da versão](https://github.com/ShardGem/Grafla/releases/tag/2.1.0)
 
-[Veja a galeria com 30 capturas e variações](docs/galeria.md), com imagens em alta resolução
-e os grafos de exemplo para abrir no editor.
+![Rede de metrô no Grafla, com estações e tempos entre os trechos](docs/screenshots/galeria/19-rede-de-metro.png)
 
-## O que funciona
+## Do desenho à análise
 
-- Nova marca no aplicativo e no executável, com símbolo no canto superior esquerdo
-  para abrir Sobre. A [splash e as telas Sobre](docs/galeria.md#marca-do-grafla)
-  usam as versões horizontal e vertical criadas pelo autor.
-- Canvas com seleção individual/múltipla e por retângulo, movimento em grupo,
-  conexões por dois cliques, laços, arestas opostas, exclusão e menus contextuais.
-- Ferramentas horizontais com silhuetas preenchidas inspiradas nos ícones originais,
-  estados de hover/desabilitado, transições opcionais e dicas ligadas ao modo ativo.
-- Criação de arestas sem selecionar ou arrastar vértices: origem com ring próprio,
-  laços opcionais, conexão em sequência e cancelamento por fundo/Esc. Preferências
-  de direção, peso e comportamento das novas conexões são persistidas.
-- Slider de zoom sincronizado
-  com roda/atalhos e controles de construção dentro do workspace.
-- Inspector com prévia ao vivo de rótulo, posição, raio, cor, fixação, direção e
-  peso. **Aplicar propriedades** confirma tudo em um único undo; **Reverter Alterações**
-  restaura os últimos valores aplicados. Trocar a seleção descarta a prévia.
-  Cores têm roda de matiz/saturação e brilho,
-  e X/Y dividem a mesma linha. Arquivos e recuperação guardam apenas edições confirmadas.
-  Arestas podem
-  ser direcionadas ou não; pesos não negativos incluem zero.
-- Desfazer/refazer de edição, exclusão com incidentes, geração, layouts, colagem,
-  matrizes e organização pela física. Histórico limitado às últimas 60 operações.
-- Novo, abrir, salvar, salvar como, recentes, indicação de alterações e confirmação
-  de fechamento. Arquivos `.grafla` são JSON validado, com schema versionado e save atômico.
-- Cópia de recuperação opcional a cada minuto, oferecida como novo documento após
-  interrupção. Preferências e geometria são persistidas separadamente.
-- **Física com controle próprio**, indicação de estado e pausa automática ao
-  estabilizar ou atingir o orçamento de iterações. Desligar preserva as posições;
-  reativar inicia a partir delas. Vértices fixados não são movidos.
-- Aba **Física** com perfis Equilibrada/Suave/Elástica e 12 ajustes persistentes:
-  repulsão e alcance, atração, rigidez, distância ideal, amortecimento, centralização,
-  gravidade/direção, velocidade, limite de movimento e limiar de repouso. Ajustar
-  valores preserva a sessão em andamento; Pausar/Retomar mantém as posições.
-- Undo/Redo pausa o movimento e preserva o histórico restaurado até Retomar.
-  Alterações de rótulo/estilo não interrompem a simulação nem reaplicam posições
-  antigas. O comando de física registra somente coordenadas.
-- Dijkstra, maior caminho simples e enumeração com limites, BFS/DFS com visita,
-  fila/pilha e arestas percorridas, componentes, floresta geradora mínima e topológica.
-- Reprodução, pausa, passo anterior/seguinte, reinício e parada da visualização.
-  Edições invalidam resultados antigos; tarefas usam um snapshot independente da UI.
-- Rotas clicáveis com custo e sequência; tabela de visitas/fila/pilha e slider de
-  etapas ligados ao grafo. O relatório textual é secundário e abre sob demanda.
-- Matrizes binárias e de pesos, copiar CSV e construir grafo a partir de matriz.
-  Layouts circular, grade e aleatório com operação desfazível.
-- Exportação PNG/JPEG/SVG/PDF, região inteira ou seleção, largura configurável e
-  transparência em PNG/SVG. A exportação exclui controles e handles do editor.
-- Copiar/colar subgrafo, busca de comandos/vértices, zoom no cursor, navegação com
-  Espaço/botão do meio, snap e temas Dark/Light/System.
-- Splash ligada às etapas reais do bootstrap, com mínimo padrão de **3 s** ajustável
-  nas preferências (0,5–5 s), usando timer sem bloquear a interface, e controles
-  **nativos de janela** para minimizar, maximizar/restaurar, arrastar e fechar.
+Crie os vértices, ligue as conexões e dê a cada um o nome e a cor que fizerem
+sentido. As mudanças aparecem enquanto você edita. Quando estiver satisfeito,
+aplique as propriedades; se mudar de ideia, reverta para os últimos valores
+aplicados.
 
-## Um passeio pelo editor
+Com o grafo pronto, você pode:
 
-| Rede de metrô | Arquitetura no tema claro |
+- Encontrar caminhos com Dijkstra e acompanhar buscas em largura ou profundidade,
+  pausando e avançando uma etapa por vez.
+- Explorar componentes, árvores geradoras mínimas e ordenação topológica.
+- Organizar os vértices com layouts ou deixar a física acomodar as conexões.
+- Trabalhar com matrizes de adjacência e gerar grafos para experimentar.
+- Salvar em `.grafla` para continuar depois ou exportar em PNG, JPG, SVG e PDF.
+
+Também há seleção em grupo, copiar e colar, desfazer e refazer, além de temas claro
+e escuro.
+
+## Alguns exemplos
+
+| Uma busca em árvore | Conexões entre serviços |
 | --- | --- |
-| [![Estações e tempos por trecho](docs/screenshots/galeria/19-rede-de-metro.png)](docs/galeria.md#caso-19) | [![Clientes, serviços, banco e fila](docs/screenshots/galeria/24-servicos-tema-claro.png)](docs/galeria.md#caso-24) |
-| **Árvore binária e BFS** | **Física com vértices fixados** |
-| [![Visitas e fila na árvore binária](docs/screenshots/galeria/22-arvore-binaria.png)](docs/galeria.md#caso-22) | [![Organização de uma rede com três centros fixados](docs/screenshots/galeria/14-fisica.png)](docs/galeria.md#caso-14) |
-| **Mapa de estudos** | **Custos decimais e custo zero** |
-| [![Seis assuntos em um mapa colorido](docs/screenshots/galeria/25-mapa-de-estudos.png)](docs/galeria.md#caso-25) | [![Dijkstra no circuito cultural](docs/screenshots/galeria/30-pesos-decimais.png)](docs/galeria.md#caso-30) |
+| ![Busca em largura numa árvore binária, com as etapas ao lado](docs/screenshots/galeria/22-arvore-binaria.png) | ![Diagrama de serviços no tema claro](docs/screenshots/galeria/24-servicos-tema-claro.png) |
 
-A [galeria completa](docs/galeria.md) também mostra árvore geradora mínima,
-dependências, componentes, laços, conexões opostas, propriedades, geração de grafos,
-seleção em grupo, relatório de rotas, grafos completos e layouts. Há também capturas
-da busca, das preferências e da abertura. Os 26 grafos estão em
-[`examples/galeria/`](examples/galeria/).
+A [galeria](docs/galeria.md) tem mais exemplos: mapas de estudos, rotas de entrega,
+dependências e outras formas de usar o editor. Os [grafos das imagens](examples/galeria/)
+estão no repositório para você abrir e mexer.
 
-## Física em movimento
+## A física em movimento
 
-![Física do Grafla: acomodação, pausa e retomada](docs/screenshots/fisica-em-acao.gif)
+![Vértices se acomodando com a física do Grafla](docs/screenshots/fisica-em-acao.gif)
 
-Os três centros permanecem fixos enquanto os outros vértices se acomodam.
-A simulação é pausada e retomada com outra distância ideal entre os vértices.
-O GIF tem 12 segundos, 20 quadros por segundo e se repete automaticamente.
+Neste exemplo, três vértices ficam fixos enquanto os demais se acomodam. Você pode
+pausar o movimento e ajustar a distância entre eles, a atração e a repulsão até
+chegar à organização que preferir.
 
-[Abrir o GIF](docs/screenshots/fisica-em-acao.gif) ·
-[Abrir o grafo do exemplo](examples/fisica-em-acao.grafla)
+[Abrir esse grafo no editor](examples/fisica-em-acao.grafla)
 
-## Executar
+## Para começar
 
-Requer Python **3.12–3.15** e uma sessão gráfica. A versão de referência validada
-localmente é Python 3.12.14 com PyQt6/Qt 6.12.0.
+No Windows, [baixe o instalador](https://github.com/ShardGem/Grafla/releases/download/2.1.0/Grafla-2.1.0-Windows-x64-Setup.exe),
+abra o arquivo e siga a instalação. Depois, é só abrir o Grafla pelo menu Iniciar.
+Não precisa instalar Python.
 
-Com [uv](https://docs.astral.sh/uv/):
+Se preferir rodar pelo código, use Python 3.12 a 3.15 e
+[uv](https://docs.astral.sh/uv/). Na pasta do projeto:
 
 ```bash
 uv sync --frozen
 uv run grafla
-uv run grafla examples/rotas.grafla
 ```
 
-Ou com pip, em um ambiente virtual:
+Essa opção também permite usar o Grafla no Linux e no macOS, com ambiente gráfico.
+Para gerar seu próprio instalador, há um [guia separado](docs/instalador.md).
 
-```bash
-python -m pip install -e .
-python -m grafla
-```
+---
 
-`python main.py` continua disponível depois da instalação. `--no-splash` omite a
-abertura; `--version` mostra a versão. Logs rotativos, preferências e recuperação
-usam o diretório de dados do aplicativo do sistema. Para escolher outro:
-
-```bash
-uv run grafla --data-dir ./workspace-data
-```
-
-Adicione seu diretório de dados ao ignore local se o criar dentro do checkout.
-Não versione preferências, logs ou documentos pessoais.
-
-### Ambiente na nuvem / headless
-
-O ambiente já é isolado: use o checkout existente, sem criar outro worktree.
-Uma janela interativa exige desktop/servidor gráfico; o modo offscreen serve a
-testes e não disponibiliza uma janela no navegador.
-
-```bash
-QT_QPA_PLATFORM=offscreen uv run grafla --smoke-test --data-dir /tmp/grafla-smoke
-```
-
-No cloud workspace, um diretório persistente gravável pode ser passado com
-`--data-dir /workspace/.grafla-data`. O bootstrap de smoke gera uma captura e
-encerra automaticamente, sem pedir confirmação de arquivo.
-
-## Atalhos
-
-| Ação | Atalho |
-|---|---|
-| Selecionar / mão / vértice / aresta / borracha | V / H / N / E / B |
-| Pan temporário | Espaço + arrastar ou botão do meio |
-| Multisseleção | Ctrl+clique ou retângulo no fundo |
-| Apagar seleção | Delete |
-| Cancelar conexão / limpar seleção | Esc |
-| Desfazer / refazer | Ctrl+Z / Ctrl+Shift+Z ou Ctrl+Y |
-| Novo / abrir / salvar / salvar como | Ctrl+N / Ctrl+O / Ctrl+S / Ctrl+Shift+S |
-| Copiar / colar subgrafo | Ctrl+C / Ctrl+V |
-| Buscar comandos e vértices | Ctrl+K ou Ctrl+F |
-| Ajustar grafo / seleção / 100% | Ctrl+0 / F / Ctrl+1 |
-| Zoom | Ctrl+roda ou Ctrl++ / Ctrl+- |
-| Ativar/desativar física | Ctrl+Shift+P |
-| Gerar grafo / exportar | Ctrl+G / Ctrl+Shift+E |
-
-Atalhos de ferramentas pertencem ao canvas e não interceptam letras digitadas no
-inspector. Os comandos também estão nos menus e na busca.
-
-O botão de pausa ao lado de Física interrompe/retoma o movimento sem desativar
-a opção. O botão de ajustes abre a aba Física; os parâmetros avançados ficam
-recolhidos inicialmente. As opções de laços e conexões em sequência ficam em
-**Elemento → Novas conexões**. Nas preferências, destaques de vizinhança, criação
-por duplo clique e transições das ferramentas podem ser desativados.
-
-## Contratos e limites
-
-- O grafo aceita direção por aresta e laços, mas **não arestas paralelas no mesmo
-  sentido**. Uma conexão não direcionada impede outra ligação entre o mesmo par;
-  duas direcionadas opostas são permitidas.
-- Pesos aceitos: 0 a 1 bilhão, finitos. Sem ponderação, custo efetivo é 1. Rótulos:
-  até 200 caracteres. IDs são estáveis e independem dos rótulos.
-- Limites de documento: 10.000 vértices, 50.000 arestas e arquivo de até 32 MB.
-  Esses limites de validação não são promessa de fluidez para qualquer densidade.
-- Gerador: até 500 vértices/5.000 arestas e capacidade real do tipo escolhido.
-  Seed reproduzível; a quantidade é exata e não usa tentativas que podem falhar silenciosamente.
-- Física interativa: até 1.000 vértices/5.000 arestas, repulsão local aproximada,
-  até 500 iterações por ativação. Grafos maiores continuam editáveis com layouts.
-- Maior caminho e enumeração: até 300 caminhos encontrados / 1,5 segundo. O
-  orçamento é verificado mesmo quando nenhum caminho é encontrado. Resultados
-  interrompidos são parciais; o maior caminho parcial não é um ótimo comprovado.
-- MST requer grafo não direcionado; topológica requer grafo dirigido acíclico.
-  Componentes usa conectividade fraca; loops não duplicam a entrada de adjacência.
-- Matriz de pesos: `·`/`.` é ausência; `0` é aresta de custo zero. A matriz não
-  preserva posições, rótulos, estilos nem a direção individual de um grafo misto;
-  use `.grafla` para roundtrip completo. Editor matricial: até 100 vértices;
-  visualização: até 500. O painel preserva células ao mudar o tamanho ou tipo;
-  remover direção com pesos conflitantes é recusado sem apagar a edição.
-- Gerar e converter matriz são painéis integrados: parâmetros pendentes só afetam
-  o documento ao aplicar. O mínimo da splash é contado desde sua exibição e não
-  se soma ao trabalho de inicialização; `--no-splash` continua disponível.
-- Autosave é cópia de recuperação, **não** substitui Salvar nem marca o documento
-  como salvo. Pode haver até um minuto de edição ainda não recuperável.
-- Exportação: largura 128–4.096 e altura até 8.192; margem de 24 unidades da cena.
-  SVG/PDF são vetoriais. JPEG não suporta transparência.
-
-## Desenvolvimento e validação
-
-```bash
-uv sync --frozen --extra dev --extra build
-uv run ruff check src tests tools main.py
-uv run ruff format --check src tests tools main.py
-uv run mypy
-QT_QPA_PLATFORM=offscreen uv run pytest
-QT_QPA_PLATFORM=offscreen uv run python tools/benchmark.py
-QT_QPA_PLATFORM=offscreen uv run python tools/benchmark.py --physics
-```
-
-No PowerShell, defina `$env:QT_QPA_PLATFORM = "offscreen"` antes dos testes headless.
-A CI testa Linux/Windows, Python 3.12/3.14, e constrói o pacote Windows com smoke
-test usando o backend nativo. Uma configuração de CI criada não equivale a uma
-execução aprovada: consulte o resultado da execução no GitHub Actions.
-
-Os testes cobrem invariantes, pesos/caminhos, serialização, arquivos inválidos,
-undo/redo, cancelamento, recuperação, cliques/teclado, física, tema, resultados
-obsoletos e arquivos gráficos reais. Mypy verifica os módulos matemáticos e de
-persistência; Ruff verifica todo o código novo.
-
-## Build desktop
-
-Para criar o **instalador Windows**, siga o
-[passo a passo de geração e publicação](docs/instalador.md). Com o Inno Setup 6
-instalado no Windows x64:
-
-```powershell
-uv sync --frozen --extra build --python 3.12
-uv run python .\tools\criar_instalador.py
-```
-
-O resultado fica em `dist/installer/Grafla-2.1.0-Windows-x64-Setup.exe`.
-
-Para gerar apenas a pasta portátil do aplicativo:
-
-```bash
-uv sync --frozen --extra build
-uv run pyinstaller --noconfirm packaging/grafla.spec
-```
-
-O resultado **onedir** fica em `dist/Grafla/`. Distribua a pasta completa. Construa
-Windows em Windows; PyInstaller não faz cross-build de executável Windows em Linux.
-O spec inclui recursos, metadados/licenças das dependências e versão obtida de
-`grafla.__version__`. UPX fica desativado. Não há assinatura digital configurada.
-
-Em Linux, uma execução gráfica normal também requer as bibliotecas nativas e um
-servidor gráfico compatíveis com Qt. O smoke offscreen não valida o compositor do SO.
-
-## Arquitetura e evolução
-
-Veja [arquitetura](docs/arquitetura.md), [auditoria e decisões](docs/auditoria.md),
-[design system](docs/design-system.md), [revisão do workspace](docs/ux-workspace.md)
-e [changelog](CHANGELOG.md). A [captura de execução BFS](docs/screenshots/steps.png)
-mostra a tabela de visitas e o slider de etapas ligados ao canvas.
-O [refinamento de interações e física](docs/refinamento-editor.md) registra o
-diagnóstico, os contratos de estado e o método de medição. Veja também a
-[nova aba Física](docs/screenshots/physics.png).
-
-A modernização conserva o legado no commit `a9c310d`; módulos e assets obsoletos
-foram retirados do caminho ativo após a substituição por componentes testados.
-GraphML/GEXF/DOT, pesos negativos, minimap e algoritmos adicionais permanecem
-possibilidades de evolução, sem controles fictícios na interface.
-
-## Licenças
-
-A licença do código do Grafla precisa ser definida pelo mantenedor antes de uma
-distribuição pública que exija concessão explícita de direitos. Esta reformulação
-não atribui uma licença nova ao código do autor.
-
-PyQt6 é distribuído sob GPLv3 ou licença comercial; Qt tem termos por módulo e
-NetworkX é BSD-3-Clause. Consulte [avisos de terceiros](docs/terceiros.md).
+O Grafla é feito com Python, PyQt6 e NetworkX.
+[Arquitetura](docs/arquitetura.md) · [Histórico de mudanças](CHANGELOG.md) ·
+[Avisos de terceiros](docs/terceiros.md)
